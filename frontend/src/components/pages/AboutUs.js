@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Meist = () => {
+export const AboutUs = () => {
   return (
     <div>Meist</div>
   )

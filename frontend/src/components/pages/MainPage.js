@@ -1,7 +1,7 @@
 import React from 'react'
-import "./Pealeht.css"
+import "./MainPage.scss"
 
-export const Pealeht = () => {
+export const MainPage = () => {
   return (
     <div className='text'>
         <div>

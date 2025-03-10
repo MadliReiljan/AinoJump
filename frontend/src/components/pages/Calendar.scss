@@ -1,0 +1,31 @@
+.bg {
+    background-color: #f4f4f4;
+}
+
+.fc-event {
+    background-color: #308350 !important; 
+    border-radius: 8px;
+    padding: 5px;
+    color: white;
+  }
+  
+
+  .fc-day-today {
+    background: rgb(117, 151, 119) !important;
+    border: 2px solid #302929;
+  }
+  
+  .fc-toolbar {
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+
+  .fc-daygrid-day {
+    border: 1px solid #ddd;
+    cursor: pointer;
+  }
+  
+  .fc-daygrid-day:hover {
+    background: #f4f4f4;
+  }
