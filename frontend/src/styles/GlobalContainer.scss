@@ -1,0 +1,36 @@
+.container {
+    max-width: 1440px;
+    padding-left: 120px;
+    padding-right: 120px;
+    margin: 0 auto;
+    padding-top: 60px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #1C1C1C;
+    color: white;
+    min-height: 100vh;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 60px;
+      padding-right: 60px;
+      padding-top: 40px;
+    }
+  }
+  
+  @media (max-width: 580px) and (min-width: 481px) {
+    .container {
+      padding-left: 40px;
+      padding-right: 40px;
+      padding-top: 30px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container {
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-top: 20px;
+    }
+  }
