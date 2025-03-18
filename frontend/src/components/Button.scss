@@ -1,0 +1,42 @@
+.button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    outline: none;
+  }
+  
+  .button.default {
+    background-color: #9fd36c;
+    color: white;
+    width: 200px;
+    height: auto;
+  }
+  
+  .button.default:hover {
+    background-color: #7ca356;
+  }
+  
+  .button.outline {
+    background-color: transparent;
+    border: 2px solid #9fd36c;
+    color: #9fd36c;
+  }
+  
+  .button.outline:hover {
+    background-color: #7ca356;
+    color: white;
+  }
+  
+  .button.danger {
+    background-color: #ef4444;
+    color: white;
+  }
+  
+  .button.danger:hover {
+    background-color: #dc2626;
+  }
+  

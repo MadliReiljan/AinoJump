@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from "react-router-dom";
 import "./Navbar.scss"
+import Button from './Button';
 
 export const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -38,6 +39,9 @@ export const Navbar = () => {
                     </li>
                     <li>
                         <NavLink to="/kontakt">Kontakt</NavLink>
+                    </li>
+                    <li>
+                        <Button to="/login">Loo konto / logi sisse</Button>
                     </li>
                 </ul>
             </div>
