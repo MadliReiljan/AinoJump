@@ -12,25 +12,27 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Logi sisse</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="E-post"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Parool"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <Button type="submit">Logi sisse</Button>
-      </form>
+    <div className="background">
+      <div className="login-container">
+        <h2>Logi sisse</h2>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="E-post"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Parool"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <Button type="submit">Logi sisse</Button>
+        </form>
+      </div>
     </div>
   );
 };

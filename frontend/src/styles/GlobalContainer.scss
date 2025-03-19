@@ -1,36 +1,61 @@
+/* Updated GlobalContainer.scss */
+
+/* Base container class without background color */
+.container-base {
+  max-width: 1440px;
+  padding-left: 120px;
+  padding-right: 120px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Regular container with dark background */
 .container {
-    max-width: 1440px;
-    padding-left: 120px;
-    padding-right: 120px;
-    margin: 0 auto;
-    padding-top: 60px;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #1C1C1C;
-    color: white;
-    min-height: 100vh;
+  @extend .container-base;
+  background-color: #1C1C1C;
+  color: white;
+  padding-top: 60px;
+  min-height: 100vh;
+}
+
+/* Transparent container for hero sections */
+.container-transparent {
+  @extend .container-base;
+  background-color: transparent;
+  color: white;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  .container-base {
+    padding-left: 60px;
+    padding-right: 60px;
   }
   
-  @media (max-width: 768px) {
-    .container {
-      padding-left: 60px;
-      padding-right: 60px;
-      padding-top: 40px;
-    }
+  .container {
+    padding-top: 40px;
+  }
+}
+
+@media (max-width: 580px) and (min-width: 481px) {
+  .container-base {
+    padding-left: 40px;
+    padding-right: 40px;
   }
   
-  @media (max-width: 580px) and (min-width: 481px) {
-    .container {
-      padding-left: 40px;
-      padding-right: 40px;
-      padding-top: 30px;
-    }
+  .container {
+    padding-top: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-base {
+    padding-left: 20px;
+    padding-right: 20px;
   }
   
-  @media (max-width: 480px) {
-    .container {
-      padding-left: 20px;
-      padding-right: 20px;
-      padding-top: 20px;
-    }
+  .container {
+    padding-top: 20px;
   }
+}
