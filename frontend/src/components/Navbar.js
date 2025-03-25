@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from "react-router-dom";
-import "./Navbar.scss"
+import { Link, NavLink, useLocation } from "react-router-dom";
+import "./Navbar.scss";
 import Button from './Button';
 
 export const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    
+    const location = useLocation();
+
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
-    
+
+    const isLoginPage = location.pathname === "/login";
+    const authButtonText = isLoginPage ? "Registreeru" : "Logi sisse";
+    const authButtonLink = isLoginPage ? "/register" : "/login";
+
     return (
         <nav>
             <div className="nav-inner">
@@ -41,10 +46,10 @@ export const Navbar = () => {
                         <NavLink to="/kontakt">Kontakt</NavLink>
                     </li>
                     <li>
-                        <Button to="/login">Loo konto / logi sisse</Button>
+                        <Button to={authButtonLink}>{authButtonText}</Button>
                     </li>
                 </ul>
             </div>
         </nav>
     );
-}
+};
