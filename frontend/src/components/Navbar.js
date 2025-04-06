@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "./Navbar.scss";
 import Button from './Button';
+import logoImage from '../images/Logo.png'; 
 
 export const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -25,7 +26,9 @@ export const Navbar = () => {
                     alignItems: 'center',
                     boxSizing: 'border-box'
                 }}>
-                    <Link to="/" className='title'>AinoJump</Link>
+                    <Link to="/" className='logo-link'>
+                        <img src={logoImage} alt="AinoJump Logo" className="logo-image" />
+                    </Link>
                     <div className="menu" onClick={toggleMenu}>
                         <span></span>
                         <span></span>

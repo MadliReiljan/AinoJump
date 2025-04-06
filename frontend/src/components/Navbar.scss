@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 // Add this at the top of your Navbar.scss file
 .container {
     max-width: 1440px;
@@ -9,22 +11,23 @@
 }
 
 .active {
-    background-color: #D4FFA9;
+    background-color: #BFFF7F;
 }
 
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #D4FFA9;
-    position: sticky;
+    position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
     box-sizing: border-box;
-    overflow-x: hidden; // Prevent horizontal overflow
+    overflow-x: hidden;
+    z-index: 1000;
+    background-color: transparent;
+    font-family: 'Montserrat', sans-serif;
     
-    // The container inside nav inherits the background color
-    // but is constrained to max-width with proper margins
     .nav-inner {
         @extend .container;
         display: flex;
@@ -34,16 +37,25 @@ nav {
     }
 }
 
-nav .title {
-    font-size: 1.5rem;
+// Logo styling
+.logo-link {
+    display: flex;
+    align-items: center;
     margin: 1rem;
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
 }
+
+.logo-image {
+    height: 80px; // Adjust as needed
+    width: auto;
+}
+
+// Removed .title styling since it's no longer used
 
 nav ul {
     display: flex;
+    background-color: #BFFF7F; // Added background only to the navigation items
+    border-radius: 50px; // Optional: rounded corners
+    padding: 0.2rem;
 }
 
 nav ul li {
@@ -112,10 +124,6 @@ nav .menu span {
         width: 100%;
     }
     
-    nav .title {
-        margin-left: 0;
-    }
-
     nav ul {
         display: none;
         flex-direction: column;

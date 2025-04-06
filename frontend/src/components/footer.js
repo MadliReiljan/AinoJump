@@ -1,17 +1,31 @@
 import React from 'react';
-
+import "./Footer.scss";
+import logoImage from '../images/Logo2.png'; 
 
 const Footer = () => {
     return (
-        <footer style={{ 
-            backgroundColor: '#333', 
-            color: '#fff', 
-            textAlign: 'center', 
-            padding: '10px 0', 
-            bottom: 0, 
-            width: '100%' 
-        }}>
-            <p>&copy; {new Date().getFullYear()} AinoJump OÜ. Kõik õigused kaitstud.</p>
+        <footer>
+            <div className="footer-inner">
+                <div className="footer-container">
+                    <div className="footer-column logo-column">
+                        <img src={logoImage} alt="AinoJump Logo" className="footer-logo" />
+                    </div>
+                    
+                    <div className="footer-column">
+                        <h4>Kontakt</h4>
+                        <p>Email: ainotimmer1@gmail.com</p>
+                    </div>
+                    
+                    <div className="footer-column">
+                        <h4>Mingi tekst</h4>
+                        <p>........................................</p>
+                    </div>
+                </div>
+                
+                <div className="footer-bottom">
+                    <p>&copy; {new Date().getFullYear()} AinoJump OÜ. Kõik õigused kaitstud.</p>
+                </div>
+            </div>
         </footer>
     );
 };
