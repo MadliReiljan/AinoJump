@@ -15,7 +15,7 @@ const Register = () => {
   return (
     <div className="background">
       <div className="login-container">
-        <h2>Registreeru</h2> 
+        <h2>Loo konto</h2> 
         <form onSubmit={handleLogin}>
           <input
             type="text"
@@ -38,7 +38,8 @@ const Register = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <Button type="submit">Registreeru</Button> 
+          <Button type="submit" className="neutral">Loo konto</Button>
+          <a className="anchor-link" href="/login">Logi sisse</a>
         </form>
       </div>
     </div>

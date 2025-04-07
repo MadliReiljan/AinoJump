@@ -30,7 +30,8 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <Button type="submit">Logi sisse</Button>
+          <Button type="submit" className="neutral">Logi sisse</Button>
+          <a className="anchor-link" href="/register">Loo konto</a>
         </form>
       </div>
     </div>

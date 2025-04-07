@@ -13,7 +13,7 @@ export const Navbar = () => {
     };
 
     const isLoginPage = location.pathname === "/login";
-    const authButtonText = isLoginPage ? "Registreeru" : "Logi sisse";
+    const authButtonText = isLoginPage ? "Loo konto" : "Logi sisse";
     const authButtonLink = isLoginPage ? "/register" : "/login";
 
     return (

@@ -12,13 +12,13 @@ const Button = ({ children, to, variant = "default", className, ...props }) => {
   };
 
   return (
-    <button
+    <a
       onClick={handleClick}
       className={`button ${variant} ${className || ""}`.trim()}
       {...props}
     >
       {children}
-    </button>
+    </a>
   );
 };
 

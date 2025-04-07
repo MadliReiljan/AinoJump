@@ -57,4 +57,19 @@
   .login-container button:hover {
     opacity: 0.9;
   }
+
+  .anchor-link {
+    color: #000000;
+    text-decoration: none;
+    margin-top: -20px;
+    font-size: 14px;
+    align-self: flex-end;
+  }
+
+  .anchor-link:hover {
+    color: #7ca356;
+    text-decoration: none;
+    font-size: 14px;
+    align-self: flex-end;
+  }
   
