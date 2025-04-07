@@ -73,3 +73,11 @@
     align-self: flex-end;
   }
   
+  .error-message {
+    color: #ff0000;
+    margin-bottom: 1rem;
+    text-align: center;
+    padding: 0.5rem;
+    background-color: rgba(255, 0, 0, 0.1);
+    border-radius: 4px;
+  }
