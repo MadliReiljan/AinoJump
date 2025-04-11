@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "./Login.scss";
+import "../../styles/Login.scss";
 import Button from "../Button";
 
 const Register = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./Button.scss";
+import "../styles/Button.scss"; 
 
 const Button = ({ children, to, variant = "default", className, type, ...props }) => {
   const navigate = useNavigate();

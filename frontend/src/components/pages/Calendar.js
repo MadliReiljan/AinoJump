@@ -5,7 +5,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import "../../styles/GlobalContainer.scss"
 
-import "./Calendar.scss";
+import "../../styles/Calendar.scss";
 
 
 export const Calendar = () => {
