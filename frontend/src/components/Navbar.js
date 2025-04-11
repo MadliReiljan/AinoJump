@@ -46,7 +46,7 @@ export const Navbar = () => {
                         <NavLink to="/broneeri">Broneeri</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/kontakt">Kontakt</NavLink>
+                        <NavLink to="/info">Info</NavLink>
                     </li>
                     <li>
                         <Button to={authButtonLink}>{authButtonText}</Button>

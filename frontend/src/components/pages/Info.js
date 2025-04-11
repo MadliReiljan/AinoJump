@@ -1,8 +1,8 @@
 import React from 'react'
 import "../../styles/GlobalContainer.scss"
 
-export const Contact = () => {
+export const Info = () => {
   return (
-    <div className='container'>Kontakt</div>
+    <div className='container'>Info</div>
   )
 }
