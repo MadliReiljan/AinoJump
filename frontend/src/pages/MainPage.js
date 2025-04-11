@@ -1,6 +1,6 @@
 import React from 'react'
-import "../../styles/GlobalContainer.scss"
-import heroImage from "../../images/IMG_4844.jpg"
+import "../styles/GlobalContainer.scss"
+import heroImage from "../images/IMG_4844.jpg"
 
 export const MainPage = () => {
   return (

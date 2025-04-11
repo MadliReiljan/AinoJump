@@ -1,5 +1,5 @@
 import React from 'react'
-import "../../styles/GlobalContainer.scss"
+import "../styles/GlobalContainer.scss"
 
 export const AboutUs = () => {
   return (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "../../styles/Login.scss";
-import Button from "../Button";
+import "../styles/Login.scss";
+import Button from "../components/Button";
 
 const Register = () => {
   const [fullName, setFullName] = useState("");

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../../styles/Login.scss";
-import Button from "../Button";
+import { useNavigate, Link } from "react-router-dom";
+import "../styles/Login.scss";
+import Button from "../components/Button";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -74,6 +74,7 @@ const Login = () => {
           <Button type="submit" className="neutral" disabled={isLoading}>
             {isLoading ? "Logging in..." : "Logi sisse"}
           </Button>
+          <Link className="anchor-link" to="/register">Loo konto</Link>
         </form>
       </div>
     </div>

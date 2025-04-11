@@ -5,9 +5,13 @@
     color: white;
   }
   
+  .calendar-wrapper {
+    max-width: 800px; 
+    margin: 0 auto; 
+  }
 
   .fc-day-today {
-    background: rgb(117, 151, 119) !important;
+    background: rgba(191, 255, 127, 0.6) !important;
     border: 2px solid #302929;
   }
   

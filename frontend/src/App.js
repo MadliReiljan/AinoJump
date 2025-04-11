@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
-import { AboutUs, MainPage, Info, Calendar } from './components/pages';
-import LoginPage from './components/pages/Login';
-import Register from './components/pages/Register';
+import { AboutUs, MainPage, Info, Calendar } from './pages';
+import LoginPage from './pages/Login';
+import Register from './pages/Register';
 import Footer from './components/footer';
 
 function App() {
