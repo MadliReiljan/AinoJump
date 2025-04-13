@@ -26,7 +26,6 @@ $font-size-heading-large: 36px;
 $font-size-heading-medium: 28px;
 $font-size-heading-small: 24px;
 
-/* Base Styles */
 body {
   background-color: $color-background;
   margin: 0;
@@ -34,7 +33,6 @@ body {
   font-family: $font-family-base;
 }
 
-/* Container Styles */
 .container-base {
   max-width: $breakpoint-desktop;
   padding-left: 120px;
@@ -65,7 +63,6 @@ body {
   color: $color-text;
 }
 
-/* Layout Components */
 .two-column-section {
   display: flex;
   flex-direction: row;
@@ -98,11 +95,10 @@ body {
   align-items: flex-start;
 }
 
-/* Typography */
 .section-heading {
   font-size: $font-size-heading-large;
   margin-bottom: $spacing-md;
-  font-weight: 500;
+  font-weight: 400;
   color: $color-text;
 }
 
@@ -114,10 +110,9 @@ body {
 
 .highlight-text {
   color: $color-highlight;
-  font-weight: 600;
+  font-weight: 400;
 }
 
-/* Image Components */
 .content-image-container {
   border-radius: 12px;
   overflow: hidden;
@@ -131,7 +126,82 @@ body {
   object-fit: cover;
 }
 
-/* Responsive Styles */
+.benefits-grid {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-xs 0;
+  position: relative;
+}
+
+.benefits-heading {
+  text-align: right;
+  margin-bottom: $spacing-xs;
+  padding-right: $spacing-lg;
+}
+
+.benefits-row {
+  display: flex;
+  gap: $spacing-xl;
+  margin-bottom: $spacing-md;
+  flex-wrap: wrap;
+}
+
+.benefit-card {
+  flex: 0 1 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.offset-card {
+  margin-top: 100px;
+}
+
+.benefit-image-container {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: $spacing-md;
+}
+
+.benefit-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.benefit-title {
+  color: $color-highlight;
+  font-size: $font-size-heading-small;
+  margin-bottom: $spacing-xs;
+  font-weight: 500;
+}
+
+.benefit-description {
+  font-size: $font-size-base;
+  line-height: 1.6;
+}
+
+.benefits-grid:before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: left center;
+}
+
+.benefits-row + .benefits-row {
+  margin-top: -50px;
+}
+
+
 @mixin respond-to($breakpoint) {
   @if $breakpoint == tablet {
     @media (max-width: $breakpoint-tablet) { @content; }
@@ -142,7 +212,88 @@ body {
   @else if $breakpoint == mobile {
     @media (max-width: $breakpoint-mobile) { @content; }
   }
+  @else if $breakpoint == medium {
+    @media (max-width: 1087px) { @content; }
+  }
+  @else if $breakpoint == mid-small {
+    @media (max-width: 764px) and (min-width: 530px) { @content; }
+  }
 }
+
+@include respond-to(medium) {
+
+  .benefits-grid:before {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+  }
+  
+  .benefits-row {
+    justify-content: center;
+    gap: $spacing-md;
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .benefit-card {
+    flex: 0 1 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .offset-card {
+    margin-top: 0;
+  }
+
+  .benefits-heading {
+    text-align: center;
+    padding-right: 0;
+  }
+  .image-column {
+    display: none;
+  }
+}
+
+@include respond-to(mid-small) {
+  .benefits-row {
+    justify-content: center;
+    gap: $spacing-sm;
+  }
+  
+  .benefit-card {
+    flex: 0 1 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .benefits-heading {
+    text-align: center;
+    padding-right: 0;
+  }
+}
+
+
+@include respond-to(tablet) {
+  .benefits-row {
+    flex-direction: column;
+  }
+  
+  .benefit-card {
+    flex: 0 1 100%;
+  }
+  
+  .offset-card {
+    margin-top: 0;
+  }
+  
+  .benefits-heading {
+    text-align: center;
+    padding-right: 0;
+  }
+}
+
 
 @include respond-to(tablet) {
   .container-base {

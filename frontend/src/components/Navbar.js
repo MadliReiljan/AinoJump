@@ -12,6 +12,10 @@ export const Navbar = () => {
         setMenuOpen(!menuOpen);
     };
 
+    const closeMenu = () => {
+        setMenuOpen(false);
+    };
+
     const isLoginPage = location.pathname === "/login";
     const authButtonText = isLoginPage ? "Loo konto" : "Logi sisse";
     const authButtonLink = isLoginPage ? "/register" : "/login";
@@ -26,7 +30,7 @@ export const Navbar = () => {
                     alignItems: 'center',
                     boxSizing: 'border-box'
                 }}>
-                    <Link to="/" className='logo-link'>
+                    <Link to="/" className='logo-link' onClick={closeMenu}>
                         <img src={logoImage} alt="AinoJump Logo" className="logo-image" />
                     </Link>
                     <div className="menu" onClick={toggleMenu}>
@@ -37,19 +41,19 @@ export const Navbar = () => {
                 </div>
                 <ul className={menuOpen ? "open" : ""}>
                     <li>
-                        <NavLink to="/pealeht">Pealeht</NavLink>
+                        <NavLink to="/pealeht" onClick={closeMenu}>Pealeht</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/meist">Meist</NavLink>
+                        <NavLink to="/meist" onClick={closeMenu}>Meist</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/broneeri">Broneeri</NavLink>
+                        <NavLink to="/broneeri" onClick={closeMenu}>Broneeri</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/info">Info</NavLink>
+                        <NavLink to="/info" onClick={closeMenu}>Info</NavLink>
                     </li>
                     <li>
-                        <Button to={authButtonLink}>{authButtonText}</Button>
+                        <Button to={authButtonLink} onClick={closeMenu}>{authButtonText}</Button>
                     </li>
                 </ul>
             </div>

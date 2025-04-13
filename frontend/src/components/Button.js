@@ -2,10 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Button.scss"; 
 
-const Button = ({ children, to, variant = "default", className, type, ...props }) => {
+const Button = ({ children, to, variant = "default", className, type, onClick, ...props }) => {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
+    if (onClick) {
+      onClick(e);
+    }
+    
     if (type === "submit") {
       e.preventDefault();
       const form = e.target.closest("form");
