@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 .button {
     padding: 10px 10px;
     border-radius: 8px;
@@ -6,54 +8,78 @@
     transition: all 0.2s ease-in-out;
     border: none;
     outline: none;
+    position: relative; 
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 50%;
+      width: 0;
+      height: 3px;
+      background-color: #BFFF7F; 
+      transition: width 0.5s ease;
+      border-radius: 3px;
+      transform: translateX(-50%);
   }
   
-  .button.default {
+  &:hover::after {
+      width: 100%;
+  }
+}
+  
+.button.default {
     text-align: center;
     display: block;
-    color: black;
+    color: white;
     width: 5.5rem;
     height: auto;
     padding: 0.5rem;
     border-radius: 0.5rem;
-  }
+}
   
-  .button.default:hover {
-    background-color: #9fd36c;
-    ;
-  }
-  
-  .button.outline {
+.button.outline {
     background-color: transparent;
     border: 2px solid #BFFF7F;
     color: #BFFF7F;
-  }
-  
-  .button.outline:hover {
-    background-color: #BFFF7F;
-    color: white;
-  }
+    
+    &:hover {
+        background-color: #BFFF7F;
+        color: white;
+    }
+    
+    &::after {
+        background-color: #BFFF7F;
+    }
+}
 
-  .button.neutral {
+.button.neutral {
     align-items: center;
     justify-content: center;
     align-self: center;
     background-color: #dbdbdb;
     color: rgb(0, 0, 0);
     text-decoration: none;
-  }
-
-  .button.neutral:hover {
-    background-color: #d1d1d1;
-    color: rgb(0, 0, 0);
-  }
+    
+    &:hover {
+        background-color: #d1d1d1;
+        color: rgb(0, 0, 0);
+    }
+    
+    &::after {
+        background-color: #333;
+    }
+}
   
-  .button.danger {
+.button.danger {
     background-color: #ef4444;
     color: white;
-  }
-  
-  .button.danger:hover {
-    background-color: #dc2626;
-  }
-  
+    
+    &:hover {
+        background-color: #dc2626;
+    }
+    
+    &::after {
+        background-color: #fecaca;
+    }
+}

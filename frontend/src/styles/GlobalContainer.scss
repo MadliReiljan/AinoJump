@@ -1,15 +1,42 @@
+// Import fonts
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
-/* Updated GlobalContainer.scss */
+// Variables
+$font-family-base: 'Montserrat', sans-serif;
+$color-background: #1C1C1C;
+$color-text: white;
+$color-highlight: #BFFF7F;
+
+// Breakpoints
+$breakpoint-mobile: 480px;
+$breakpoint-tablet-small: 580px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1600px;
+
+// Spacing
+$spacing-xs: 1rem;
+$spacing-sm: 1.5rem;
+$spacing-md: 2rem;
+$spacing-lg: 3rem;
+$spacing-xl: 5rem;
+
+// Font sizes
+$font-size-base: 16px;
+$font-size-heading-large: 36px;
+$font-size-heading-medium: 28px;
+$font-size-heading-small: 24px;
+
+/* Base Styles */
 body {
-  background-color: #1C1C1C;
+  background-color: $color-background;
   margin: 0;
   padding: 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: $font-family-base;
 }
-/* Base container class without background color */
+
+/* Container Styles */
 .container-base {
-  max-width: 1440px;
+  max-width: $breakpoint-desktop;
   padding-left: 120px;
   padding-right: 120px;
   margin: 0 auto;
@@ -17,24 +44,107 @@ body {
   box-sizing: border-box;
 }
 
-/* Regular container with dark background */
 .container {
   @extend .container-base;
-  background-color: #1C1C1C;
-  color: white;
-  padding-top: 10rem;
-  min-height: 100vh;
+  background-color: $color-background;
+  color: $color-text;
+  padding-top: 5rem;
 }
 
-/* Transparent container for hero sections */
+.container2 {
+  @extend .container-base;
+  background-color: $color-background;
+  color: $color-text;
+  padding-top: 2rem; 
+  padding-bottom: 2rem;  
+}
+
 .container-transparent {
   @extend .container-base;
   background-color: transparent;
-  color: white;
+  color: $color-text;
 }
 
-/* Media queries */
-@media (max-width: 768px) {
+/* Layout Components */
+.two-column-section {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-lg;
+  margin: $spacing-lg 0 $spacing-md;
+  flex-wrap: wrap;
+}
+
+.one-column-section {
+  display: flex;
+  gap: $spacing-lg;
+  justify-content: center;
+  align-items: center;
+  
+  .text-column,
+  .section-heading,
+  .paragraph {
+    text-align: center;
+  }
+}
+
+.text-column {
+  flex: 2 1 400px;
+}
+
+.image-column {
+  flex: 1 1 400px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Typography */
+.section-heading {
+  font-size: $font-size-heading-large;
+  margin-bottom: $spacing-md;
+  font-weight: 500;
+  color: $color-text;
+}
+
+.paragraph {
+  margin-bottom: $spacing-md;
+  line-height: 1.6;
+  font-size: $font-size-base;
+}
+
+.highlight-text {
+  color: $color-highlight;
+  font-weight: 600;
+}
+
+/* Image Components */
+.content-image-container {
+  border-radius: 12px;
+  overflow: hidden;
+  width: 80%;
+  max-height: 500px;
+}
+
+.content-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Responsive Styles */
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == tablet {
+    @media (max-width: $breakpoint-tablet) { @content; }
+  }
+  @else if $breakpoint == tablet-small {
+    @media (max-width: $breakpoint-tablet-small) and (min-width: $breakpoint-mobile + 1) { @content; }
+  }
+  @else if $breakpoint == mobile {
+    @media (max-width: $breakpoint-mobile) { @content; }
+  }
+}
+
+@include respond-to(tablet) {
   .container-base {
     padding-left: 60px;
     padding-right: 60px;
@@ -43,9 +153,20 @@ body {
   .container {
     padding-top: 40px;
   }
+  
+  .two-column-section {
+    flex-direction: column-reverse;
+    gap: $spacing-md;
+    margin: $spacing-md 0;
+  }
+  
+  .section-heading {
+    font-size: $font-size-heading-medium;
+    margin-bottom: $spacing-sm;
+  }
 }
 
-@media (max-width: 580px) and (min-width: 481px) {
+@include respond-to(tablet-small) {
   .container-base {
     padding-left: 40px;
     padding-right: 40px;
@@ -56,7 +177,7 @@ body {
   }
 }
 
-@media (max-width: 480px) {
+@include respond-to(mobile) {
   .container-base {
     padding-left: 20px;
     padding-right: 20px;
@@ -64,5 +185,9 @@ body {
   
   .container {
     padding-top: 20px;
+  }
+  
+  .section-heading {
+    font-size: $font-size-heading-small;
   }
 }

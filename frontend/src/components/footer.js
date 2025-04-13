@@ -14,11 +14,12 @@ const Footer = () => {
                     <div className="footer-column">
                         <h4>Kontakt</h4>
                         <p>Email: ainotimmer1@gmail.com</p>
+                        <p>Tel: +372 53939608</p>
                     </div>
                     
                     <div className="footer-column">
-                        <h4>Mingi tekst</h4>
-                        <p>........................................</p>
+                        <h4>Asukoht</h4>
+                        <p>Ülenumre Spordihoone</p>
                     </div>
                 </div>
                 

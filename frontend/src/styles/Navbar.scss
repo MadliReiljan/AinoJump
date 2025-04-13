@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
-// Add this at the top of your Navbar.scss file
 .container {
-    max-width: 1440px;
+    max-width: 1600px;
     padding-left: 120px;
     padding-right: 120px;
     margin: 0 auto;
@@ -11,7 +10,19 @@
 }
 
 .active {
-    background-color: #BFFF7F;
+    position: relative;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%; 
+        width: 100%;
+        height: 3px;
+        background-color: #BFFF7F; 
+        border-radius: 3px;
+        transform: translateX(-50%);
+    }
 }
 
 nav {
@@ -19,7 +30,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     position: absolute;
-    top: 0;
+    top: 20px;
     left: 0;
     width: 100%;
     box-sizing: border-box;
@@ -37,7 +48,6 @@ nav {
     }
 }
 
-// Logo styling
 .logo-link {
     display: flex;
     align-items: center;
@@ -45,16 +55,13 @@ nav {
 }
 
 .logo-image {
-    height: 80px; // Adjust as needed
+    height: 50px;
     width: auto;
 }
 
-// Removed .title styling since it's no longer used
-
 nav ul {
     display: flex;
-    background-color: #BFFF7F; // Added background only to the navigation items
-    border-radius: 50px; // Optional: rounded corners
+    border-radius: 50px;
     padding: 0.2rem;
 }
 
@@ -65,14 +72,32 @@ nav ul li {
 nav ul li a {
     display: block;
     text-decoration: none;
-    color: black;
+    color: rgb(255, 255, 255);
     padding: 0.5rem;
     margin: 0 0.5rem;
     border-radius: 0.5rem;
+    position: relative; 
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0; 
+        height: 3px;
+        background-color: #BFFF7F;
+        transition: width 0.5s ease;
+        border-radius: 3px;
+        transform: translateX(-50%);
+    }
+    
+    &:hover::after {
+        width: 100%;
+    }
 }
 
 nav ul li a:not(.active):hover {
-    background-color: #9fd36c;
+    background-color: transparent;
 }
 
 nav .menu {
@@ -89,7 +114,7 @@ nav .menu {
 nav .menu span {
     height: 0.4rem;
     width: 100%;
-    background-color: black;
+    background-color: white; 
     border-radius: 0.2rem;
 }
 
