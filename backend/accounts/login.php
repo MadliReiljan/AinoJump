@@ -29,12 +29,16 @@ if (!empty($data->email) && !empty($data->password)) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if (password_verify($data->password, $row['password_hash'])) {
+               
+                $token = $row['id']; 
+
                 http_response_code(200);
                 echo json_encode(array(
                     "id" => $row['id'],
                     "fullname" => $row['full_name'],
                     "email" => $row['email'],
-                    "role" => $row['role']
+                    "role" => $row['role'],
+                    "token" => $token 
                 ));
             } else {
                 http_response_code(401);

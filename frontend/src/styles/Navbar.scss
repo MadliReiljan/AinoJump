@@ -164,6 +164,30 @@ nav .menu span {
     }
 }
 
+.user-panel {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-panel .user-info {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+  }
+  
+  .user-panel .user-info button {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .user-panel .user-info button:hover {
+    background: #e60000;
+  }
+
 @media (max-width: 768px) {
     .container, nav .nav-inner {
         padding-left: 60px;
