@@ -67,7 +67,6 @@ body {
   display: flex;
   flex-direction: row;
   gap: $spacing-lg;
-  margin: $spacing-lg 0 $spacing-md;
   flex-wrap: wrap;
 }
 
@@ -104,7 +103,7 @@ body {
 
 .paragraph {
   margin-bottom: $spacing-md;
-  line-height: 1.6;
+  line-height: 1.5;
   font-size: $font-size-base;
 }
 
@@ -200,6 +199,8 @@ body {
 .benefits-row + .benefits-row {
   margin-top: -50px;
 }
+
+
 
 
 @mixin respond-to($breakpoint) {
