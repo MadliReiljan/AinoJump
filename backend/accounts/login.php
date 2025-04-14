@@ -17,28 +17,37 @@ $db = $database->getConnection();
 $data = json_decode(file_get_contents("php://input"));
 
 if (!empty($data->email) && !empty($data->password)) {
-    $query = "SELECT id, fullname, email, password_hash, role FROM users WHERE email = ?";
-    $stmt = $db->prepare($query);
-    $stmt->execute([$data->email]);
-    
-    if ($stmt->rowCount() > 0) {
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    try {
+        $query = "SELECT u.id, u.email, u.password_hash, u.role, p.full_name 
+                  FROM user u 
+                  INNER JOIN person p ON u.person_id = p.id 
+                  WHERE u.email = ?";
+        $stmt = $db->prepare($query);
+        $stmt->execute([$data->email]);
         
-        if (password_verify($data->password, $row['password_hash'])) {
-            http_response_code(200);
-            echo json_encode(array(
-                "id" => $row['id'],
-                "fullname" => $row['fullname'],
-                "email" => $row['email'],
-                "role" => $row['role']
-            ));
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (password_verify($data->password, $row['password_hash'])) {
+                http_response_code(200);
+                echo json_encode(array(
+                    "id" => $row['id'],
+                    "fullname" => $row['full_name'],
+                    "email" => $row['email'],
+                    "role" => $row['role']
+                ));
+            } else {
+                http_response_code(401);
+                echo json_encode(array("message" => "Invalid credentials."));
+            }
         } else {
             http_response_code(401);
             echo json_encode(array("message" => "Invalid credentials."));
         }
-    } else {
-        http_response_code(401);
-        echo json_encode(array("message" => "Invalid credentials."));
+    } catch (Exception $e) {
+        error_log("Error during login: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(array("message" => "Internal server error."));
     }
 } else {
     http_response_code(400);

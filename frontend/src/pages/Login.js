@@ -38,7 +38,7 @@ const Login = () => {
       console.log("Response data:", data);
 
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(data));
+        localStorage.setItem("user", JSON.stringify(data)); 
         navigate("/"); 
       } else {
         setError(data.message || "Login failed.");

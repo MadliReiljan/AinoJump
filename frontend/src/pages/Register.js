@@ -11,9 +11,8 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("Form submitted"); 
     setError("");
     setIsLoading(true);
 
@@ -23,7 +22,7 @@ const Register = () => {
       password: password
     };
 
-    console.log("Sending data:", userData); 
+    console.log("Sending registration data:", userData);
 
     try {
       const response = await fetch("http://localhost:8000/accounts/register.php", {
@@ -41,13 +40,13 @@ const Register = () => {
       console.log("Response data:", data);
 
       if (response.ok) {
-        navigate("/login");
+        navigate("/login"); 
       } else {
-        setError(data.message || "Konto loomine nurjus");
+        setError(data.message || "Registration failed.");
       }
     } catch (err) {
       console.error("Registration error:", err);
-      setError("Viga registreerimisel: " + err.message);
+      setError("Network error. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -58,41 +57,26 @@ const Register = () => {
       <div className="login-container">
         <h2>Loo konto</h2>
         {error && <div className="error-message">{error}</div>}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log("Form onSubmit triggered"); 
-            handleLogin(e);
-          }}
-        >
+        <form onSubmit={handleRegister}>
           <input
             type="text"
             placeholder="Täisnimi"
             value={fullName}
-            onChange={(e) => {
-              console.log("Full Name:", e.target.value); 
-              setFullName(e.target.value);
-            }}
+            onChange={(e) => setFullName(e.target.value)}
             required
           />
           <input
             type="email"
             placeholder="E-post"
             value={email}
-            onChange={(e) => {
-              console.log("Email:", e.target.value); 
-              setEmail(e.target.value);
-            }}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
             type="password"
             placeholder="Parool"
             value={password}
-            onChange={(e) => {
-              console.log("Password:", e.target.value); 
-              setPassword(e.target.value);
-            }}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
           <Button type="submit" className="neutral" disabled={isLoading}>

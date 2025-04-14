@@ -1,5 +1,5 @@
 CREATE TABLE membership (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(255),
     start_date DATETIME,
     end_date DATETIME,
