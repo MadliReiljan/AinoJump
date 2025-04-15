@@ -21,7 +21,6 @@ function validateToken($token) {
     return false;
 }
 
-
 $headers = getallheaders();
 error_log("Headers: " . print_r($headers, true)); 
 
@@ -45,7 +44,7 @@ if (!$userId) {
 }
 
 try {
-    $query = "SELECT u.email, p.full_name, p.parent_id IS NOT NULL AS hasChild
+    $query = "SELECT u.email, u.role, p.full_name, p.parent_id IS NOT NULL AS hasChild
               FROM user u
               INNER JOIN person p ON u.person_id = p.id
               WHERE u.id = :userId";
