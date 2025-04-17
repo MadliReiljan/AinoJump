@@ -44,7 +44,7 @@ if (!$userId) {
 }
 
 try {
-    $query = "SELECT u.email, u.role, p.full_name, p.parent_id IS NOT NULL AS hasChild
+    $query = "SELECT u.email, u.role, p.full_name
               FROM user u
               INNER JOIN person p ON u.person_id = p.id
               WHERE u.id = :userId";
@@ -56,7 +56,11 @@ try {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         error_log("User data fetched: " . print_r($user, true)); 
         http_response_code(200);
-        echo json_encode($user);
+        echo json_encode(array(
+            "email" => $user['email'],
+            "role" => $user['role'],
+            "fullname" => $user['full_name']
+        ));
     } else {
         error_log("User not found for ID: " . $userId); 
         http_response_code(404);

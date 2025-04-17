@@ -24,9 +24,8 @@ if (!isset($headers['Authorization'])) {
 $authHeader = $headers['Authorization'];
 $token = str_replace('Bearer ', '', $authHeader);
 
-// Validate the token and get the user ID and role
+
 function validateToken($token) {
-    // For simplicity, assume the token is the user ID
     return is_numeric($token) ? intval($token) : false;
 }
 
@@ -37,7 +36,6 @@ if (!$userId) {
     exit();
 }
 
-// Check if the user is an owner
 try {
     $query = "SELECT role FROM user WHERE id = :userId";
     $stmt = $db->prepare($query);
@@ -57,7 +55,6 @@ try {
     exit();
 }
 
-// Get event data from the request
 $data = json_decode(file_get_contents("php://input"));
 
 if (

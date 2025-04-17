@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userEmail, setUserEmail] = useState(null);
+    const [fullName, setFullName] = useState(null); 
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,10 +26,11 @@ export const AuthProvider = ({ children }) => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
+    
             if (response.ok) {
                 const data = await response.json();
                 setUserEmail(data.email);
+                setFullName(data.fullname); 
             }
         } catch (err) {
             console.error("Failed to fetch user data:", err);
@@ -45,11 +47,12 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("token");
         setIsLoggedIn(false);
         setUserEmail(null);
-        navigate("/"); 
+        setFullName(null); 
+        navigate("/");
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, userEmail, login, logout }}>
+        <AuthContext.Provider value={{ isLoggedIn, userEmail, fullName, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

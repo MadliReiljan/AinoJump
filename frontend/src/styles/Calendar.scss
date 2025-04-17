@@ -1,31 +1,121 @@
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 80%; 
+  margin: 100px auto 20px auto;
+  overflow: hidden; 
+}
+
+.calendar-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 100px auto 20px auto;
+  max-width: 1200px;
+}
+
+.calendar-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.calendar-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.info-box {
+  flex: 1;
+  background-color: #e5f5e5;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  color: #333;
+}
+
+.info-box h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.info-box ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.info-box ul li {
+  margin-bottom: 5px;
+}
+
+.calendar-wrapper {
+  flex: 2;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.fc {
+  background-color: #1C1C1C;
+  color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.fc-toolbar {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
+}
+
+.fc-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.fc-button:hover {
+  background-color: #45a049;
+}
+
+.fc-button:disabled {
+  background-color: #ccc;
+  color: #666;
+}
+
+.fc-daygrid-day {
+  border: 1px solid #ddd;
+}
+
+.fc-daygrid-day:hover {
+  background-color: #f0f0f0;
+}
+
 .fc-event {
-    background-color: #308350 !important; 
-    border-radius: 8px;
-    padding: 5px;
-    color: white;
-  }
-  
-  .calendar-wrapper {
-    max-width: 800px; 
-    margin: 0 auto; 
-  }
-
-  .fc-day-today {
-    background: rgba(191, 255, 127, 0.6) !important;
-    border: 2px solid #302929;
-  }
-  
-  .fc-toolbar {
-    padding: 10px;
-    border-radius: 8px;
-  }
-  
-
-  .fc-daygrid-day {
-    border: 1px solid #ddd;
-    cursor: pointer;
-  }
-  
-  .fc-daygrid-day:hover {
-    background: #f4f4f4;
-  }
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 2px 5px;
+  font-size: 12px;
+}
