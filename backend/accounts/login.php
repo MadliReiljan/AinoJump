@@ -14,6 +14,12 @@ include_once '../database.php';
 $database = new Database();
 $db = $database->getConnection();
 
+if (!$db) {
+    http_response_code(401);
+    echo json_encode(array("message" => "Invalid credentials."));
+    exit();
+}
+
 $data = json_decode(file_get_contents("php://input"));
 
 if (!empty($data->email) && !empty($data->password)) {
@@ -29,7 +35,6 @@ if (!empty($data->email) && !empty($data->password)) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if (password_verify($data->password, $row['password_hash'])) {
-               
                 $token = $row['id']; 
 
                 http_response_code(200);
