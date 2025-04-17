@@ -5,7 +5,7 @@ import { AboutUs, MainPage, Info, Calendar } from "./pages";
 import LoginPage from "./pages/Login";
 import Register from "./pages/Register";
 import User from "./pages/User";
-import Footer from "./components/footer";
+import Footer from "./components/PageFooter";
 import { AuthProvider } from "./auth/Authentication";
 
 function App() {
