@@ -57,23 +57,24 @@
     align-items: center;
     justify-content: center;
     align-self: center;
-    background-color: #dbdbdb;
+    background-color: #A4FF87;
     color: rgb(0, 0, 0);
     text-decoration: none;
     
     &:hover {
-        background-color: #d1d1d1;
+        background-color: #BFFF7F;
         color: rgb(0, 0, 0);
     }
     
     &::after {
-        background-color: #333;
+        background-color: #d3faac;
     }
 }
   
 .button.danger {
     background-color: #ef4444;
     color: white;
+    text-decoration: none;
     
     &:hover {
         background-color: #dc2626;

@@ -1,14 +1,65 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { AuthContext } from "../auth/Authentication";
+import EventDetailsModal from "../components/DetailsModal";
+import EventModal from "../components/Modal";
 import "../styles/GlobalContainer.scss";
 import "../styles/Calendar.scss";
+import etLocale from "@fullcalendar/core/locales/et"; 
 
 export const Calendar = () => {
-  const { fullName } = useContext(AuthContext);
+  const { fullName, userRole } = useContext(AuthContext);
+  const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/events/get_events.php");
+        if (response.ok) {
+          const data = await response.json();
+          setEvents(data);
+        } else {
+          console.error("Failed to fetch events");
+        }
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  const handleEventClick = (info) => {
+    const clickedEvent = events.find((event) => event.id === parseInt(info.event.id));
+    if (clickedEvent) {
+      setSelectedEvent(clickedEvent);
+      setIsDetailsModalOpen(true);
+    }
+  };
+
+  const handleDateClick = (info) => {
+    if (userRole === "owner") {
+      setSelectedDate(info.dateStr);
+      setIsCreateModalOpen(true);
+    }
+  };
+
+  const handleCloseDetailsModal = () => {
+    setIsDetailsModalOpen(false);
+    setSelectedEvent(null);
+  };
+
+  const handleCloseCreateModal = () => {
+    setIsCreateModalOpen(false);
+    setSelectedDate(null);
+  };
 
   return (
     <div className="calendar-page">
@@ -31,16 +82,19 @@ export const Calendar = () => {
           <p>Osta endale kuupilet Stebby kaudu!</p>
         </div>
         <div className="calendar-wrapper">
-          <FullCalendar
+        <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             height={"600px"}
             selectable={true}
             firstDay={1}
-            events={[
-              { title: "Reservation 1", date: "2025-03-15" },
-              { title: "Reservation 2", date: "2025-03-18" },
-            ]}
+            locale={etLocale}
+            events={events.map((event) => ({
+              id: event.id,
+              title: event.title,
+              start: event.time,
+              allDay: false, 
+            }))}
             headerToolbar={{
               left: "prev,next today",
               center: "title",
@@ -52,9 +106,28 @@ export const Calendar = () => {
               week: "Nädal",
               day: "Päev",
             }}
+            eventClick={handleEventClick}
+            dateClick={handleDateClick}
+            eventContent={(arg) => (
+              <div>
+                <b>{arg.timeText}</b> <span>{arg.event.title}</span>
+              </div>
+            )}
           />
         </div>
       </div>
+      {isDetailsModalOpen && selectedEvent && (
+        <EventDetailsModal
+          event={selectedEvent}
+          onClose={handleCloseDetailsModal}
+        />
+      )}
+      {isCreateModalOpen && (
+        <EventModal
+          selectedDate={selectedDate}
+          onClose={handleCloseCreateModal}
+        />
+      )}
     </div>
   );
 };
