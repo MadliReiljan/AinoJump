@@ -16,7 +16,11 @@
   flex-direction: column;
   align-items: center;
   margin: 100px auto 20px auto;
-  max-width: 1200px;
+  max-width: 1600px;
+  padding-left: 120px;
+  padding-right: 120px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .calendar-header {
@@ -25,9 +29,12 @@
 }
 
 .calendar-header h2 {
-  font-size: 24px;
-  font-weight: bold;
-  color: #ffffff;
+  font-size: 32px;
+  text-align: center;
+  color: white;
+  font-weight: 400;
+  font-family: "Montserrat", sans-serif;
+  margin-top: 8rem;
 }
 
 .calendar-content {
@@ -35,6 +42,7 @@
   justify-content: space-between;
   gap: 20px;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .info-box {
@@ -64,8 +72,6 @@
 
 .calendar-wrapper {
   flex: 2;
-  background-color: white;
-  border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
@@ -73,16 +79,17 @@
 .fc {
   background-color: #1C1C1C;
   color: white;
-  border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .fc-toolbar {
-  background-color: #333;
-  color: white;
+  color: #ffffff;
   padding: 10px;
-  border-radius: 10px 10px 0 0;
+}
+
+.fc .fc-toolbar-title::first-letter {
+  text-transform: uppercase;
 }
 
 .fc-button {
@@ -95,7 +102,7 @@
 }
 
 .fc-button:hover {
-  background-color: #45a049;
+  background-color: #284229;
 }
 
 .fc-button:disabled {
@@ -108,7 +115,8 @@
 }
 
 .fc-daygrid-day:hover {
-  background-color: #f0f0f0;
+  background-color: #252525;
+  cursor: pointer;
 }
 
 .fc-event {
@@ -118,4 +126,9 @@
   border-radius: 5px;
   padding: 2px 5px;
   font-size: 12px;
+}
+
+.fc-event:hover {
+  background-color: #337736;
+  cursor: pointer;
 }

@@ -1,0 +1,10 @@
+.page-transition {
+    position: relative;
+    min-height: 60vh;
+    animation: simpleFadeIn 400ms ease forwards;
+  }
+  
+  @keyframes simpleFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
