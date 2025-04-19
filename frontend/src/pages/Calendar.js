@@ -6,6 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { AuthContext } from "../auth/Authentication";
 import EventDetailsModal from "../components/DetailsModal";
 import EventModal from "../components/Modal";
+import ReviewsCarousel from "../components/ReviewsCarousel";
 import "../styles/GlobalContainer.scss";
 import "../styles/Calendar.scss";
 import etLocale from "@fullcalendar/core/locales/et"; 
@@ -60,6 +61,29 @@ export const Calendar = () => {
     setIsCreateModalOpen(false);
     setSelectedDate(null);
   };
+
+  const reviewsData = [
+    {
+      text: "Tund möödub märkamatult ja pärast on nii kerge ja hea tunne kehas.",
+      author: "Maarika"
+    },
+    {
+      text: "Ma pole kunagi arvanud, et trenn võib olla nii lõbus. Soovitan soojalt!",
+      author: "Anu"
+    },
+    {
+      text: "Jumping on aidanud mul taasavastada liikumisrõõmu, isegi pärast pikka tööpäeva.",
+      author: "Annika"
+    },
+    {
+      text: "Parim treening, mida olen kunagi proovinud!",
+      author: "Liisa"
+    },
+    {
+      text: "Jumpingus on parim kombinatsioon treenivast koormusest ja lõbust.",
+      author: "Kadri"
+    }
+  ];
 
   return (
     <div className="calendar-page">
@@ -128,6 +152,7 @@ export const Calendar = () => {
           onClose={handleCloseCreateModal}
         />
       )}
+      <ReviewsCarousel reviews={reviewsData} />
     </div>
   );
 };

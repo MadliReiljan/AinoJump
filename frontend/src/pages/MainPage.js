@@ -1,8 +1,12 @@
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import "../styles/GlobalContainer.scss"
-import heroImage from "../images/IMG_4844.jpg"
-import contentImage from "../images/MainImage.jpg"
+import heroImage from "../images/IMG_4844.jpg";
+import mainImg from "../images/main1.png";
+import mainImg2 from "../images/main2.png";
+import mainImg3 from "../images/main3.png"; 
+import mainImg4 from "../images/main4.png";
+import contentImage from "../images/MainImage.jpg";
 import CircleBackground from "../components/CircleBackground";
 
 export const MainPage = () => {
@@ -70,7 +74,7 @@ export const MainPage = () => {
             <div className="benefit-card">
               <div className="benefit-image-container">
                 <img 
-                  src={heroImage} 
+                  src={mainImg} 
                   alt="Südame tervis" 
                   className="benefit-image"
                 />
@@ -85,7 +89,7 @@ export const MainPage = () => {
             <div className="benefit-card offset-card">
               <div className="benefit-image-container">
                 <img 
-                  src={heroImage} 
+                  src={mainImg2} 
                   alt="Koordinatsioon" 
                   className="benefit-image"
                 />
@@ -102,7 +106,7 @@ export const MainPage = () => {
             <div className="benefit-card">
               <div className="benefit-image-container">
                 <img 
-                  src={heroImage}
+                  src={mainImg3}
                   alt="Kalorite põletus" 
                   className="benefit-image"
                 />
@@ -117,7 +121,7 @@ export const MainPage = () => {
             <div className="benefit-card offset-card">
               <div className="benefit-image-container">
                 <img 
-                  src={heroImage} 
+                  src={mainImg4} 
                   alt="Stressi maandamine" 
                   className="benefit-image"
                 />
