@@ -1,0 +1,23 @@
+@import './Login.scss';
+
+.login-container h2 {
+  margin-bottom: 25px;
+  color: #000;
+  text-align: left;
+  font-weight: bold;
+  font-size: 24px;
+  font-family: 'roboto', sans-serif;
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: 2px solid #53A953;
+  padding-bottom: 2px;
+}
+
+.login-container input[type="text"] {
+  width: 94%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #f7f7f7;
+}

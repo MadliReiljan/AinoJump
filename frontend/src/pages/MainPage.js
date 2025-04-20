@@ -128,9 +128,9 @@ export const MainPage = () => {
               </div>
               <h3 className="benefit-title">Stressi maandamine ja heaolu</h3>
               <p className="benefit-description">
-                Jumping treening aitab vabastada pinget ja stressi, pakkudes
-                võimalust nautida liikumist ja energilist ilumüüat, mis parandab
-                meeleolu ning üldist heaolu.
+              Jumping treening aitab vabastada pinget ja stressi, 
+              pakkudes võimalust nautida lõbusat ja energilist liikumist,
+              mis parandab meeleolu ning üldist heaolu.
               </p>
             </div>
           </div>

@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "../styles/Login.scss";
-import Button from "../components/Button";
+import "../styles/Register.scss";
+import loginImage from "../images/registerimg.png"; 
 
 const Register = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); 
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    
+    if (password !== confirmPassword) {
+      setError("Paroolid ei kattu");
+      return;
+    }
+    
     setError("");
     setIsLoading(true);
 
@@ -21,8 +28,6 @@ const Register = () => {
       email: email.trim(),
       password: password
     };
-
-    console.log("Sending registration data:", userData);
 
     try {
       const response = await fetch("http://localhost:8000/accounts/register.php", {
@@ -34,10 +39,7 @@ const Register = () => {
         body: JSON.stringify(userData)
       });
 
-      console.log("Response status:", response.status);
-
       const data = await response.json();
-      console.log("Response data:", data);
 
       if (response.ok) {
         navigate("/login"); 
@@ -54,36 +56,57 @@ const Register = () => {
 
   return (
     <div className="background">
-      <div className="login-container">
-        <h2>Loo konto</h2>
-        {error && <div className="error-message">{error}</div>}
-        <form onSubmit={handleRegister}>
-          <input
-            type="text"
-            placeholder="Täisnimi"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
+      <div className="login-page-container">
+        <div className="image-container">
+          <img 
+            src={loginImage} 
+            alt="Trampoline Fitness" 
+            className="login-image" 
           />
-          <input
-            type="email"
-            placeholder="E-post"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Parool"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <Button type="submit" className="neutral" disabled={isLoading}>
-            {isLoading ? "Registering..." : "Loo konto"}
-          </Button>
-          <Link className="anchor-link" to="/login">Logi sisse</Link>
-        </form>
+        </div>
+        <div className="login-container">
+          <h2>Registreeri</h2>
+          {error && <div className="error-message">{error}</div>}
+          <form onSubmit={handleRegister}>
+            <div className="input-group">
+              <label>Täisnimi *</label>
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="input-group">
+              <label>E-post *</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="input-group">
+              <label>Parool *</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <button type="submit" className="login-button" disabled={isLoading}>
+              {isLoading ? "Registreerimine..." : "Registreeri mind"}
+            </button>
+            <div className="links-container">
+              <div className="register-link">
+                <span>Kas olete registreeritud? </span>
+                <Link to="/login">Logige sisse</Link>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -4,80 +4,152 @@
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  align-items:  center;
+  align-items: center;
   width: 100%;
 }
 
+.login-page-container {
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.image-container {
+  flex: 1;
+  overflow: hidden;
+  
+  @media (max-width: 768px) {
+    display: none; // Hide on mobile
+  }
+}
+
+.login-image {
+  width: 450px;
+  height: 100%;
+  object-fit: cover;
+}
+
 .login-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .login-container h2 {
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .login-container form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .login-container input {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .login-container input:focus {
-    outline: none;
-    border-color: #7ca356;
-    box-shadow: 0 0 5px rgba(124, 163, 86, 0.5);
-  }
-  
-  .login-container button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    align-self: center;
-  }
-  
-  .login-container button:hover {
-    opacity: 0.9;
-  }
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
-  .anchor-link {
-    color: #000000;
-    text-decoration: none;
-    margin-top: -20px;
-    font-size: 14px;
-    align-self: flex-end;
-  }
+.login-container h2 {
+  margin-bottom: 25px;
+  color: #000;
+  text-align: left;
+  font-weight: bold;
+  font-size: 24px;
+  font-family: 'roboto', sans-serif;
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: 2px solid #53A953;
+  padding-bottom: 2px;
+}
 
-  .anchor-link:hover {
-    color: #7ca356;
-    text-decoration: none;
-    font-size: 14px;
-    align-self: flex-end;
-  }
-  
-  .error-message {
-    color: #ff0000;
-    margin-bottom: 1rem;
-    text-align: center;
-    padding: 0.5rem;
-    background-color: rgba(255, 0, 0, 0.1);
-    border-radius: 4px;
-  }
+.login-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #8F8F8F;
+  font-size: 16px;
+  font-family: "inter", sans-serif;
+}
+
+.login-container input[type="email"],
+.login-container input[type="password"] {
+  width: 94%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #f7f7f7;
+}
+
+.login-container input:focus {
+  outline: none;
+  border-color: #66b366;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #66b366;
+  color: white;
+  margin-bottom: 15px;
+}
+
+.login-button:hover {
+  background-color: #5ca15c;
+}
+
+.links-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.forgot-password {
+  margin-bottom: 10px;
+}
+
+.forgot-password a,
+.register-link a {
+  color: #66b366;
+  text-decoration: none;
+}
+
+.forgot-password a:hover,
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  color: #ff0000;
+  margin-bottom: 1rem;
+  text-align: center;
+  padding: 0.5rem;
+  background-color: rgba(255, 0, 0, 0.1);
+  border-radius: 4px;
+}

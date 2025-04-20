@@ -1,10 +1,13 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../auth/Authentication";
+import loginImage from "../images/loginimg.png";
+import "../styles/Login.scss";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const { login } = useContext(AuthContext);
@@ -18,6 +21,7 @@ const Login = () => {
         const userData = {
             email: email.trim(),
             password: password,
+            rememberMe: rememberMe
         };
 
         try {
@@ -48,28 +52,62 @@ const Login = () => {
 
     return (
         <div className="background">
-            <div className="login-container">
-                <h2>Logi sisse</h2>
-                {error && <div className="error-message">{error}</div>}
-                <form onSubmit={handleLogin}>
-                    <input
-                        type="email"
-                        placeholder="E-post"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
+            <div className="login-page-container">
+                <div className="image-container">
+                    <img 
+                        src={loginImage} 
+                        alt="Trampoline Fitness" 
+                        className="login-image" 
                     />
-                    <input
-                        type="password"
-                        placeholder="Parool"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <button type="submit" disabled={isLoading}>
-                        {isLoading ? "Logging in..." : "Logi sisse"}
-                    </button>
-                </form>
+                </div>
+                <div className="login-container">
+                    <h2>Logige sisse</h2>
+                    {error && <div className="error-message">{error}</div>}
+                    <form onSubmit={handleLogin}>
+                        <div className="input-group">
+                            <label>E-post *</label>
+                            <input
+                                type="email"
+                                placeholder=""
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label>Parool *</label>
+                            <input
+                                type="password"
+                                placeholder=""
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="checkbox-container">
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                />
+                                Jätke mind meelde
+                            </label>
+                        </div>
+                        <button type="submit" className="login-button" disabled={isLoading}>
+                            {isLoading ? "Loading..." : "Logige sisse"}
+                        </button>
+                        <div className="links-container">
+                            <div className="forgot-password">
+                                <Link to="/forgot-password">Unustasid Parooli?</Link>
+                            </div>
+                            <div className="register-link">
+                                <span>Ei ole kasutajat? </span>
+                                <Link to="/register">Registreeri!</Link>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );
