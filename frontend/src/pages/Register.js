@@ -7,16 +7,17 @@ const Register = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); 
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    
-    if (password !== confirmPassword) {
-      setError("Paroolid ei kattu");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      setError("Palun sisestage kehtiv e-posti aadress.");
       return;
     }
     
@@ -44,7 +45,7 @@ const Register = () => {
       if (response.ok) {
         navigate("/login"); 
       } else {
-        setError(data.message || "Registration failed.");
+        setError(data.message || "Regitreerimine ebaõnnestus.");
       }
     } catch (err) {
       console.error("Registration error:", err);

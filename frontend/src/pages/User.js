@@ -4,86 +4,67 @@ import "../styles/User.scss";
 const User = () => {
   const [userData, setUserData] = useState(null);
   const [newPassword, setNewPassword] = useState("");
-  const [hasChild, setHasChild] = useState(false);
+  const [childName, setChildName] = useState(""); // State for the child's name
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
-        const token = localStorage.getItem("token");
-        console.log("Token being sent:", token); 
-        if (!token) {
-            setError("No token found. Please log in.");
-            setIsLoading(false);
-            return;
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found. Please log in.");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8000/accounts/user.php", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data.");
         }
 
-        try {
-            const response = await fetch("http://localhost:8000/accounts/user.php", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            console.log("Response status:", response.status); 
-            if (!response.ok) {
-                throw new Error("Failed to fetch user data.");
-            }
-
-            const data = await response.json();
-            console.log("User data received:", data); 
-            setUserData(data);
-            setHasChild(data.hasChild || false);
-        } catch (err) {
-            console.error("Error fetching user data:", err); 
-            setError(err.message);
-        } finally {
-            setIsLoading(false);
-        }
+        const data = await response.json();
+        setUserData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchUserData();
-}, []);
+  }, []);
 
-  const handlePasswordChange = async () => {
-    try {
-        const response = await fetch("http://localhost:8000/accounts/user.php", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-        });
-
-      if (!response.ok) {
-        throw new Error("Failed to update password.");
-      }
-
-      alert("Password updated successfully!");
-      setNewPassword("");
-    } catch (err) {
-      setError(err.message);
+  const handleAddChild = async () => {
+    if (!childName.trim()) {
+      alert("Please enter a valid child name.");
+      return;
     }
-  };
-
-  const handleChildToggle = async () => {
+  
     try {
-      const response = await fetch("http://localhost:8000/accounts/update_child_status.php", {
+      const response = await fetch("http://localhost:8000/accounts/add_child.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ hasChild }),
+        body: JSON.stringify({ childName }),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Failed to update child status.");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to add child.");
       }
-
-      alert("Child status updated successfully!");
+  
+      alert("Child added successfully!");
+      setChildName("");
     } catch (err) {
       setError(err.message);
     }
@@ -113,17 +94,19 @@ const User = () => {
           placeholder="Enter new password"
           disabled
         />
-        <button onClick={handlePasswordChange} disabled>Change Password</button>
+        <button onClick={() => alert("Password change functionality not implemented yet.")} disabled>
+          Change Password
+        </button>
       </div>
       <div className="user-info">
-        <label>Do you have a child?</label>
+        <label>Add Child:</label>
         <input
-          type="checkbox"
-          checked={hasChild}
-          onChange={(e) => setHasChild(e.target.checked)}
-          disabled
+          type="text"
+          value={childName}
+          onChange={(e) => setChildName(e.target.value)}
+          placeholder="Enter child's name"
         />
-        <button onClick={handleChildToggle} disabled>Update Child Status</button>
+        <button onClick={handleAddChild}>Add Child</button>
       </div>
     </div>
   );
