@@ -1,0 +1,7 @@
+CREATE TABLE tokens (
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    person_id INT NOT NULL,            
+    token VARCHAR(255) NOT NULL UNIQUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+    FOREIGN KEY (person_id) REFERENCES person(id) ON DELETE CASCADE 
+);

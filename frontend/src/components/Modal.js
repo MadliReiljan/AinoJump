@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "./Button";
 import "../styles/EventModal.scss";
 
-const EventModal = ({ selectedDate, onClose }) => {
+const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
   const [formData, setFormData] = useState({
     title: "",
     body: "",
@@ -39,6 +39,8 @@ const EventModal = ({ selectedDate, onClose }) => {
 
       if (response.ok) {
         alert("Event created successfully!");
+        const newEvent = await response.json();  
+        onEventCreated(newEvent);  
         onClose();
       } else {
         const errorData = await response.json();
@@ -95,14 +97,23 @@ const EventModal = ({ selectedDate, onClose }) => {
             />
           </label>
           <label className="checkbox-label">
-                Kas trenn on mõeldud lastele?
-                <input
-                    type="checkbox"
-                    name="is_for_children"
-                    checked={formData.is_for_children}
-                    onChange={handleChange}
-                />
-            </label>
+            Kas trenn kordub igal nädalal?
+            <input
+              type="checkbox"
+              name="is_recurring"
+              checked={formData.is_recurring}
+              onChange={handleChange}
+            />
+          </label>
+          <label className="checkbox-label">
+            Kas trenn on mõeldud lastele?
+            <input
+              type="checkbox"
+              name="is_for_children"
+              checked={formData.is_for_children}
+              onChange={handleChange}
+            />
+          </label>
           <div className="button-group">
             <Button type="button" variant="danger" onClick={onClose}>
               Tühista
@@ -116,5 +127,6 @@ const EventModal = ({ selectedDate, onClose }) => {
     </div>
   );
 };
+
 
 export default EventModal;

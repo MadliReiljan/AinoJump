@@ -5,5 +5,6 @@ CREATE TABLE event (
     time TIMESTAMP,
     max_capacity INT,
     is_for_children BOOLEAN,
+    is_recurring BOOLEAN,
     created_at TIMESTAMP
 );

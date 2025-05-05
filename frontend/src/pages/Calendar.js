@@ -62,6 +62,9 @@ export const Calendar = () => {
     setSelectedDate(null);
   };
 
+  const handleEventCreated = (newEvent) => {
+    setEvents((prevEvents) => [...prevEvents, newEvent]);
+  };
   const reviewsData = [
     {
       text: "Tund möödub märkamatult ja pärast on nii kerge ja hea tunne kehas.",
@@ -150,6 +153,7 @@ export const Calendar = () => {
         <EventModal
           selectedDate={selectedDate}
           onClose={handleCloseCreateModal}
+          onEventCreated={handleEventCreated} 
         />
       )}
       <ReviewsCarousel reviews={reviewsData} />

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/Authentication";
 import loginImage from "../images/loginimg.png";
 import "../styles/Login.scss";
@@ -7,23 +7,23 @@ import "../styles/Login.scss";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [rememberMe, setRememberMe] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false); 
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const { login } = useContext(AuthContext);
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError("");
         setIsLoading(true);
-
+    
         const userData = {
             email: email.trim(),
             password: password,
-            rememberMe: rememberMe
+            rememberMe: rememberMe,
         };
-
+    
         try {
             const response = await fetch("http://localhost:8000/accounts/login.php", {
                 method: "POST",
@@ -33,11 +33,11 @@ const Login = () => {
                 },
                 body: JSON.stringify(userData),
             });
-
+    
             const data = await response.json();
-
+    
             if (response.ok) {
-                login(data.token); 
+                login(data.token, email); 
                 navigate("/"); 
             } else {
                 setError(data.message || "Login failed.");
@@ -68,7 +68,7 @@ const Login = () => {
                             <label>E-post *</label>
                             <input
                                 type="email"
-                                placeholder=""
+                                placeholder="Sisestage oma e-post"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -78,7 +78,7 @@ const Login = () => {
                             <label>Parool *</label>
                             <input
                                 type="password"
-                                placeholder=""
+                                placeholder="Sisestage oma parool"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
