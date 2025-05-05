@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -10,22 +10,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 include_once '../database.php';
+include_once '../validate_token.php';
+
+$database = new Database();
+$db = $database->getConnection();
 
 $headers = getallheaders();
-if (!isset($headers['Authorization'])) {
+$authHeader = $headers['Authorization'] ?? '';
+$token = str_replace('Bearer ', '', $authHeader);
+
+$user = validateToken($db, $token);
+if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Authorization header missing."]);
+    echo json_encode(["message" => "Unauthorized - Invalid token."]);
     exit();
 }
 
-$token = str_replace('Bearer ', '', $headers['Authorization']);
-
-if (empty($token)) {
-    http_response_code(401);
-    echo json_encode(["message" => "Invalid token."]);
-    exit();
-}
-$parentId = is_numeric($token) ? intval($token) : null;
+$parentId = $user['person_id']; 
 if (!$parentId) {
     http_response_code(401);
     echo json_encode(["message" => "Invalid token."]);
@@ -42,16 +43,12 @@ if (!isset($data->childName) || !trim($data->childName)) {
 $childName = htmlspecialchars(strip_tags($data->childName));
 
 try {
-    $database = new Database();
-    $db = $database->getConnection();
-
     $insert = "INSERT INTO person (full_name, parent_id) VALUES (:name, :parentId)";
     $stmt = $db->prepare($insert);
     $stmt->bindValue(":name", $childName, PDO::PARAM_STR);
     $stmt->bindValue(":parentId", $parentId, PDO::PARAM_INT);
-    $stmt->execute();
 
-    if ($stmt->execute()) {
+    if ($stmt->execute()) { 
         http_response_code(201);
         echo json_encode(["message" => "Child added successfully."]);
     } else {

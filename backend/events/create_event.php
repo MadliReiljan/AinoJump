@@ -10,28 +10,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 include_once '../database.php';
+include_once '../validate_token.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
 $headers = getallheaders();
-if (!isset($headers['Authorization'])) {
-    http_response_code(401);
-    echo json_encode(array("message" => "Authorization header missing."));
-    exit();
-}
-
-$authHeader = $headers['Authorization'];
+$authHeader = $headers['Authorization'] ?? '';
 $token = str_replace('Bearer ', '', $authHeader);
 
-function validateToken($token) {
-    return is_numeric($token) ? intval($token) : false;
-}
-
-$userId = validateToken($token);
-if (!$userId) {
+$user = validateToken($db, $token);
+if (!$user) {
     http_response_code(401);
-    echo json_encode(array("message" => "Invalid or expired token."));
+    echo json_encode(["message" => "Unauthorized - Invalid token."]);
     exit();
 }
 
@@ -61,11 +52,14 @@ if (
     !empty($data->body) &&
     !empty($data->time) &&
     isset($data->max_capacity) &&
-    isset($data->is_for_children)
+    isset($data->is_for_children) &&
+    isset($data->is_recurring) 
 ) {
     try {
-        $query = "INSERT INTO event (title, body, time, max_capacity, is_for_children, created_at)
-                  VALUES (:title, :body, :time, :max_capacity, :is_for_children, NOW())";
+        $db->beginTransaction(); 
+
+        $query = "INSERT INTO event (title, body, time, max_capacity, is_for_children, is_recurring, created_at)
+                  VALUES (:title, :body, :time, :max_capacity, :is_for_children, :is_recurring, NOW())";
         $stmt = $db->prepare($query);
 
         $stmt->bindParam(":title", $data->title);
@@ -73,15 +67,41 @@ if (
         $stmt->bindParam(":time", $data->time);
         $stmt->bindParam(":max_capacity", $data->max_capacity, PDO::PARAM_INT);
         $stmt->bindParam(":is_for_children", $data->is_for_children, PDO::PARAM_BOOL);
+        $stmt->bindParam(":is_recurring", $data->is_recurring, PDO::PARAM_BOOL);
 
-        if ($stmt->execute()) {
-            http_response_code(201);
-            echo json_encode(array("message" => "Event created successfully."));
-        } else {
-            http_response_code(500);
-            echo json_encode(array("message" => "Failed to create event."));
+        if (!$stmt->execute()) {
+            throw new Exception("Failed to create the initial event.");
         }
+
+        if ($data->is_recurring) {
+            $currentDate = new DateTime($data->time);
+            $endDate = (new DateTime($data->time))->modify('+3 months');
+
+            while ($currentDate < $endDate) {
+                $currentDate->modify('+1 week');
+
+                $query = "INSERT INTO event (title, body, time, max_capacity, is_for_children, is_recurring, created_at)
+                          VALUES (:title, :body, :time, :max_capacity, :is_for_children, :is_recurring, NOW())";
+                $stmt = $db->prepare($query);
+
+                $stmt->bindParam(":title", $data->title);
+                $stmt->bindParam(":body", $data->body);
+                $stmt->bindParam(":time", $currentDate->format('Y-m-d H:i:s'));
+                $stmt->bindParam(":max_capacity", $data->max_capacity, PDO::PARAM_INT);
+                $stmt->bindParam(":is_for_children", $data->is_for_children, PDO::PARAM_BOOL);
+                $stmt->bindParam(":is_recurring", $data->is_recurring, PDO::PARAM_BOOL);
+
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to create a recurring event.");
+                }
+            }
+        }
+
+        $db->commit(); 
+        http_response_code(201);
+        echo json_encode(array("message" => "Event created successfully."));
     } catch (Exception $e) {
+        $db->rollBack(); 
         error_log("Error creating event: " . $e->getMessage());
         http_response_code(500);
         echo json_encode(array("message" => "Internal server error."));

@@ -10,29 +10,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 include_once '../database.php';
+include_once '../validate_token.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
 $headers = getallheaders();
-if (!isset($headers['Authorization'])) {
-    http_response_code(401);
-    echo json_encode(array("message" => "Authorization header missing."));
-    exit();
-}
-
-$authHeader = $headers['Authorization'];
+$authHeader = $headers['Authorization'] ?? '';
 $token = str_replace('Bearer ', '', $authHeader);
 
-
-function validateToken($token) {
-    return is_numeric($token) ? intval($token) : false;
-}
-
-$userId = validateToken($token);
-if (!$userId) {
+$user = validateToken($db, $token);
+if (!$user) {
     http_response_code(401);
-    echo json_encode(array("message" => "Invalid or expired token."));
+    echo json_encode(["message" => "Unauthorized - Invalid token."]);
     exit();
 }
 

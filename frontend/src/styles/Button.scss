@@ -30,13 +30,39 @@
   
 .button.default {
     text-align: center;
-    display: block;
     color: white;
-    width: 5.5rem;
-    height: auto;
-    padding: 0.5rem;
     border-radius: 0.5rem;
+    text-decoration: none;
 }
+
+.modal-content {
+    position: relative; 
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modal-content .button.default {
+    position: absolute; 
+    top: 10px;
+    right: 20px;
+    background-color: transparent;
+    font-size: 25px;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    width: auto;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .modal-content .button.default:hover {
+    color: #BFFF7F; 
+  }
+
+  .modal-content .button.default::after {
+    content: none; 
+  }
   
 .button.outline {
     background-color: transparent;

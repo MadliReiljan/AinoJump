@@ -39,8 +39,8 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
 
       if (response.ok) {
         alert("Event created successfully!");
-        const newEvent = await response.json();  // Assuming the response contains the new event details
-        onEventCreated(newEvent);  // Call the callback function to update the events in parent
+        const newEvent = await response.json();  
+        onEventCreated(newEvent);  
         onClose();
       } else {
         const errorData = await response.json();
@@ -94,6 +94,15 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
               value={formData.max_capacity}
               onChange={handleChange}
               required
+            />
+          </label>
+          <label className="checkbox-label">
+            Kas trenn kordub igal nädalal?
+            <input
+              type="checkbox"
+              name="is_recurring"
+              checked={formData.is_recurring}
+              onChange={handleChange}
             />
           </label>
           <label className="checkbox-label">

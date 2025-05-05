@@ -10,43 +10,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 include_once '../database.php';
+include_once '../validate_token.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
 $data = json_decode(file_get_contents("php://input"));
 
-$userEmail = $data->userEmail;
-$eventId = $data->eventId;
-
 $authorizationHeader = getallheaders()['Authorization'] ?? '';
 $token = str_replace('Bearer ', '', $authorizationHeader);
 
-if (!$token) {
+$user = validateToken($db, $token);
+if (!$user) {
     http_response_code(401);
-    echo json_encode(array("message" => "Unauthorized - Token missing"));
+    echo json_encode(["message" => "Unauthorized - Invalid token"]);
     exit();
 }
 
-if ($token !== 'yourPredefinedToken') { 
-    http_response_code(401);
-    echo json_encode(array("message" => "Unauthorized - Invalid token"));
-    exit();
-}
+$userEmail = $user['email'];
+$personId = $user['person_id'];
 
-$query = "SELECT id FROM person WHERE email = :userEmail";
-$stmt = $db->prepare($query);
-$stmt->bindParam(':userEmail', $userEmail);
-$stmt->execute();
-
-$person = $stmt->fetch(PDO::FETCH_ASSOC);
-if (!$person) {
-    http_response_code(404);
-    echo json_encode(array("message" => "User not found"));
-    exit();
-}
-
-$personId = $person['id'];
+$eventId = $data->eventId;
 
 $query = "SELECT * FROM reservations WHERE person_id = :personId AND event_id = :eventId";
 $stmt = $db->prepare($query);
@@ -77,6 +61,7 @@ if ($event['reserved_count'] >= $event['max_capacity']) {
     echo json_encode(array("message" => "Event is fully booked"));
     exit();
 }
+
 
 try {
     $query = "INSERT INTO reservations (person_id, event_id) VALUES (:personId, :eventId)";
