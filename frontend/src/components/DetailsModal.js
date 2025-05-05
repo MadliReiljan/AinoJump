@@ -1,11 +1,40 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Button from "./Button";
 import { AuthContext } from "../auth/Authentication";
 import "../styles/EventDetailsModal.scss";
 
 const EventDetailsModal = ({ event, onClose }) => {
-  const { userEmail, userRole } = useContext(AuthContext); 
+  const { userEmail, userRole } = useContext(AuthContext);
   const [isReserved, setIsReserved] = useState(false);
+
+  useEffect(() => {
+    const fetchReservationStatus = async () => {
+      const token = localStorage.getItem("token"); 
+    
+      try {
+        const response = await fetch("http://localhost:8000/events/check_reservation.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, 
+          },
+          body: JSON.stringify({
+            eventId: event.id,
+          }),
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          setIsReserved(data.isReserved); 
+        } else {
+          console.error("Failed to fetch reservation status");
+        }
+      } catch (error) {
+        console.error("An error occurred while checking reservation status:", error);
+      }
+    };
+    fetchReservationStatus();
+  }, [event.id]); 
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -15,23 +44,53 @@ const EventDetailsModal = ({ event, onClose }) => {
 
   const handleReserve = async () => {
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:8000/events/reserve_event.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        eventId: event.id,
-      }),
-    });
-  
-    if (response.ok) {
-      alert("Reservation successful!");
-      setIsReserved(true);
-    } else {
-      const errorData = await response.json();
-      alert(errorData.message || "Failed to reserve the spot.");
+    try {
+      const response = await fetch("http://localhost:8000/events/reserve_event.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          eventId: event.id,
+        }),
+      });
+
+      if (response.ok) {
+        alert("Reservation successful!");
+        setIsReserved(true);
+      } else {
+        const errorData = await response.json().catch(() => null);
+        alert(errorData?.message || "Failed to reserve the spot.");
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again.");
+    }
+  };
+
+  const handleUnreserve = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("http://localhost:8000/events/reserve_event.php", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          eventId: event.id,
+        }),
+      });
+
+      if (response.ok) {
+        alert("Unreservation successful!");
+        setIsReserved(false);
+      } else {
+        const errorData = await response.json().catch(() => null);
+        alert(errorData?.message || "Failed to unreserve the spot.");
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again.");
     }
   };
 
@@ -53,7 +112,7 @@ const EventDetailsModal = ({ event, onClose }) => {
 
     if (response.ok) {
       alert("Event deleted successfully!");
-      onClose(); 
+      onClose();
     } else {
       const errorData = await response.json();
       alert(errorData.message || "Failed to delete the event. Please try again.");
@@ -73,7 +132,11 @@ const EventDetailsModal = ({ event, onClose }) => {
         <p><strong>Kogus:</strong> {event.max_capacity}</p>
         <p><strong>Laste trenn?</strong> {event.is_for_children ? "Jah" : "Ei"}</p>
 
-        {!isReserved && (
+        {isReserved ? (
+          <Button type="button" variant="neutral" onClick={handleUnreserve}>
+            Vabasta koht
+          </Button>
+        ) : (
           <Button type="button" variant="neutral" onClick={handleReserve}>
             Reserveeri koht
           </Button>
@@ -83,9 +146,7 @@ const EventDetailsModal = ({ event, onClose }) => {
           <p style={{ color: "green" }}>You have already reserved a spot!</p>
         )}
 
-        
-
-        {userRole === "owner" && ( 
+        {userRole === "owner" && (
           <Button type="button" variant="danger" onClick={handleDelete}>
             Kustuta sündmus
           </Button>
