@@ -4,7 +4,7 @@ function validateToken($db, $token) {
         return false;
     }
 
-    $query = "SELECT t.person_id, p.full_name, u.email, u.role 
+    $query = "SELECT u.id AS user_id, t.person_id, p.full_name, u.email, u.role 
               FROM tokens t
               INNER JOIN person p ON t.person_id = p.id
               INNER JOIN user u ON p.id = u.person_id
