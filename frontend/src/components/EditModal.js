@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import Button from "./Button";
 import "../styles/EventModal.scss";
 
-const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
+const EventEditModal = ({ event, onClose, onEventUpdated }) => {
   const [formData, setFormData] = useState({
-    title: "",
-    body: "",
-    time: "",
-    max_capacity: 32,
-    is_for_children: false,
+    title: event.title,
+    body: event.body,
+    time: event.time.split(" ")[1].slice(0, 5), 
+    max_capacity: event.max_capacity,
+    is_for_children: event.is_for_children,
+    is_recurring: event.is_recurring,
   });
 
   const handleChange = (e) => {
@@ -21,43 +22,46 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+    console.log("Token being sent:", token);
+
     try {
-      const token = localStorage.getItem("token");
-      const eventDateTime = `${selectedDate} ${formData.time}:00`;
-  
-      const response = await fetch("http://localhost:8000/events/create_event.php", {
-        method: "POST",
+      const eventDateTime = `${event.time.split(" ")[0]} ${formData.time}:00`;
+
+      console.log("Submitting eventDateTime:", eventDateTime); 
+
+      const response = await fetch("http://localhost:8000/events/edit_event.php", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          id: event.id,
           ...formData,
-          time: eventDateTime,
-          is_for_children: formData.is_for_children || false, 
-          is_recurring: formData.is_recurring || false, 
+          time: eventDateTime, 
         }),
       });
-  
+
       if (response.ok) {
-        alert("Event created successfully!");
-        const newEvent = await response.json();
-        onEventCreated(newEvent);
+        const updatedEvent = await response.json();
+        alert("Event updated successfully!");
+        onEventUpdated(updatedEvent);
         onClose();
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message}`);
       }
     } catch (error) {
-      console.error("Error creating event:", error);
-      alert("An error occurred while creating the event.");
+      console.error("Error updating event:", error);
+      alert("An error occurred while updating the event.");
     }
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>Loo uus trenn</h2>
+        <h2>Muuda sündmust</h2>
         <form onSubmit={handleSubmit}>
           <label>
             Nimi:
@@ -99,15 +103,6 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
             />
           </label>
           <label className="checkbox-label">
-            Kas trenn kordub igal nädalal?
-            <input
-              type="checkbox"
-              name="is_recurring"
-              checked={formData.is_recurring}
-              onChange={handleChange}
-            />
-          </label>
-          <label className="checkbox-label">
             Kas trenn on mõeldud lastele?
             <input
               type="checkbox"
@@ -116,12 +111,21 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
               onChange={handleChange}
             />
           </label>
+          <label className="checkbox-label">
+            Kas sündmus on korduv?
+            <input
+              type="checkbox"
+              name="is_recurring"
+              checked={formData.is_recurring}
+              onChange={handleChange}
+            />
+          </label>
           <div className="button-group">
             <Button type="button" variant="danger" onClick={onClose}>
               Tühista
             </Button>
             <Button type="submit" variant="neutral">
-              Loo trenn
+              Salvesta muudatused
             </Button>
           </div>
         </form>
@@ -130,5 +134,4 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
   );
 };
 
-
-export default EventModal;
+export default EventEditModal;
