@@ -15,11 +15,11 @@ $database = new Database();
 $db = $database->getConnection();
 
 try {
-    $query = "SELECT p.id, p.title, p.body, p.time, p.created_at, pr.full_name AS author
-              FROM post p
-              INNER JOIN user u ON p.user_id = u.id
-              INNER JOIN person pr ON u.person_id = pr.id
-              ORDER BY p.created_at DESC";
+    $query = "SELECT p.id, p.title, p.body, p.time, p.created_at, p.image_url, pr.full_name AS author
+                FROM post p
+                INNER JOIN user u ON p.user_id = u.id
+                INNER JOIN person pr ON u.person_id = pr.id
+                ORDER BY p.created_at DESC";
     $stmt = $db->prepare($query);
     $stmt->execute();
 

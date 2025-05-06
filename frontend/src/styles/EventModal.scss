@@ -77,3 +77,17 @@
 .modal-content form button[type="button"] {
   background: #f44336;
 }
+
+.drag-drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.drag-drop-area.dragging {
+  border-color: #007bff;
+  background-color: #f0f8ff;
+}

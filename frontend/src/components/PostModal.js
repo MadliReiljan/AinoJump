@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import Button from "./Button";
 import "../styles/EventModal.scss";
 
-const PostModal = ({ onClose, onPostCreated }) => {
+const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
   const [formData, setFormData] = useState({
-    title: "",
-    body: "",
+    title: editingPost?.title || "",
+    body: editingPost?.body || "",
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [dragging, setDragging] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,42 +18,78 @@ const PostModal = ({ onClose, onPostCreated }) => {
     });
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith("image/")) {
+      setImageFile(file);
+    } else {
+      alert("Please drop a valid image file.");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-  
-      const response = await fetch("http://localhost:8000/info/create_post.php", {
-        method: "POST",
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("body", formData.body);
+      if (imageFile) {
+        formDataToSend.append("image", imageFile);
+      }
+
+      const url = editingPost
+        ? "http://localhost:8000/info/edit_post.php"
+        : "http://localhost:8000/info/create_post.php";
+
+      const method = editingPost ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: editingPost
+          ? JSON.stringify({ ...formData, id: editingPost.id })
+          : formDataToSend,
       });
-  
+
       if (response.ok) {
-        const newPost = await response.json();
-        alert("Post created successfully!");
-        onPostCreated(newPost); 
-        onClose(); 
+        const post = await response.json();
+        if (editingPost) {
+          onPostUpdated(post);
+        } else {
+          onPostCreated(post);
+        }
+        onClose();
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message}`);
       }
     } catch (error) {
-      console.error("Error creating post:", error);
-      alert("An error occurred while creating the post.");
+      console.error("Error submitting post:", error);
+      alert("An error occurred while submitting the post.");
     }
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>Create a New Post</h2>
+        <h2>{editingPost ? "Edit Post" : "Create a New Post"}</h2>
         <form onSubmit={handleSubmit}>
           <label>
-            Pealkiri:
+            Title:
             <input
               type="text"
               name="title"
@@ -61,7 +99,7 @@ const PostModal = ({ onClose, onPostCreated }) => {
             />
           </label>
           <label>
-            Sisu:
+            Body:
             <textarea
               name="body"
               value={formData.body}
@@ -69,12 +107,24 @@ const PostModal = ({ onClose, onPostCreated }) => {
               required
             />
           </label>
+          <div
+            className={`drag-drop-area ${dragging ? "dragging" : ""}`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            {imageFile ? (
+              <p>Image Selected: {imageFile.name}</p>
+            ) : (
+              <p>Drag and drop an image here, or click to select one.</p>
+            )}
+          </div>
           <div className="button-group">
             <Button type="button" variant="danger" onClick={onClose}>
               Cancel
             </Button>
             <Button type="submit" variant="neutral">
-              Create Post
+              {editingPost ? "Update Post" : "Create Post"}
             </Button>
           </div>
         </form>
