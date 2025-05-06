@@ -2,10 +2,12 @@ import React, { useState, useContext, useEffect } from "react";
 import Button from "./Button";
 import { AuthContext } from "../auth/Authentication";
 import "../styles/EventDetailsModal.scss";
+import EventEditModal from "./EditModal";
 
 const EventDetailsModal = ({ event, onClose }) => {
   const { userEmail, userRole } = useContext(AuthContext);
   const [isReserved, setIsReserved] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchReservationStatus = async () => {
@@ -94,6 +96,14 @@ const EventDetailsModal = ({ event, onClose }) => {
     }
   };
 
+  const handleEdit = () => {
+    setIsEditing(true); 
+  };
+  
+  const handleEditClose = () => {
+    setIsEditing(false); 
+  };
+
   const handleDelete = async () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this event?");
     if (!confirmDelete) return;
@@ -146,9 +156,25 @@ const EventDetailsModal = ({ event, onClose }) => {
           <p style={{ color: "green" }}>You have already reserved a spot!</p>
         )}
 
+        {isEditing && (
+          <EventEditModal
+            event={event}
+            onClose={handleEditClose}
+            onEventUpdated={(updatedEvent) => {
+              setIsEditing(false);
+              Object.assign(event, updatedEvent);
+            }}
+          />
+        )}
+
         {userRole === "owner" && (
           <Button type="button" variant="danger" onClick={handleDelete}>
             Kustuta sündmus
+          </Button>
+        )}
+        {userRole === "owner" && (
+          <Button type="button" variant="neutral" onClick={handleEdit}>
+            Muuda sündmust
           </Button>
         )}
       </div>

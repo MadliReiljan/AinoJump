@@ -26,22 +26,9 @@ if (!$user) {
     exit();
 }
 
-try {
-    $query = "SELECT role FROM user WHERE id = :userId";
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(":userId", $userId, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$user || $user['role'] !== 'owner') {
-        http_response_code(403);
-        echo json_encode(array("message" => "Access denied. Only owners can edit events."));
-        exit();
-    }
-} catch (Exception $e) {
-    error_log("Error validating user role: " . $e->getMessage());
-    http_response_code(500);
-    echo json_encode(array("message" => "Internal server error."));
+if ($user['role'] !== 'owner') {
+    http_response_code(403);
+    echo json_encode(["message" => "Access denied. Only owners can edit events."]);
     exit();
 }
 
@@ -73,18 +60,24 @@ if (
         $stmt->bindParam(":is_for_children", $data->is_for_children, PDO::PARAM_BOOL);
 
         if ($stmt->execute()) {
+            $query = "SELECT * FROM event WHERE id = :id";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(":id", $data->id, PDO::PARAM_INT);
+            $stmt->execute();
+            $updatedEvent = $stmt->fetch(PDO::FETCH_ASSOC);
+
             http_response_code(200);
-            echo json_encode(array("message" => "Event updated successfully."));
+            echo json_encode($updatedEvent);
         } else {
             http_response_code(500);
-            echo json_encode(array("message" => "Failed to update event."));
+            echo json_encode(["message" => "Failed to update event."]);
         }
     } catch (Exception $e) {
         error_log("Error updating event: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(array("message" => "Internal server error."));
+        echo json_encode(["message" => "Internal server error."]);
     }
 } else {
     http_response_code(400);
-    echo json_encode(array("message" => "Invalid input. Please provide all required fields."));
+    echo json_encode(["message" => "Invalid input. Please provide all required fields."]);
 }
