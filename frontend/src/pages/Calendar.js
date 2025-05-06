@@ -96,11 +96,15 @@ export const Calendar = () => {
       <div className="calendar-content">
         <div className="info-box">
           <h3>Tere{fullName ? `, ${fullName}` : ""}!</h3>
-          <h4>Trennid toimuvad:</h4>
+          <h4>Trennid toimuvad täiskasvanutel:</h4>
           <ul>
             <li>Teisipäeval: 19:00-20:00</li>
             <li>Kolmapäeval: 19:00-20:00</li>
             <li>Pühapäeval: 17:30-18:30</li>
+          </ul>
+          <h4>Trennid toimuvad lastel:</h4>
+          <ul>
+            <li>Teisipäeval: 18:00-19:00</li>
           </ul>
           <p>
             Kui tuled jumpingu trenni, siis võta kaasa trenniriided, hea tuju,

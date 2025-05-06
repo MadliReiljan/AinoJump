@@ -12,19 +12,13 @@ export const AboutUs = () => {
         <div className="two-column-section">
           <div className="text-column">
             <p className="paragraph">
-              Jumpingu batuuditreening on dünaamiline treeningvorm, mis ühendab aeglased ja kiiremad hüpped, traditsioonilise aeroobika sammude variatsioonid ning kiirus- ja jõuelementide kombinatsiooni. Selle treeningu juured ulatuvad tagasi trampoliinide arenguni 1930. aastatel, mil Ameerika sportlased ja leiutajad nagu George Nissen ja Larry Griswold hakkasid kasutama hüppamist treeninguna, et parandada koordinatsiooni, jõudu ja vastupidavust. Alguses mõeldud peamiselt sportlikeks ja akrobaatlikeks harjutusteks, on jumping arenenud üldiseks kehalise aktiivsuse vormiks, mis rõhutab kogu keha lihaste töö ja pidevaid gravitatsioonilisi muutusi – protsessi, kus ühes treeningus aktiveeritakse üle 400 lihast. 
-            </p>
-            <p className="paragraph">
-              Selline intensiivne ja mitmekülgne liikumine muudab jumping treeningu kolm korda efektiivsemaks kui jooksmine, pakkudes samal ajal ka palju rõõmu ja motivatsiooni. Treeningu eesmärk on mitte ainult füüsiline tugevdamine, vaid ka lõbus liikumisvorm, mis sobib kõigile – olenemata vanusest või varasemast treeningukogemusest.
+            Aino on kogenud jumpingu­treener, kes on pühendunud sellele erivõimlemisvormile juba kahe aasta jagu. Oma teekonna alguses suundus ta Tallinnas toimuvale jumpingu koolitusele, mida viis läbi Tšehhist pärit spetsialist – just tema on peetud üheks selle treeningstiili tuntuimaks loojaiks. Pärast seda täiendas Aino end Tartus Hafiti trennides, kus Eesti turul on need sessioonid olnud peamised väravad jumpingu tutvustamiseks ja levitamiseks. Oma kogemuste ja omandatud teadmiste toel asutas Aino AinoJumpi, mille raames pakub ta tänini regulaarseid ja struktureeritud treeninguid nii algajatele kui edasijõudnutele.
             </p>
           </div>
                 
           <div className="text-column">
             <p className="paragraph">
-              Jumpingu batuuditreening on dünaamiline treeningvorm, mis ühendab aeglased ja kiiremad hüpped, traditsioonilise aeroobika sammude variatsioonid ning kiirus- ja jõuelementide kombinatsiooni. Selle treeningu juured ulatuvad tagasi trampoliinide arenguni 1930. aastatel, mil Ameerika sportlased ja leiutajad nagu George Nissen ja Larry Griswold hakkasid kasutama hüppamist treeninguna, et parandada koordinatsiooni, jõudu ja vastupidavust. Alguses mõeldud peamiselt sportlikeks ja akrobaatlikeks harjutusteks, on jumping arenenud üldiseks kehalise aktiivsuse vormiks, mis rõhutab kogu keha lihaste töö ja pidevaid gravitatsioonilisi muutusi – protsessi, kus ühes treeningus aktiveeritakse üle 400 lihast. 
-            </p>
-            <p className="paragraph">
-              Selline intensiivne ja mitmekülgne liikumine muudab jumping treeningu kolm korda efektiivsemaks kui jooksmine, pakkudes samal ajal ka palju rõõmu ja motivatsiooni. Treeningu eesmärk on mitte ainult füüsiline tugevdamine, vaid ka lõbus liikumisvorm, mis sobib kõigile – olenemata vanusest või varasemast treeningukogemusest.
+            Anna liitus AinoJumpi tiimiga hiljem, tuues endaga selge sooviga õppida korrektselt teostatud hüppeid ja efektiivseid treeningmeetodeid. Aino juhendamisel omandas Anna põhjaliku ettevalmistuse – alates õigest hüppetehnikast kuni rutiinide kavandamiseni – ning on nüüd võimeline Aino kõrval treeninguid läbi viima. Koos pakuvad Aino ja Anna struktureeritud, motiveeriva õhkkonnaga jumpingu­sessioone, mille fookuses on nii osalejate turvalisus kui ka individuaalsete arengueesmärkide saavutamine.
             </p>
           </div>
         </div>

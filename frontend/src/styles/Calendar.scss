@@ -43,6 +43,7 @@
   gap: 20px;
   width: 100%;
   flex-wrap: wrap;
+  margin-top: 2rem;
 }
 
 .info-box {
@@ -99,6 +100,86 @@
   border-radius: 5px;
   padding: 5px 10px;
   font-size: 14px;
+}
+
+// Today button - hover and active states
+.fc .fc-button-primary:not(.fc-prev-button):not(.fc-next-button):not(.fc-dayGridMonth-button):not(.fc-timeGridWeek-button):not(.fc-timeGridDay-button) {
+  background-color: #667064;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  
+  &:hover, &:focus, &:active {
+    background-color: #7a867a !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  &:active {
+    background-color: #4d544c !important;
+  }
+}
+
+// View buttons (month, week, day) - hover and active states
+.fc .fc-dayGridMonth-button,
+.fc .fc-timeGridWeek-button,
+.fc .fc-timeGridDay-button {
+  background-color: #667064;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  
+  &:hover, &:focus, &:active, &:focus-visible, &:focus-within {
+    background-color: #7a867a !important;
+    border: none !important;
+    border-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  &:active {
+    background-color: #4d544c !important;
+  }
+  
+  // Selected view button state
+  &.fc-button-active {
+    background-color: #4caf50 !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  // Handle the focus ring specifically
+  &.fc-button-active:focus {
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
+  }
+}
+
+// Prev/next buttons - hover and active states
+.fc .fc-prev-button,
+.fc .fc-next-button {
+  background-color: #667064;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  
+  &:hover, &:focus, &:active {
+    background-color: #7a867a !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  &:active {
+    background-color: #4d544c !important;
+  }
+}
+
+.calendar-wrapper .fc .fc-day-today.fc-day-today {
+  background-color: #3a4139;
 }
 
 .fc-button:hover {
