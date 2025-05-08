@@ -36,7 +36,7 @@ export const Navbar = () => {
                         boxSizing: "border-box",
                     }}
                 >
-                    <Link to="/" className="logo-link" onClick={closeMenu}>
+                    <Link to={`${BASE_PATH}/`} className="logo-link" onClick={closeMenu}>
                         <img src={logoImage} alt="AinoJump Logo" className="logo-image" />
                     </Link>
                     <div className="menu" onClick={toggleMenu}>
@@ -47,22 +47,22 @@ export const Navbar = () => {
                 </div>
                 <ul className={menuOpen ? "open" : ""}>
                     <li>
-                        <NavLink to="/pealeht" onClick={closeMenu}>
+                        <NavLink to={`${BASE_PATH}/pealeht`} onClick={closeMenu}>
                             Pealeht
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/meist" onClick={closeMenu}>
+                        <NavLink to={`${BASE_PATH}/meist`} onClick={closeMenu}>
                             Meist
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/broneeri" onClick={closeMenu}>
+                        <NavLink to={`${BASE_PATH}/broneeri`} onClick={closeMenu}>
                             Broneeri
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/info" onClick={closeMenu}>
+                        <NavLink to={`${BASE_PATH}/info`} onClick={closeMenu}>
                             Info
                         </NavLink>
                     </li>
@@ -75,7 +75,7 @@ export const Navbar = () => {
                     ) : (
                         <li className="user-panel">
                             <div className="user-info">
-                                <NavLink to="/user" onClick={closeMenu}>
+                                <NavLink to={`${BASE_PATH}/user`} onClick={closeMenu}>
                                    Konto
                                 </NavLink>
                                 <button onClick={logout}>Logi välja</button>

@@ -26,15 +26,22 @@ export const Calendar = () => {
         const response = await fetch(`${baseURL}/events/get_events.php`);
         if (response.ok) {
           const data = await response.json();
-          setEvents(data);
+          if (Array.isArray(data)) {
+            setEvents(data);
+          } else {
+            console.error("Unexpected response format:", data);
+            setEvents([]); 
+          }
         } else {
           console.error("Failed to fetch events");
+          setEvents([]); 
         }
       } catch (error) {
         console.error("Error fetching events:", error);
+        setEvents([]); 
       }
     };
-  
+
     fetchEvents();
   }, []);
 
