@@ -1,13 +1,8 @@
-# .htaccess file for React routing on CPanel
 <IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /ainojump/frontend
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+    RewriteEngine On
+    RewriteBase /ainojump/frontend/
+    RewriteRule ^index\.html$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ /ainojump/frontend/index.html [L]
 </IfModule>
-
-# Ensure proper MIME types for JavaScript and CSS files
-AddType application/javascript .js
-AddType text/css .css
