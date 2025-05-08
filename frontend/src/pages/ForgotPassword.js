@@ -64,7 +64,7 @@ const ForgotPassword = () => {
         <div className="login-container">
           <h2>Unustasin parooli</h2>
           {error && <div className="error-message">{error}</div>}
-          {success && <div className="success-message">{success}</div>}
+          {success && <div className="success-message" style={{ marginBottom: '20px' }}>{success}</div>}
           <form onSubmit={handlePasswordReset}>
             <div className="input-group">
               <label>E-post *</label>
@@ -78,7 +78,7 @@ const ForgotPassword = () => {
             </div>
 
             <button type="submit" className="login-button" disabled={isLoading}>
-              {isLoading ? "Saadan..." : "Saada lähtestamise link"}
+              {isLoading ? "Saadan..." : success ? "Saada uuesti" : "Saada lähtestamise link"}
             </button>
             <div className="links-container">
               <div className="register-link">
