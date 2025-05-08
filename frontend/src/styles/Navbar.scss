@@ -8,7 +8,27 @@
     width: 100%;
     box-sizing: border-box;
 }
-
+.auth-link {
+    // Add any special styling you want for auth links here
+    white-space: nowrap; // Prevents text wrapping
+  }
+  
+  .logout-link {
+    color: white; // Override the default link color
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap; // Prevents text wrapping
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+      background: #f71616;
+    }
+    
+    &::after {
+      display: none; // Remove the underline effect if you don't want it
+    }
+  }
 .active {
     position: relative;
     

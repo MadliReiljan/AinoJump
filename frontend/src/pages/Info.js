@@ -77,8 +77,10 @@ export const Info = () => {
 
   return (
     <div className="container">
+      <h1 className="page-title">Info</h1>
+      
       {userRole === "owner" && (
-        <div>
+        <div className="admin-controls">
           <Button onClick={() => setIsPostModalOpen(true)} className="neutral">
             Loo postitus
           </Button>
@@ -92,37 +94,36 @@ export const Info = () => {
           )}
         </div>
       )}
-
-      <div>
-        <h2>Postitused</h2>
+  
+      <div className="posts-grid">
         {posts.length > 0 ? (
           posts.map((post, index) => (
-            <div key={post.id || index} className="post">
-              <h3>{post.title}</h3>
-              <p>{post.body}</p>
-              {post.image_url && (
-                <img
-                  src={`${baseURL}${post.image_url}`}
-                  alt={post.title}
-                  style={{ maxWidth: "40%" }}
-                />
-              )}
-              <p>
-                <strong>Aeg:</strong>{" "}
-                {post.time ? new Date(post.time).toLocaleString() : "Aeg puudub"}
-              </p>
+            <div key={post.id || index} className="post-card">
+              <div className="post-image">
+                {post.image_url ? (
+                  <img
+                    src={`${baseURL}${post.image_url}`}
+                    alt={post.title}
+                    onError={(e) => {
+                      console.error("Image failed to load:", `${baseURL}${post.image_url}`);
+                      e.target.onerror = null;
+                      e.target.className = 'placeholder-image';
+                    }}
+                  />
+                ) : (
+                  <div className="placeholder-image"></div>
+                )}
+              </div>
+              <h3 className="post-title">{post.title}</h3>
+              <p className="post-date">{post.time ? new Date(post.time).toLocaleString() : "Kuupäev"}</p>
+              <p className="post-content">{post.body}</p>
+              
               {userRole === "owner" && (
-                <div>
-                  <Button
-                    onClick={() => handleEditPost(post)}
-                    className="neutral"
-                  >
+                <div className="post-actions">
+                  <Button onClick={() => handleEditPost(post)} className="neutral">
                     Edit
                   </Button>
-                  <Button
-                    onClick={() => handleDeletePost(post.id)}
-                    className="danger"
-                  >
+                  <Button onClick={() => handleDeletePost(post.id)} className="danger">
                     Delete
                   </Button>
                 </div>
@@ -135,4 +136,4 @@ export const Info = () => {
       </div>
     </div>
   );
-};
+}

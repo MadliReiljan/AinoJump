@@ -67,21 +67,23 @@ export const Navbar = () => {
                         </NavLink>
                     </li>
                     {!isLoggedIn ? (
-                        <li>
-                            <Button to={authButtonLink} onClick={closeMenu}>
-                                {authButtonText}
-                            </Button>
-                        </li>
-                    ) : (
-                        <li className="user-panel">
-                            <div className="user-info">
-                                <NavLink to="/user" onClick={closeMenu}>
-                                   Konto
-                                </NavLink>
-                                <button onClick={logout}>Logi välja</button>
-                            </div>
-                        </li>
-                    )}
+                    <li>
+                        <NavLink to={authButtonLink} onClick={closeMenu} className="auth-link">
+                            {authButtonText}
+                        </NavLink>
+                    </li>
+                ) : (
+                    <li className="user-panel">
+                        <div className="user-info">
+                            <NavLink to="/user" onClick={closeMenu}>
+                                Konto
+                            </NavLink>
+                            <NavLink to="/" onClick={() => {logout(); closeMenu();}} className="logout-link">
+                                Logi välja
+                            </NavLink>
+                        </div>
+                    </li>
+                )}
                 </ul>
             </div>
         </nav>
