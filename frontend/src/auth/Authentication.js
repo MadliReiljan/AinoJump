@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import baseURL from "../baseURL";
 
 export const AuthContext = createContext();
 
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/accounts/user.php", {
+      const response = await fetch(`${baseURL}/accounts/user.php`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,

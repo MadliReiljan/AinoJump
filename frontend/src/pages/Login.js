@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/Authentication";
 import loginImage from "../images/loginimg.png";
+import baseURL from "../baseURL";
 import "../styles/Login.scss";
 
 const Login = () => {
@@ -25,7 +26,7 @@ const Login = () => {
         };
     
         try {
-            const response = await fetch("http://localhost:8000/accounts/login.php", {
+            const response = await fetch(`${baseURL}/accounts/login.php`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

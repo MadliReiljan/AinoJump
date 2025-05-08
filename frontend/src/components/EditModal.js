@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "./Button";
 import "../styles/EventModal.scss";
+import baseURL from "../baseURL";
 
 const EventEditModal = ({ event, onClose, onEventUpdated }) => {
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ const EventEditModal = ({ event, onClose, onEventUpdated }) => {
 
       console.log("Submitting eventDateTime:", eventDateTime); 
 
-      const response = await fetch("http://localhost:8000/events/edit_event.php", {
+      const response = await fetch(`${baseURL}/events/edit_event.php`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

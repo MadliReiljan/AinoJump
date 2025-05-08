@@ -5,6 +5,8 @@ import Button from "./Button";
 import logoImage from "../images/Logo3.png";
 import { AuthContext } from "../auth/Authentication";
 
+const BASE_PATH = process.env.NODE_ENV === "production" ? "/ainojump/frontend" : "";
+
 export const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const { isLoggedIn, userEmail, logout } = useContext(AuthContext);
@@ -18,9 +20,9 @@ export const Navbar = () => {
         setMenuOpen(false);
     };
 
-    const isLoginPage = location.pathname === "/login";
+    const isLoginPage = location.pathname === `${BASE_PATH}/login`;
     const authButtonText = isLoginPage ? "Loo konto" : "Logi sisse";
-    const authButtonLink = isLoginPage ? "/register" : "/login";
+    const authButtonLink = isLoginPage ? `${BASE_PATH}/register` : `${BASE_PATH}/login`;
 
     return (
         <nav>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "./Button";
 import "../styles/EventModal.scss";
+import baseURL from "../baseURL";
 
 const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
   const [formData, setFormData] = useState({
@@ -50,8 +51,8 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
       }
 
       const url = editingPost
-        ? "http://localhost:8000/info/edit_post.php"
-        : "http://localhost:8000/info/create_post.php";
+        ? `${baseURL}/info/edit_post.php`
+        : `${baseURL}/info/create_post.php`;
 
       const method = editingPost ? "PUT" : "POST";
 

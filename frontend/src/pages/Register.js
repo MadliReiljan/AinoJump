@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/Register.scss";
 import loginImage from "../images/registerimg.png"; 
+import baseURL from "../baseURL";
 
 const Register = () => {
   const [fullName, setFullName] = useState("");
@@ -31,7 +32,7 @@ const Register = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/accounts/register.php", {
+      const response = await fetch(`${baseURL}/accounts/register.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

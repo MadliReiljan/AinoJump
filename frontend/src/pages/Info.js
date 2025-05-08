@@ -4,6 +4,7 @@ import PostModal from "../components/PostModal";
 import "../styles/GlobalContainer.scss";
 import Button from "../components/Button";
 import "../styles/Info.scss";
+import baseURL from "../baseURL";
 
 export const Info = () => {
   const { userRole } = useContext(AuthContext);
@@ -17,7 +18,7 @@ export const Info = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch("http://localhost:8000/info/list_posts.php");
+      const response = await fetch(`${baseURL}/info/list_posts.php`);
       if (response.ok) {
         const data = await response.json();
         console.log("Fetched posts:", data);
@@ -40,7 +41,7 @@ export const Info = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/info/delete_post.php", {
+      const response = await fetch(`${baseURL}/info/delete_post.php`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +103,7 @@ export const Info = () => {
               <p>{post.body}</p>
               {post.image_url && (
                 <img
-                  src={`http://localhost:8000${post.image_url}`}
+                  src={`${baseURL}${post.image_url}`}
                   alt={post.title}
                   style={{ maxWidth: "40%" }}
                 />

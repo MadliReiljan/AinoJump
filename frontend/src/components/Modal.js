@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "./Button";
 import "../styles/EventModal.scss";
+import baseURL from "../baseURL";
 
 const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
   const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
       const token = localStorage.getItem("token");
       const eventDateTime = `${selectedDate} ${formData.time}:00`;
   
-      const response = await fetch("http://localhost:8000/events/create_event.php", {
+      const response = await fetch(`${baseURL}/events/create_event.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

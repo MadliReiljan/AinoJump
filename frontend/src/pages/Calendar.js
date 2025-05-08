@@ -10,6 +10,7 @@ import ReviewsCarousel from "../components/ReviewsCarousel";
 import "../styles/GlobalContainer.scss";
 import "../styles/Calendar.scss";
 import etLocale from "@fullcalendar/core/locales/et"; 
+import baseURL from "../baseURL";
 
 export const Calendar = () => {
   const { fullName, userRole } = useContext(AuthContext);
@@ -22,7 +23,7 @@ export const Calendar = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:8000/events/get_events.php");
+        const response = await fetch(`${baseURL}/events/get_events.php`);
         if (response.ok) {
           const data = await response.json();
           setEvents(data);
@@ -33,7 +34,7 @@ export const Calendar = () => {
         console.error("Error fetching events:", error);
       }
     };
-
+  
     fetchEvents();
   }, []);
 

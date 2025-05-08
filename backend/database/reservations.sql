@@ -1,5 +1,5 @@
 CREATE TABLE reservations (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     created_at TIMESTAMP,
     person_id INT,
     event_id INT,

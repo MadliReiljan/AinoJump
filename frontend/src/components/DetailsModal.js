@@ -3,6 +3,7 @@ import Button from "./Button";
 import { AuthContext } from "../auth/Authentication";
 import "../styles/EventDetailsModal.scss";
 import EventEditModal from "./EditModal";
+import baseURL from "../baseURL";
 
 const EventDetailsModal = ({ event, onClose }) => {
   const { userEmail, userRole } = useContext(AuthContext);
@@ -11,23 +12,23 @@ const EventDetailsModal = ({ event, onClose }) => {
 
   useEffect(() => {
     const fetchReservationStatus = async () => {
-      const token = localStorage.getItem("token"); 
-    
+      const token = localStorage.getItem("token");
+
       try {
-        const response = await fetch("http://localhost:8000/events/check_reservation.php", {
+        const response = await fetch(`${baseURL}/events/check_reservation.php`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             eventId: event.id,
           }),
         });
-    
+
         if (response.ok) {
           const data = await response.json();
-          setIsReserved(data.isReserved); 
+          setIsReserved(data.isReserved);
         } else {
           console.error("Failed to fetch reservation status");
         }
@@ -36,7 +37,7 @@ const EventDetailsModal = ({ event, onClose }) => {
       }
     };
     fetchReservationStatus();
-  }, [event.id]); 
+  }, [event.id]);
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -47,7 +48,7 @@ const EventDetailsModal = ({ event, onClose }) => {
   const handleReserve = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:8000/events/reserve_event.php", {
+      const response = await fetch(`${baseURL}/events/reserve_event.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +74,7 @@ const EventDetailsModal = ({ event, onClose }) => {
   const handleUnreserve = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:8000/events/reserve_event.php", {
+      const response = await fetch(`${baseURL}/events/reserve_event.php`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -97,11 +98,11 @@ const EventDetailsModal = ({ event, onClose }) => {
   };
 
   const handleEdit = () => {
-    setIsEditing(true); 
+    setIsEditing(true);
   };
-  
+
   const handleEditClose = () => {
-    setIsEditing(false); 
+    setIsEditing(false);
   };
 
   const handleDelete = async () => {
@@ -109,11 +110,11 @@ const EventDetailsModal = ({ event, onClose }) => {
     if (!confirmDelete) return;
 
     const token = localStorage.getItem("token");
-    const response = await fetch(`http://localhost:8000/events/delete_event.php`, {
+    const response = await fetch(`${baseURL}/events/delete_event.php`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         eventId: event.id,

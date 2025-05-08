@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/User.scss";
+import baseURL from "../baseURL";
 
 const User = () => {
   const [userData, setUserData] = useState(null);
@@ -18,7 +19,7 @@ const User = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/accounts/user.php", {
+        const response = await fetch(`${baseURL}/accounts/user.php`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -49,7 +50,7 @@ const User = () => {
     }
   
     try {
-      const response = await fetch("http://localhost:8000/accounts/add_child.php", {
+      const response = await fetch(`${baseURL}/accounts/add_child.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
