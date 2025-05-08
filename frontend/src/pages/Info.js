@@ -21,7 +21,6 @@ export const Info = () => {
       const response = await fetch(`${baseURL}/info/list_posts.php`);
       if (response.ok) {
         const data = await response.json();
-        console.log("Fetched posts:", data);
         setPosts(data);
       } else {
         console.error("Failed to fetch posts. Status:", response.status);

@@ -9,6 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+$headers = getallheaders();
+if (!isset($headers['Authorization']) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+    $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+}
+
 include_once '../database.php';
 
 $database = new Database();

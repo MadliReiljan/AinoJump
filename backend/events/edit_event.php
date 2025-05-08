@@ -16,6 +16,9 @@ $database = new Database();
 $db = $database->getConnection();
 
 $headers = getallheaders();
+if (!isset($headers['Authorization']) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+    $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+}
 $authHeader = $headers['Authorization'] ?? '';
 $token = str_replace('Bearer ', '', $authHeader);
 

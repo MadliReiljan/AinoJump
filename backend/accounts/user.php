@@ -16,8 +16,11 @@ $database = new Database();
 $db = $database->getConnection();
 
 $headers = getallheaders();
+if (!isset($headers['Authorization']) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+    $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+}
+
 if (!isset($headers['Authorization'])) {
-    error_log("Authorization header is missing.");
     http_response_code(401);
     echo json_encode(array("message" => "Authorization header missing."));
     exit();
@@ -25,11 +28,9 @@ if (!isset($headers['Authorization'])) {
 
 $authHeader = $headers['Authorization'];
 $token = str_replace('Bearer ', '', $authHeader);
-error_log("Token received: " . $token);
 
 $user = validateToken($db, $token);
 if (!$user) {
-    error_log("Invalid or expired token.");
     http_response_code(401);
     echo json_encode(array("message" => "Invalid or expired token."));
     exit();
@@ -43,7 +44,6 @@ try {
         "fullname" => $user['full_name']
     ));
 } catch (Exception $e) {
-    error_log("Error fetching user data: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(array("message" => "Internal server error."));
 }

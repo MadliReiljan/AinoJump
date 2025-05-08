@@ -18,11 +18,14 @@ $db = $database->getConnection();
 $data = json_decode(file_get_contents("php://input"));
 
 $authorizationHeader = getallheaders()['Authorization'] ?? '';
+if (!$authorizationHeader && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+    $authorizationHeader = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+}
 $token = str_replace('Bearer ', '', $authorizationHeader);
 
 $user = validateToken($db, $token);
+
 if (!$user) {
-    error_log("Invalid token: " . $token);
     http_response_code(401);
     echo json_encode(["message" => "Unauthorized - Invalid token"]);
     exit();

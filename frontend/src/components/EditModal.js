@@ -24,7 +24,6 @@ const EventEditModal = ({ event, onClose, onEventUpdated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-    console.log("Token being sent:", token);
 
     try {
       const eventDateTime = `${event.time.split(" ")[0]} ${formData.time}:00`;

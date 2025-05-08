@@ -15,12 +15,22 @@ include_once '../validate_token.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$data = json_decode(file_get_contents("php://input"));
+$data = json_decode(file_get_contents("php://input"), true);
+$eventId = $data['eventId'] ?? null;
+if (!$eventId) {
+    http_response_code(400);
+    echo json_encode(["message" => "Invalid or missing event ID."]);
+    exit();
+}
 
 $authorizationHeader = getallheaders()['Authorization'] ?? '';
+if (!$authorizationHeader && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+    $authorizationHeader = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+}
 $token = str_replace('Bearer ', '', $authorizationHeader);
 
 $user = validateToken($db, $token);
+
 if (!$user) {
     http_response_code(401);
     echo json_encode(["message" => "Unauthorized - Invalid token"]);
@@ -31,8 +41,6 @@ $userEmail = $user['email'];
 $personId = $user['person_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $eventId = $data->eventId;
-
     $query = "SELECT * FROM reservations WHERE person_id = :personId AND event_id = :eventId";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':personId', $personId);
@@ -80,13 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         http_response_code(200);
         echo json_encode(array("message" => "Reservation successful"));
     } catch (Exception $e) {
-        error_log("Error reserving event: " . $e->getMessage());
         http_response_code(500);
         echo json_encode(array("message" => "Internal server error"));
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    $eventId = $data->eventId;
-
     try {
         $query = "DELETE FROM reservations WHERE person_id = :personId AND event_id = :eventId";
         $stmt = $db->prepare($query);
@@ -102,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(array("message" => "No reservation found to unreserve"));
         }
     } catch (Exception $e) {
-        error_log("Error unreserving event: " . $e->getMessage());
         http_response_code(500);
         echo json_encode(array("message" => "Internal server error"));
     }

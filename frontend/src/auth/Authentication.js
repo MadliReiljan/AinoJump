@@ -36,7 +36,6 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("User data:", data);
         setUserEmail(data.email);
         setFullName(data.fullname);
         setUserRole(data.role);

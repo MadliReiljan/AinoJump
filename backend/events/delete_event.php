@@ -16,6 +16,9 @@ $database = new Database();
 $db = $database->getConnection();
 
 $headers = getallheaders();
+if (!isset($headers['Authorization']) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+    $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+}
 $authHeader = $headers['Authorization'] ?? '';
 $token = str_replace('Bearer ', '', $authHeader);
 
@@ -32,13 +35,26 @@ if ($user['role'] !== 'owner') {
     exit();
 }
 
+$data = json_decode(file_get_contents("php://input"), true);
+$eventId = $data['eventId'] ?? null;
+if (!$eventId) {
+    http_response_code(400);
+    echo json_encode(["message" => "Invalid or missing event ID."]);
+    exit();
+}
+
 $query = "DELETE FROM event WHERE id = :eventId";
 $stmt = $db->prepare($query);
 $stmt->bindParam(":eventId", $eventId, PDO::PARAM_INT);
 
 if ($stmt->execute()) {
-    http_response_code(200);
-    echo json_encode(["message" => "Event deleted successfully."]);
+    if ($stmt->rowCount() > 0) {
+        http_response_code(200);
+        echo json_encode(["message" => "Event deleted successfully."]);
+    } else {
+        http_response_code(404);
+        echo json_encode(["message" => "No event found with the given ID."]);
+    }
 } else {
     http_response_code(500);
     echo json_encode(["message" => "Failed to delete the event."]);
