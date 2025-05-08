@@ -11,7 +11,7 @@ $color-highlight: #BFFF7F;
 $breakpoint-mobile: 480px;
 $breakpoint-tablet-small: 580px;
 $breakpoint-tablet: 768px;
-$breakpoint-desktop: 1600px;
+$breakpoint-desktop: 1440px;
 
 // Spacing
 $spacing-xs: 1rem;
@@ -293,10 +293,7 @@ body {
     text-align: center;
     padding-right: 0;
   }
-}
-
-
-@include respond-to(tablet) {
+  
   .container-base {
     padding-left: 60px;
     padding-right: 60px;

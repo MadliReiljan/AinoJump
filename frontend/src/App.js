@@ -4,6 +4,7 @@ import { Navbar } from "./components/Navbar";
 import { AboutUs, MainPage, Info, Calendar } from "./pages";
 import LoginPage from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import User from "./pages/User";
 import Footer from "./components/PageFooter";
 import { AuthProvider } from "./auth/Authentication";
@@ -23,6 +24,7 @@ function App() {
                         <Route path="Info" element={<Info />} />
                         <Route path="Login" element={<LoginPage />} />
                         <Route path="Register" element={<Register />} />
+                        <Route path="unustasin-parooli" element={<ForgotPassword />} />
                         <Route path="User" element={<User />} />
                     </Routes>
                 </PageTransition>

@@ -6,6 +6,7 @@
   color: white;
   font-weight: 400;
   margin-top: 8rem;
+  margin-bottom: 2.5rem;
 }
 
 .name-row {
@@ -54,6 +55,22 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.paragraph {
+  color: rgba(255, 255, 255, 0.9);  // Slightly softer white for eye comfort
+  line-height: 1.65;  // Increased line height for better readability
+  font-size: 1.05rem;  // Slightly larger text
+  margin-bottom: 1.2rem;  // Space between paragraphs if you split them
+  letter-spacing: 0.01rem;  // Slight letter spacing
+  text-align: justify;  // Optional: for even text distribution
+}
+
+.name-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 300px;
+  margin-bottom: 20px;
 }
 
 @media (max-width: 768px) {

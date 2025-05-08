@@ -49,16 +49,70 @@
 .info-box {
   flex: 1;
   background-color: #667064;
-  border-radius: 10px;
-  padding: 20px;
+  border-radius: 15px;
+  padding: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-size: 16px;
   color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+  max-width: 450px;
 }
 
 .info-box h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.info-instruction {
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.schedule-heading {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  margin-top: 10px;
+}
+
+.schedule-table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+.schedule-row {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.day {
+  font-weight: normal;
+  width: 150px;
+}
+
+.time {
+  font-weight: normal;
+}
+
+.stebby-link {
+  margin-top: 15px;
+  font-weight: normal;
+}
+
+.stebby-link a {
+  color: #ffffff;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.stebby-link a:hover {
+  text-decoration: none;
 }
 
 .info-box ul {
