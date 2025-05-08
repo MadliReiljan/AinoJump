@@ -26,7 +26,7 @@ const ForgotPassword = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${baseURL}/accounts/forgot-password.php`, {
+      const response = await fetch(`${baseURL}/accounts/forgot_password.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +38,7 @@ const ForgotPassword = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess("Parooli lähtestamise link on saadetud teie e-posti aadressile.");
+        setSuccess("Parooli uudendamise link on saadetud teie e-posti aadressile.");
         setEmail("");
       } else {
         setError(data.message || "Parooli lähtestamine ebaõnnestus.");
