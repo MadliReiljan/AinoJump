@@ -7,7 +7,6 @@ import { AuthContext } from "../auth/Authentication";
 import EventDetailsModal from "../components/DetailsModal";
 import EventModal from "../components/Modal";
 import ReviewsCarousel from "../components/ReviewsCarousel";
-import "../styles/GlobalContainer.scss";
 import "../styles/Calendar.scss";
 import etLocale from "@fullcalendar/core/locales/et"; 
 import baseURL from "../baseURL";

@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../auth/Authentication";
 import PostModal from "../components/PostModal";
-import "../styles/GlobalContainer.scss";
 import Button from "../components/Button";
 import "../styles/Info.scss";
 import baseURL from "../baseURL";
@@ -76,7 +75,7 @@ export const Info = () => {
   };
 
   return (
-    <div className="container">
+    <div className="info-container">
       <h1 className="page-title">Info</h1>
       
       {userRole === "owner" && (

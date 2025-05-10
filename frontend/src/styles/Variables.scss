@@ -1,0 +1,29 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+// Colors
+$color-background: #1C1C1C;
+$color-text: white;
+$color-highlight: #BFFF7F;
+
+// Breakpoints
+$breakpoint-mobile: 480px;
+$breakpoint-tablet-small: 580px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1600px;
+
+// Spacing
+$spacing-xs: 1rem;
+$spacing-sm: 1.5rem;
+$spacing-md: 2rem;
+$spacing-lg: 3rem;
+$spacing-xl: 5rem;
+
+// Font sizes
+$font-size-base: 16px;
+$font-size-heading-large: 36px;
+$font-size-heading-medium: 28px;
+$font-size-heading-small: 24px;
+
+// Font family
+$font-family-base: 'Montserrat', sans-serif;

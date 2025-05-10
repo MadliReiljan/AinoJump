@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styles/GlobalContainer.scss';
 import '../styles/AboutUs.scss';
 import contentImage1 from "../images/Anna.jpg";
 import contentImage2 from "../images/Aino-Anna.jpg";
@@ -7,7 +6,7 @@ import contentImage3 from "../images/Aino.jpg";
 
 export const AboutUs = () => {
   return (
-    <div className="container">
+    <div className="about-container">
       <h2 className="meist-heading">Tutvu meiega</h2>
         <div className="two-column-section">
           <div className="text-column">

@@ -1,30 +1,5 @@
-// Import fonts
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-
-// Variables
-$font-family-base: 'Montserrat', sans-serif;
-$color-background: #1C1C1C;
-$color-text: white;
-$color-highlight: #BFFF7F;
-
-// Breakpoints
-$breakpoint-mobile: 480px;
-$breakpoint-tablet-small: 580px;
-$breakpoint-tablet: 768px;
-$breakpoint-desktop: 1600px;
-
-// Spacing
-$spacing-xs: 1rem;
-$spacing-sm: 1.5rem;
-$spacing-md: 2rem;
-$spacing-lg: 3rem;
-$spacing-xl: 5rem;
-
-// Font sizes
-$font-size-base: 16px;
-$font-size-heading-large: 36px;
-$font-size-heading-medium: 28px;
-$font-size-heading-small: 24px;
+@import 'Variables';
+@import 'Mixins';
 
 body {
   background-color: $color-background;
@@ -34,12 +9,7 @@ body {
 }
 
 .container-base {
-  max-width: $breakpoint-desktop;
-  padding-left: 120px;
-  padding-right: 120px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
+  @include container-base;
 }
 
 .container {
@@ -63,6 +33,7 @@ body {
   color: $color-text;
 }
 
+// Layout components
 .two-column-section {
   display: flex;
   flex-direction: row;
@@ -125,6 +96,7 @@ body {
   object-fit: cover;
 }
 
+// Benefits section
 .benefits-grid {
   display: flex;
   flex-direction: column;
@@ -200,29 +172,8 @@ body {
   margin-top: -50px;
 }
 
-
-
-
-@mixin respond-to($breakpoint) {
-  @if $breakpoint == tablet {
-    @media (max-width: $breakpoint-tablet) { @content; }
-  }
-  @else if $breakpoint == tablet-small {
-    @media (max-width: $breakpoint-tablet-small) and (min-width: $breakpoint-mobile + 1) { @content; }
-  }
-  @else if $breakpoint == mobile {
-    @media (max-width: $breakpoint-mobile) { @content; }
-  }
-  @else if $breakpoint == medium {
-    @media (max-width: 1087px) { @content; }
-  }
-  @else if $breakpoint == mid-small {
-    @media (max-width: 764px) and (min-width: 530px) { @content; }
-  }
-}
-
+// Responsive styles
 @include respond-to(medium) {
-
   .benefits-grid:before {
     display: none !important;
     content: none !important;
@@ -251,6 +202,7 @@ body {
     text-align: center;
     padding-right: 0;
   }
+  
   .image-column {
     display: none;
   }
@@ -275,7 +227,6 @@ body {
   }
 }
 
-
 @include respond-to(tablet) {
   .benefits-row {
     flex-direction: column;
@@ -292,11 +243,6 @@ body {
   .benefits-heading {
     text-align: center;
     padding-right: 0;
-  }
-  
-  .container-base {
-    padding-left: 60px;
-    padding-right: 60px;
   }
   
   .container {
@@ -316,22 +262,12 @@ body {
 }
 
 @include respond-to(tablet-small) {
-  .container-base {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
-  
   .container {
     padding-top: 30px;
   }
 }
 
 @include respond-to(mobile) {
-  .container-base {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-  
   .container {
     padding-top: 20px;
   }

@@ -1,35 +1,48 @@
-@import 'GlobalContainer';
+@import 'Variables';
+@import 'Mixins';
+
+body {
+  background-color: $color-background;
+  margin: 0;
+  padding: 0;
+  font-family: $font-family-base;
+}
+
+.about-container {
+  @include container-base;
+  background-color: $color-background;
+  color: $color-text;
+  margin-top: 10rem;
+}
 
 .meist-heading {
-  font-size: 32px;
   text-align: center;
-  color: white;
-  font-weight: 400;
-  margin-top: 8rem;
-  margin-bottom: 2.5rem;
+  font-size: $font-size-heading-medium;
+  margin-bottom: $spacing-lg;
+  color: $color-text;
 }
 
 .name-row {
   display: flex;
   justify-content: space-between;
   padding: 0 300px;
-  margin-bottom: 20px;
+  margin-bottom: $spacing-xs;
 }
 
 .name {
-  font-size: 24px;
+  font-size: $font-size-heading-small;
   font-weight: 500;
-  color: white;
-  margin-top: 40px;
+  color: $color-text;
+  margin-top: $spacing-lg;
 }
 
 .image-gallery {
   display: flex;
   justify-content: center;
   align-items: flex-start; 
-  gap: 0px; 
+  gap: 0; 
   position: relative;
-  margin-bottom: 100px;
+  margin-bottom: $spacing-xl;
 }
 
 .individual-image-container {
@@ -45,7 +58,7 @@
   z-index: 2;
   width: 30%;
   min-width: 300px;
-  margin-top: 50px;
+  margin-top: $spacing-lg;
   margin-left: -80px;
   margin-right: -80px; 
 }
@@ -58,22 +71,15 @@
 }
 
 .paragraph {
-  color: rgba(255, 255, 255, 0.9);  // Slightly softer white for eye comfort
-  line-height: 1.65;  // Increased line height for better readability
-  font-size: 1.05rem;  // Slightly larger text
-  margin-bottom: 1.2rem;  // Space between paragraphs if you split them
-  letter-spacing: 0.01rem;  // Slight letter spacing
-  text-align: justify;  // Optional: for even text distribution
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.65;
+  font-size: calc($font-size-base * 1.05);
+  margin-bottom: $spacing-sm;
+  letter-spacing: 0.01rem;
+  text-align: justify;
 }
 
-.name-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 300px;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 768px) {
+@include respond-to(tablet) {
   .image-gallery {
     flex-direction: column;
   }
@@ -89,6 +95,6 @@
   }
   
   .name-row {
-    padding: 0 20px;
+    padding: 0 $spacing-xs;
   }
 }

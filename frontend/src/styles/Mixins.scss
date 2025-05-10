@@ -1,0 +1,43 @@
+@import 'variables';
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == tablet {
+    @media (max-width: $breakpoint-tablet) { @content; }
+  }
+  @else if $breakpoint == tablet-small {
+    @media (max-width: $breakpoint-tablet-small) and (min-width: $breakpoint-mobile + 1) { @content; }
+  }
+  @else if $breakpoint == mobile {
+    @media (max-width: $breakpoint-mobile) { @content; }
+  }
+  @else if $breakpoint == medium {
+    @media (max-width: 1087px) { @content; }
+  }
+  @else if $breakpoint == mid-small {
+    @media (max-width: 764px) and (min-width: 530px) { @content; }
+  }
+}
+
+@mixin container-base {
+  max-width: $breakpoint-desktop;
+  padding-left: 120px;
+  padding-right: 120px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  
+  @include respond-to(tablet) {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+  
+  @include respond-to(tablet-small) {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  
+  @include respond-to(mobile) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

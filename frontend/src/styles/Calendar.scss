@@ -1,49 +1,61 @@
-.calendar-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 80%; 
-  margin: 100px auto 20px auto;
-  overflow: hidden; 
-}
+@import 'variables';
+@import 'mixins';
 
 .calendar-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 100px auto 20px auto;
-  max-width: 1600px;
-  padding-left: 120px;
-  padding-right: 120px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.calendar-header {
-  text-align: center;
-  margin-bottom: 20px;
+  @include container-base;
+  margin-top: 10rem;
 }
 
 .calendar-header h2 {
-  font-size: 32px;
   text-align: center;
-  color: white;
-  font-weight: 400;
-  font-family: "Montserrat", sans-serif;
-  margin-top: 8rem;
+  font-size: $font-size-heading-medium;
+  margin-bottom: $spacing-lg;
+  color: $color-text;
 }
 
 .calendar-content {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: $spacing-md;
   width: 100%;
   flex-wrap: wrap;
-  margin-top: 2rem;
+  margin-top: $spacing-md;
+}
+
+.calendar-wrapper {
+  flex: 2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+  background-color: $color-background;
+
+  .fc {
+    height: 100%;
+    background-color: $color-background;
+    color: $color-text;
+    overflow: visible;
+    box-shadow: none;
+  }
+  
+  .fc-scroller {
+    overflow: auto !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(76, 175, 80, 0.4) transparent;
+    
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(76, 175, 80, 0.4);
+      border-radius: 10px;
+      border: 2px solid transparent;
+    }
+  }
 }
 
 .info-box {
@@ -52,17 +64,16 @@
   border-radius: 15px;
   padding: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-size: 16px;
-  color: #ffffff;
+  font-size: $font-size-base;
+  color: $color-text;
   display: flex;
   flex-direction: column;
-  min-width: 320px;
-  max-width: 450px;
+  max-width: 350px;
 }
 
 .info-box h3 {
-  font-size: 24px;
-  margin-bottom: 20px;
+  font-size: $font-size-heading-small;
+  margin-bottom: $spacing-md;
   font-weight: 500;
 }
 
@@ -106,7 +117,7 @@
 }
 
 .stebby-link a {
-  color: #ffffff;
+  color: $color-text;
   text-decoration: underline;
   font-weight: 500;
 }
@@ -132,15 +143,24 @@
 }
 
 .fc {
-  background-color: #1C1C1C;
-  color: white;
+  background-color: $color-background;
+  color: $color-text;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.fc-toolbar {
-  color: #ffffff;
-  padding: 10px;
+.fc-header-toolbar {
+  margin-bottom: 1.5em !important;
+  padding: 16px !important;
+  background-color: #515a50;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  .fc-toolbar-title {
+    font-size: 1.5rem !important;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
 }
 
 .fc .fc-toolbar-title::first-letter {
@@ -149,14 +169,25 @@
 
 .fc-button {
   background-color: #4caf50;
-  color: white;
+  color: $color-text;
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
   font-size: 14px;
 }
 
-// Today button - hover and active states
+.fc .fc-button-group {
+  gap: 8px;
+  
+  .fc-button-primary {
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    font-weight: 500 !important;
+    text-transform: capitalize;
+    transition: all 0.2s ease;
+  }
+}
+
 .fc .fc-button-primary:not(.fc-prev-button):not(.fc-next-button):not(.fc-dayGridMonth-button):not(.fc-timeGridWeek-button):not(.fc-timeGridDay-button) {
   background-color: #667064;
   border: none !important;
@@ -175,7 +206,6 @@
   }
 }
 
-// View buttons (month, week, day) - hover and active states
 .fc .fc-dayGridMonth-button,
 .fc .fc-timeGridWeek-button,
 .fc .fc-timeGridDay-button {
@@ -196,15 +226,13 @@
     background-color: #4d544c !important;
   }
   
-  // Selected view button state
   &.fc-button-active {
-    background-color: #4caf50 !important;
+    background-color:#4caf50 !important;
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
   }
   
-  // Handle the focus ring specifically
   &.fc-button-active:focus {
     box-shadow: none !important;
     outline: none !important;
@@ -212,7 +240,6 @@
   }
 }
 
-// Prev/next buttons - hover and active states
 .fc .fc-prev-button,
 .fc .fc-next-button {
   background-color: #667064;
@@ -232,8 +259,19 @@
   }
 }
 
-.calendar-wrapper .fc .fc-day-today.fc-day-today {
+.calendar-wrapper .fc .fc-day-today {
   background-color: #3a4139;
+  
+  .fc-daygrid-day-number {
+    background-color: #4caf50;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
 }
 
 .fc-button:hover {
@@ -256,14 +294,79 @@
 
 .fc-event {
   background-color: #4caf50;
-  color: white;
+  color: $color-text;
   border: none;
-  border-radius: 5px;
-  padding: 2px 5px;
-  font-size: 12px;
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  margin: 2px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  .fc-event-title {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .fc-event-time {
+    font-weight: 600;
+    margin-right: 6px;
+  }
 }
 
 .fc-event:hover {
-  background-color: #337736;
-  cursor: pointer;
+  background-color: #3c8c40;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+@include respond-to(tablet) {
+  .calendar-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .info-box {
+    margin-bottom: $spacing-md;
+    max-width: 100%;
+  }
+
+  .fc-header-toolbar {
+    flex-direction: column;
+    gap: 16px;
+    
+    .fc-toolbar-chunk {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+  }
+  
+  .fc .fc-toolbar-title {
+    font-size: 1.3rem !important;
+  }
+}
+
+@include respond-to(mobile) {
+  .calendar-container {
+    padding: $spacing-xs;
+    max-width: 95%;
+  }
+
+  .fc-header-toolbar {
+    padding: 12px !important;
+  }
+  
+  .fc .fc-button-primary {
+    padding: 6px 12px !important;
+    font-size: 0.9rem;
+  }
+  
+  .fc-right .fc-button-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
 }

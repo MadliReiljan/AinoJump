@@ -1,56 +1,280 @@
+@import 'Variables';
+@import 'Mixins';
 
-.user-popup {
-    background: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    max-width: 400px;
-    margin: 50px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.account-container {
+  @include container-base;
+  color: $color-text;
+  min-height: 100vh;
+  margin-top: 10rem;
+}
+
+.account-title {
+  text-align: center;
+  font-size: $font-size-heading-medium;
+  margin-bottom: $spacing-lg;
+  color: $color-text;
+}
+
+.account-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 1440px;
+  margin: 0 auto;
+  gap: $spacing-xs;
+  
+  @media (min-width: $breakpoint-tablet) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.details-section {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: $spacing-xs;
+  flex: 0 0 100%;
+  
+  @media (min-width: $breakpoint-tablet) {
+    flex: 0 0 35%;
   }
   
-  .user-popup h2 {
-    text-align: center;
-    margin-bottom: 20px;
+  h2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+    margin-bottom: $spacing-xs;
+    font-weight: normal;
   }
   
-  .user-info {
-    margin-bottom: 15px;
+  .edit-button {
+    background: transparent;
+    color: #BFFF7F;
+    border: 1px solid #BFFF7F;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition-duration: 0.5s;
+    
+    &.save {
+      background: #429745;
+      color: $color-text;
+    }
+    
+    &:hover {
+      background: #bfff7f12;
+      opacity: 0.85;
+    }
+  }
+}
+
+.detail-row {
+  display: flex;
+  margin-bottom: 15px;
+  
+  .detail-label {
+    flex: 0 0 40%;
+    color: #999;
+    font-size: 0.9rem;
   }
   
-  .user-info label {
-    display: block;
+  .detail-value {
+    flex: 0 0 60%;
+  }
+  
+  .detail-input {
+    background-color: #333;
+    border: 1px solid #444;
+    color: $color-text;
+    padding: 5px 10px;
+    border-radius: 4px;
+    width: 100%;
+  }
+}
+
+.children-section {
+  margin-top: $spacing-md;
+  
+  h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: normal;
+  }
+  
+  .add-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: $color-text;
+    font-size: $font-size-base;
+    transition-duration: 0.5s;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: #3e8e41;
+    }
+  }
+  
+  .add-child-form {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    
+    .child-input {
+      flex-grow: 1;
+      background-color: #333;
+      border: 1px solid #444;
+      color: $color-text;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+    
+    .add-child-button {
+      background-color: #4CAF50;
+      color: $color-text;
+      border: none;
+      padding: 5px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      
+      &:hover {
+        background-color: #3e8e41;
+      }
+    }
+  }
+}
+
+.bookings-section {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: $spacing-xs;
+  flex: 0 0 100%;
+  
+  @media (min-width: $breakpoint-tablet) {
+    flex: 0 0 60%;
+  }
+  
+  h2 {
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+    margin-bottom: $spacing-xs;
+    font-weight: normal;
+  }
+}
+
+.bookings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+}
+
+.booking-item {
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #444;
+  }
+  
+  .booking-time {
+    margin-top: 5px;
     font-weight: bold;
-    margin-bottom: 5px;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: $color-text;
+  font-size: 1.2rem;
+}
+
+.error-message {
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.2);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  margin: $spacing-xl auto;
+  max-width: 500px;
+}
+
+.password-change-button {
+  background: none;
+  border: 1px solid #ccc;
+  color: #666;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.password-change-form {
+  margin-top: 10px;
+}
+
+.password-field {
+  margin-bottom: 10px;
+  
+  label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
   }
   
-  .user-info input[type="email"],
-  .user-info input[type="password"] {
+  .password-input {
     width: 100%;
     padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 4px;
   }
+}
+
+.password-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
   
-  .user-info input[type="checkbox"] {
-    margin-right: 10px;
-  }
-  
-  .user-info button {
-    background: #007bff;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
+  button {
+    padding: 8px 15px;
     border-radius: 4px;
     cursor: pointer;
   }
   
-  .user-info button:hover {
-    background: #0056b3;
+  .save-password {
+    background-color: #4caf50;
+    color: white;
+    border: none;
   }
   
-  .error-message {
-    color: red;
-    text-align: center;
-    margin-top: 20px;
+  .cancel-password {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
   }
+}
+
+.password-error {
+  color: #e53935;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.password-info {
+  color: #999;
+  font-size: 0.8rem;
+  margin-top: 8px;
+  font-style: italic;
+}

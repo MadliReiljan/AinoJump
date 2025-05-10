@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "../styles/Navbar.scss";
-import Button from "./Button";
 import logoImage from "../images/Logo3.png";
 import { AuthContext } from "../auth/Authentication";
 

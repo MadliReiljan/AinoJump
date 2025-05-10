@@ -1,32 +1,33 @@
-.container {
-  padding: 20px;
-  margin-top: 7rem;
-  max-width: 1440px;
-  margin-left: auto;
-  margin-right: auto;
+@import 'Variables';
+@import 'Mixins';
+
+.info-container {
+  @include container-base;
+  margin-top: 10rem;
+  min-height: 100vh;
 }
 
 .page-title {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 2.5rem;
-  color: white;
+  font-size: $font-size-heading-medium;
+  margin-bottom: $spacing-lg;
+  color: $color-text;
 }
 
 .admin-controls {
-  margin-bottom: 20px;
+  margin-bottom: $spacing-xs;
   text-align: right;
 }
 
 button.neutral {
-  margin-bottom: 20px;
+  margin-bottom: $spacing-xs;
 }
 
 .posts-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 100px;
-  margin-top: 20px;
+  gap: $spacing-xl;
+  margin-top: $spacing-xs;
 }
 
 .post-card {
@@ -55,20 +56,20 @@ button.neutral {
   }
 
   .post-title {
-    margin: 15px 0 5px;
-    font-size: 1rem;
-    color: #BFFF7F;
+    margin: $spacing-xs 0 0.33rem;
+    font-size: $font-size-base;
+    color: $color-highlight;
   }
 
   .post-date {
-    margin: 0 0 10px;
-    font-size: 0.9rem;
+    margin: 0 0 0.67rem;
+    font-size: 14.4px;
     color: #aaa;
   }
 
   .post-content {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 14.4px;
     overflow: hidden;
     color: #aaa;
     word-wrap: break-word;
@@ -79,18 +80,18 @@ button.neutral {
       width: 100%;
       height: 1px;
       border-top: 1px dashed #aaa;
-      margin: 8px 0;
+      margin: 0.5rem 0;
     }
   }
 
   .post-actions {
-    margin: 15px 0;
+    margin: $spacing-xs 0;
     display: flex;
-    gap: 10px;
+    gap: 0.67rem;
   }
 }
 
-@media (max-width: 768px) {
+@include respond-to(tablet) {
   .posts-grid {
     grid-template-columns: 1fr;
   }
