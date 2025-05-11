@@ -1,3 +1,4 @@
 /database.php
 /uploads
 /password_reset_debug.log
+/accounts/password_reset_debug.log
