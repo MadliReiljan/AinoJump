@@ -1,6 +1,40 @@
 @import 'Variables';
 @import 'Mixins';
 
+// Color variables
+$color-green: #429745;
+$color-green-hover: #3e8e41;
+$color-green-light: #bfff7f12;
+$color-red: #ff6b6b;
+$color-bg-dark: #2a2a2a;
+$color-bg-darker: #333;
+$color-border: #444;
+$color-text-muted: #999;
+
+// Mixins
+@mixin button-base {
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+@mixin form-input {
+  background-color: $color-bg-darker;
+  border: 1px solid $color-border;
+  color: $color-text;
+  padding: 5px 10px;
+  border-radius: 4px;
+  width: 100%;
+  
+  &:focus {
+    outline: none;
+    border-color: $color-highlight;
+    box-shadow: 0 0 0 1px rgba(191, 255, 127, 0.3);
+  }
+}
+
+/* ===== LAYOUT ===== */
 .account-container {
   @include container-base;
   color: $color-text;
@@ -28,72 +62,179 @@
   }
 }
 
-.details-section {
-  background-color: #2a2a2a;
+/* ===== SECTION STYLES ===== */
+.details-section, .bookings-section {
+  background-color: $color-bg-dark;
   border-radius: 8px;
   padding: $spacing-xs;
   flex: 0 0 100%;
-  
-  @media (min-width: $breakpoint-tablet) {
-    flex: 0 0 35%;
-  }
   
   h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid $color-border;
     padding-bottom: 15px;
     margin-bottom: $spacing-xs;
     font-weight: normal;
   }
-  
-  .edit-button {
-    background: transparent;
-    color: #BFFF7F;
-    border: 1px solid #BFFF7F;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition-duration: 0.5s;
-    
-    &.save {
-      background: #429745;
-      color: $color-text;
-    }
-    
-    &:hover {
-      background: #bfff7f12;
-      opacity: 0.85;
-    }
+}
+
+.details-section {
+  @media (min-width: $breakpoint-tablet) {
+    flex: 0 0 35%;
   }
 }
 
+.bookings-section {
+  @media (min-width: $breakpoint-tablet) {
+    flex: 0 0 60%;
+  }
+}
+
+/* ===== BUTTONS ===== */
+.edit-button, .password-change-button, .add-child-button, .admin-button {
+  @include button-base;
+  
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.edit-button {
+  background: $color-green;
+  color: $color-text;
+  border: 1px solid $color-green;
+  font-size: 0.8rem;
+  margin-left: auto;
+  
+  &.save {
+    background: $color-green;
+    color: $color-text;
+  }
+  
+  &.cancel {
+    background: transparent;
+    color: $color-red;
+    border: 1px solid $color-red;
+    margin-left: 5px;
+  }
+  
+  &:hover {
+    background: $color-green-light;
+  }
+}
+
+.password-change-button {
+  background: $color-green;
+  border: 1px solid $color-green;
+  color: $color-text;
+  margin-left: 10px;
+  
+  &:hover {
+    background: $color-green-light;
+  }
+}
+
+/* ===== FORM ELEMENTS ===== */
 .detail-row {
   display: flex;
   margin-bottom: 15px;
   
   .detail-label {
     flex: 0 0 40%;
-    color: #999;
+    color: $color-text-muted;
     font-size: 0.9rem;
   }
   
   .detail-value {
     flex: 0 0 60%;
+    width: 100%;
   }
   
   .detail-input {
-    background-color: #333;
-    border: 1px solid #444;
-    color: $color-text;
-    padding: 5px 10px;
-    border-radius: 4px;
+    @include form-input;
+  }
+  
+  .password-change-form {
     width: 100%;
   }
 }
 
+/* ===== PASSWORD FIELDS ===== */
+.password-field {
+  margin-bottom: 15px;
+  width: 100%;
+  
+  label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+    color: $color-text-muted;
+    font-size: 0.9rem;
+  }
+}
+
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+  
+  input {
+    @include form-input;
+    width: 234px;
+    padding-right: 40px;
+  }
+  
+  .password-toggle-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: $color-text-muted;
+    height: 18px;
+    width: 18px;
+    
+    &:hover {
+      color: $color-highlight;
+    }
+    
+    svg {
+      display: block;
+    }
+  }
+}
+
+.password-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  
+  button {
+    @include button-base;
+    padding: 8px 15px;
+  }
+  
+  .save-password {
+    background-color: $color-green;
+    color: white;
+    border: none;
+  }
+  
+  .cancel-password {
+    background: transparent;
+    color: $color-red;
+    border: 1px solid $color-red;
+  }
+}
+
+/* ===== CHILDREN SECTION ===== */
 .children-section {
   margin-top: $spacing-md;
   
@@ -111,14 +252,12 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background-color: #4CAF50;
+    background-color: $color-green;
     color: $color-text;
-    font-size: $font-size-base;
-    transition-duration: 0.5s;
     cursor: pointer;
     
     &:hover {
-      background-color: #3e8e41;
+      background-color: $color-green-hover;
     }
   }
   
@@ -128,47 +267,23 @@
     gap: 10px;
     
     .child-input {
+      @include form-input;
       flex-grow: 1;
-      background-color: #333;
-      border: 1px solid #444;
-      color: $color-text;
-      padding: 5px 10px;
-      border-radius: 4px;
     }
     
     .add-child-button {
-      background-color: #4CAF50;
+      background-color: $color-green;
       color: $color-text;
       border: none;
-      padding: 5px 15px;
-      border-radius: 4px;
-      cursor: pointer;
       
       &:hover {
-        background-color: #3e8e41;
+        background-color: $color-green-hover;
       }
     }
   }
 }
 
-.bookings-section {
-  background-color: #2a2a2a;
-  border-radius: 8px;
-  padding: $spacing-xs;
-  flex: 0 0 100%;
-  
-  @media (min-width: $breakpoint-tablet) {
-    flex: 0 0 60%;
-  }
-  
-  h2 {
-    border-bottom: 1px solid #444;
-    padding-bottom: 15px;
-    margin-bottom: $spacing-xs;
-    font-weight: normal;
-  }
-}
-
+/* ===== BOOKINGS GRID ===== */
 .bookings-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -176,8 +291,8 @@
 }
 
 .booking-item {
-  background-color: #333;
-  border: 1px solid #444;
+  background-color: $color-bg-darker;
+  border: 1px solid $color-border;
   border-radius: 8px;
   padding: 15px;
   text-align: center;
@@ -185,7 +300,7 @@
   transition: all 0.3s ease;
   
   &:hover {
-    background-color: #444;
+    background-color: $color-border;
   }
   
   .booking-time {
@@ -194,6 +309,7 @@
   }
 }
 
+/* ===== UTILITY CLASSES ===== */
 .loading-container {
   display: flex;
   justify-content: center;
@@ -204,7 +320,7 @@
 }
 
 .error-message {
-  color: #ff6b6b;
+  color: $color-red;
   background-color: rgba(255, 107, 107, 0.2);
   padding: 15px;
   border-radius: 8px;
@@ -213,86 +329,9 @@
   max-width: 500px;
 }
 
-.password-change-button {
-  background: none;
-  border: 1px solid #ccc;
-  color: #666;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.password-change-form {
-  margin-top: 10px;
-}
-
-.password-field {
-  margin-bottom: 10px;
-  
-  label {
-    display: block;
-    margin-bottom: 4px;
-    font-weight: 500;
-  }
-  
-  .password-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-}
-
-.password-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  
-  button {
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .save-password {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-  }
-  
-  .cancel-password {
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-  }
-}
-
-.password-error {
-  color: #e53935;
-  margin-top: 8px;
-  font-size: 14px;
-}
-
-.password-info {
-  color: #999;
-  font-size: 0.8rem;
-  margin-top: 8px;
-  font-style: italic;
-}
-
-.admin-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  position: absolute;
-
-  width: 100%;
-}
-
 .admin-button-container {
   display: flex;
-  justify-content: end;
-  align-items: end;
+  justify-content: start;
   width: 100%;
   margin-top: 20px;
   max-width: 1440px;
@@ -301,16 +340,13 @@
 }
 
 .admin-button {
-  background-color: #4CAF50;
+  background-color: $color-green;
   color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.admin-button:hover {
-  background-color: #3e8e41;
+  
+  &:hover {
+    background-color: $color-green-hover;
+  }
 }

@@ -14,6 +14,11 @@ const User = () => {
   const [error, setError] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [isAddingChild, setIsAddingChild] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -73,13 +78,14 @@ const User = () => {
   
       alert("Child added successfully!");
       setChildName("");
+      setIsAddingChild(false);
     } catch (err) {
       setError(err.message);
     }
   };
 
   const handleUpdateProfile = async () => {
-    if (currentPassword || newPassword || confirmPassword) {
+    if (isChangingPassword && (currentPassword || newPassword || confirmPassword)) {
       if (!currentPassword) {
         setPasswordError("Please enter your current password");
         return;
@@ -141,10 +147,34 @@ const User = () => {
       setPasswordError("");
       
       setIsEditing(false);
+      setIsChangingPassword(false);
       alert("Profile updated successfully!");
     } catch (err) {
       setError(err.message);
     }
+  };
+
+  const toggleAddChild = () => {
+    setIsAddingChild(!isAddingChild);
+  };
+
+  const toggleChangePassword = () => {
+    setIsChangingPassword(!isChangingPassword);
+  };
+
+  const cancelAddChild = () => {
+    setIsAddingChild(false);
+    setChildName("");
+  };
+
+  const cancelEditing = () => {
+    setIsEditing(false);
+    setIsChangingPassword(false);
+    // Reset fields
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setPasswordError("");
   };
 
   const bookings = [
@@ -176,9 +206,14 @@ const User = () => {
       
       <div className="account-content">
         <div className="details-section">
-          <h2>Detailid {isEditing ? 
-            <button className="edit-button save" onClick={handleUpdateProfile}>Salvesta</button> : 
-            <button className="edit-button" onClick={() => setIsEditing(true)}>Muuda</button>}
+          <h2>Detailid {isEditing ? (
+              <>
+                <button className="edit-button save" onClick={handleUpdateProfile}>Salvesta</button>
+                <button className="edit-button cancel" onClick={cancelEditing}>Tühista</button>
+              </>
+            ) : (
+              <button className="edit-button" onClick={() => setIsEditing(true)}>Muuda</button>
+            )}
           </h2>
           
           <div className="detail-row">
@@ -213,37 +248,132 @@ const User = () => {
 
           <div className="detail-row">
             <div className="detail-label">Parool</div>
-            {isEditing ? (
+            {isEditing && !isChangingPassword ? (
+              <div className="detail-value">
+                *********
+                <button 
+                  className="password-change-button" 
+                  onClick={toggleChangePassword}
+                >
+                  Muuda parool
+                </button>
+              </div>
+            ) : isChangingPassword ? (
               <div className="password-change-form">
                 <div className="password-field">
                   <label>Praegune parool:</label>
-                  <input
-                    type="password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="password-input"
-                  />
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showCurrentPassword ? "text" : "password"}
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      className="password-input"
+                    />
+                    <button 
+                      type="button"
+                      className="password-toggle-icon" 
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                      tabIndex="-1"
+                      aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+                    >
+                      {showCurrentPassword ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                          <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <div className="password-field">
                   <label>Uus parool:</label>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="password-input"
-                  />
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="password-input"
+                    />
+                    <button 
+                      type="button"
+                      className="password-toggle-icon" 
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      tabIndex="-1"
+                      aria-label={showNewPassword ? "Hide password" : "Show password"}
+                    >
+                      {showNewPassword ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                          <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <div className="password-field">
                   <label>Kinnita uus parool:</label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="password-input"
-                  />
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="password-input"
+                    />
+                    <button 
+                      type="button"
+                      className="password-toggle-icon" 
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      tabIndex="-1"
+                      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                    >
+                      {showConfirmPassword ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                          <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
                 {passwordError && <div className="password-error">{passwordError}</div>}
-                <div className="password-info">Jäta väljad tühjaks, kui sa ei soovi parooli muuta.</div>
+                <div className="password-actions">
+                  <button 
+                    className="save-password" 
+                    onClick={handleUpdateProfile}
+                  >
+                    Salvesta
+                  </button>
+                  <button 
+                    className="cancel-password" 
+                    onClick={() => {
+                      setIsChangingPassword(false);
+                      setCurrentPassword("");
+                      setNewPassword("");
+                      setConfirmPassword("");
+                      setPasswordError("");
+                      setShowCurrentPassword(false);
+                      setShowNewPassword(false);
+                      setShowConfirmPassword(false);
+                    }}
+                  >
+                    Tühista
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="detail-value">••••••••••••</div>
@@ -251,8 +381,8 @@ const User = () => {
           </div>
           
           <div className="children-section">
-            <h3>Lisa laps <span className="add-button">+</span></h3>
-            {isEditing && (
+            <h3>Lisa laps {!isEditing && <span className="add-button" onClick={toggleAddChild}>+</span>}</h3>
+            {(isEditing || isAddingChild) && (
               <div className="add-child-form">
                 <input
                   type="text"
@@ -262,6 +392,9 @@ const User = () => {
                   className="child-input"
                 />
                 <button onClick={handleAddChild} className="add-child-button">Lisa</button>
+                {!isEditing && (
+                  <button onClick={cancelAddChild} className="cancel-button">Tühista</button>
+                )}
               </div>
             )}
           </div>

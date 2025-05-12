@@ -46,39 +46,79 @@ if (
     isset($data->is_for_children)
 ) {
     try {
+        $color = property_exists($data, 'color') ? $data->color : "#4caf50";
+
+        $checkQuery = "SELECT * FROM event WHERE id = :id";
+        $checkStmt = $db->prepare($checkQuery);
+        $checkStmt->bindParam(":id", $data->id, PDO::PARAM_INT);
+        $checkStmt->execute();
+        $currentEvent = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
         $query = "UPDATE event
                   SET title = :title,
                       body = :body,
                       time = :time,
                       max_capacity = :max_capacity,
-                      is_for_children = :is_for_children
+                      is_for_children = :is_for_children,
+                      color = :color
                   WHERE id = :id";
+                  
         $stmt = $db->prepare($query);
+ 
+        $id = (int)$data->id;
+        $title = (string)$data->title;
+        $body = (string)$data->body;
+        $time = (string)$data->time;
+        $max_capacity = (int)$data->max_capacity;
+        $is_for_children = $data->is_for_children ? 1 : 0;
 
-        $stmt->bindParam(":id", $data->id, PDO::PARAM_INT);
-        $stmt->bindParam(":title", $data->title);
-        $stmt->bindParam(":body", $data->body);
-        $stmt->bindParam(":time", $data->time);
-        $stmt->bindParam(":max_capacity", $data->max_capacity, PDO::PARAM_INT);
-        $stmt->bindParam(":is_for_children", $data->is_for_children, PDO::PARAM_BOOL);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":title", $title, PDO::PARAM_STR);
+        $stmt->bindParam(":body", $body, PDO::PARAM_STR);
+        $stmt->bindParam(":time", $time, PDO::PARAM_STR);
+        $stmt->bindParam(":max_capacity", $max_capacity, PDO::PARAM_INT);
+        $stmt->bindParam(":is_for_children", $is_for_children, PDO::PARAM_INT);
+        $stmt->bindParam(":color", $color, PDO::PARAM_STR);
 
-        if ($stmt->execute()) {
-            $query = "SELECT * FROM event WHERE id = :id";
-            $stmt = $db->prepare($query);
-            $stmt->bindParam(":id", $data->id, PDO::PARAM_INT);
-            $stmt->execute();
-            $updatedEvent = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->execute();
 
-            http_response_code(200);
-            echo json_encode($updatedEvent);
-        } else {
-            http_response_code(500);
-            echo json_encode(["message" => "Failed to update event."]);
+        $update_all = property_exists($data, 'update_all') ? $data->update_all : false;
+        $is_recurring = property_exists($data, 'is_recurring') ? $data->is_recurring : false;
+        
+        if ($currentEvent['is_recurring'] && $is_recurring && $update_all) {
+            $title = $currentEvent['title'];
+            $created_at = $currentEvent['created_at'];
+
+            $updateAllQuery = "UPDATE event 
+                              SET color = :color
+                              WHERE title = :title 
+                              AND created_at = :created_at 
+                              AND id != :id";
+            
+            $updateAllStmt = $db->prepare($updateAllQuery);
+            $updateAllStmt->bindParam(":color", $color, PDO::PARAM_STR);
+            $updateAllStmt->bindParam(":title", $title, PDO::PARAM_STR);
+            $updateAllStmt->bindParam(":created_at", $created_at, PDO::PARAM_STR);
+            $updateAllStmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $updateAllStmt->execute();
         }
+
+        $selectQuery = "SELECT id, title, body, time, max_capacity, is_for_children, is_recurring, color 
+                      FROM event 
+                      WHERE id = :id";
+                      
+        $selectStmt = $db->prepare($selectQuery);
+        $selectStmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $selectStmt->execute();
+        $updatedEvent = $selectStmt->fetch(PDO::FETCH_ASSOC);
+
+        http_response_code(200);
+        echo json_encode($updatedEvent);
+        
     } catch (Exception $e) {
         error_log("Error updating event: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(["message" => "Internal server error."]);
+        echo json_encode(["message" => "Internal server error: " . $e->getMessage()]);
     }
 } else {
     http_response_code(400);

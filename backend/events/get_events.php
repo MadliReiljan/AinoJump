@@ -20,7 +20,11 @@ $database = new Database();
 $db = $database->getConnection();
 
 try {
-    $query = "SELECT id, title, body, time, max_capacity, is_for_children FROM event";
+    $query = "SELECT e.id, e.title, e.body, e.time, e.max_capacity, e.is_for_children, e.is_recurring,
+                e.color,
+                (SELECT COUNT(*) FROM reservations r WHERE r.event_id = e.id) AS reserved_count 
+          FROM event e";
+              
     $stmt = $db->prepare($query);
     $stmt->execute();
 

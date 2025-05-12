@@ -12,7 +12,7 @@ import etLocale from "@fullcalendar/core/locales/et";
 import baseURL from "../baseURL";
 
 export const Calendar = () => {
-  const { fullName, userRole } = useContext(AuthContext);
+  const { fullName, userRole, token } = useContext(AuthContext);
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
@@ -22,7 +22,11 @@ export const Calendar = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(`${baseURL}/events/get_events.php`);
+        const response = await fetch(`${baseURL}/events/get_events.php`, {
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : ''
+          }
+        });
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data)) {
@@ -42,7 +46,33 @@ export const Calendar = () => {
     };
 
     fetchEvents();
-  }, []);
+  }, [token]);
+
+  const refreshEvents = async () => {
+    try {
+      const storedToken = localStorage.getItem("token");
+      const response = await fetch(`${baseURL}/events/get_events.php`, {
+        headers: {
+          'Authorization': storedToken ? `Bearer ${storedToken}` : ''
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setEvents(data);
+        } else {
+          console.error("Unexpected response format:", data);
+          setEvents([]); 
+        }
+      } else {
+        console.error("Failed to fetch events");
+        setEvents([]); 
+      }
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      setEvents([]); 
+    }
+  };
 
   const handleEventClick = (info) => {
     const clickedEvent = events.find((event) => event.id === parseInt(info.event.id));
@@ -62,6 +92,7 @@ export const Calendar = () => {
   const handleCloseDetailsModal = () => {
     setIsDetailsModalOpen(false);
     setSelectedEvent(null);
+    refreshEvents(); // Always refresh events when modal closes
   };
 
   const handleCloseCreateModal = () => {
@@ -138,43 +169,68 @@ export const Calendar = () => {
       </div>
         <div className="calendar-wrapper">
         <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            height={"600px"}
-            selectable={true}
-            firstDay={1}
-            locale={etLocale}
-            events={events.map((event) => ({
-              id: event.id,
-              title: event.title,
-              start: event.time,
-              allDay: false, 
-            }))}
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay",
-            }}
-            buttonText={{
-              today: "Täna",
-              month: "Kuu",
-              week: "Nädal",
-              day: "Päev",
-            }}
-            eventClick={handleEventClick}
-            dateClick={handleDateClick}
-            eventContent={(arg) => (
-              <div>
-                <b>{arg.timeText}</b> <span>{arg.event.title}</span>
-              </div>
-            )}
-          />
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        initialView="dayGridMonth"
+        height={"600px"}
+        selectable={true}
+        firstDay={1}
+        locale={etLocale}
+        events={events.map((event) => {
+          return {
+            id: event.id,
+            title: event.title,
+            start: event.time,
+            backgroundColor: event.color || "#4caf50",
+            borderColor: event.color || "#4caf50",
+            textColor: "#ffffff",
+            allDay: false,
+            extendedProps: {
+              customColor: event.color || "#4caf50"
+            }
+          };
+        })}
+        headerToolbar={{
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        }}
+        buttonText={{
+          today: "Täna",
+          month: "Kuu",
+          week: "Nädal",
+          day: "Päev",
+        }}
+        eventClick={handleEventClick}
+        dateClick={handleDateClick}
+        eventDidMount={(info) => {
+          // Apply the color to the outer element (the anchor tag)
+          const color = info.event.extendedProps.customColor || "#4caf50";
+          info.el.style.backgroundColor = color;
+          info.el.style.borderColor = color;
+        }}
+        eventContent={(arg) => {
+          const customColor = arg.event.extendedProps.customColor || "#4caf50";
+          return (
+            <div style={{
+              backgroundColor: customColor,
+              borderColor: customColor,
+              color: "#ffffff",
+              padding: "2px 4px",
+              borderRadius: "3px",
+              width: "100%"
+            }}>
+              <b>{arg.timeText}</b> <span>{arg.event.title}</span>
+            </div>
+          );
+        }}
+      />
         </div>
       </div>
       {isDetailsModalOpen && selectedEvent && (
         <EventDetailsModal
           event={selectedEvent}
           onClose={handleCloseDetailsModal}
+          onReservationChange={refreshEvents}
         />
       )}
       {isCreateModalOpen && (

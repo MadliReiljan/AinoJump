@@ -60,7 +60,7 @@
 
 .info-box {
   flex: 1;
-  background-color: #667064;
+  background-color: #555D53;
   border-radius: 15px;
   padding: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -293,12 +293,10 @@
 }
 
 .fc-event {
-  background-color: #4caf50;
   color: $color-text;
   border: none;
   border-radius: 8px;
-  padding: 4px 12px;
-  font-size: 13px;
+  font-size: 14px;
   transition: all 0.2s ease;
   margin: 2px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -316,10 +314,13 @@
   }
 }
 
+.fc-event.fc-daygrid-event {
+  background-color: inherit;
+  border-color: inherit;
+}
+
 .fc-event:hover {
-  background-color: #3c8c40;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0.9;
 }
 
 @include respond-to(tablet) {

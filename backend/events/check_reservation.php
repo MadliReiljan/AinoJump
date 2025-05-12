@@ -1,7 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -14,8 +14,6 @@ include_once '../validate_token.php';
 
 $database = new Database();
 $db = $database->getConnection();
-
-$data = json_decode(file_get_contents("php://input"));
 
 $authorizationHeader = getallheaders()['Authorization'] ?? '';
 if (!$authorizationHeader && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
@@ -32,7 +30,20 @@ if (!$user) {
 }
 
 $personId = $user['person_id'];
-$eventId = $data->eventId;
+
+$eventId = null;
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $eventId = isset($_GET['eventId']) ? $_GET['eventId'] : null;
+} else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents("php://input"));
+    $eventId = $data->eventId ?? null;
+}
+
+if (!$eventId) {
+    http_response_code(400);
+    echo json_encode(["message" => "Event ID is required"]);
+    exit();
+}
 
 $query = "SELECT * FROM reservations WHERE person_id = :personId AND event_id = :eventId";
 $stmt = $db->prepare($query);

@@ -56,14 +56,14 @@ const AdminUserList = () => {
 
   return (
     <div className="admin-user-list-container">
-      <h1>All Users</h1>
+      <h1>Kõik Kasutajad</h1>
       <table className="user-table">
         <thead>
           <tr>
             <th>ID</th>
             <th>Eesnimi</th>
             <th>Perekonnanimi</th>
-            <th>Email</th>
+            <th>E-post</th>
             <th>Telefon</th>
           </tr>
         </thead>
