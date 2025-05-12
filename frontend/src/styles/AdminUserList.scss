@@ -68,3 +68,25 @@
   color: #BFFF7F;
   font-size: 1.1rem;
 }
+
+.delete-user-btn {
+  background: #ff4d4f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  margin-right: 4px;
+
+  &:hover,
+  &:focus {
+    background: #d9363e;
+    color: #fff;
+  }
+
+  &:active {
+    background: #b71c1c;
+  }
+}

@@ -19,6 +19,7 @@ const User = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -52,7 +53,27 @@ const User = () => {
       }
     };
 
+    const fetchBookings = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      try {
+        const response = await fetch(`${baseURL}/accounts/get_user_bookings.php`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setBookings(data);
+        }
+      } catch (e) {
+        // Optionally handle error
+      }
+    };
+
     fetchUserData();
+    fetchBookings();
   }, []);
 
   const handleAddChild = async () => {
@@ -176,21 +197,6 @@ const User = () => {
     setConfirmPassword("");
     setPasswordError("");
   };
-
-  const bookings = [
-    { date: "01.04", day: "Teisipäev", time: "19-20" },
-    { date: "03.04", day: "Neljapäev", time: "19-20" },
-    { date: "05.04", day: "Pühapäev", time: "17:30-18:30" },
-    { date: "08.04", day: "Tisipäev", time: "19-20" },
-    { date: "10.04", day: "Neljapäev", time: "19-20" },
-    { date: "12.04", day: "Pühapäev", time: "19-20" },
-    { date: "15.04", day: "Teisipäev", time: "19-20" },
-    { date: "17.04", day: "Neljapäev", time: "19-20" },
-    { date: "19.04", day: "Pühapäev", time: "19-20" },
-    { date: "22.04", day: "Teisipäev", time: "19-20" },
-    { date: "24.04", day: "Neljapäev", time: "19-20" },
-    { date: "26.04", day: "Pühapäev", time: "19-20" },
-  ];
 
   if (isLoading) {
     return <div className="loading-container">Loading...</div>;
@@ -403,12 +409,16 @@ const User = () => {
         <div className="bookings-section">
           <h2>Sinu broneeringud</h2>
           <div className="bookings-grid">
-            {bookings.map((booking, index) => (
-              <div key={index} className="booking-item">
-                {booking.day} {booking.date}
-                <div className="booking-time">{booking.time}</div>
-              </div>
-            ))}
+            {bookings.length > 0 ? (
+              bookings.map((booking, index) => (
+                <div key={booking.id || index} className="booking-item">
+                  {booking.title} <span className="booking-date">{booking.time ? new Date(booking.time).toLocaleString() : ''}</span>
+                  <div className="booking-time">Broneeritud: {booking.reservation_time ? new Date(booking.reservation_time).toLocaleString() : ''}</div>
+                </div>
+              ))
+            ) : (
+              <div className="booking-item">Sul pole ühtegi broneeringut.</div>
+            )}
           </div>
         </div> 
       </div>

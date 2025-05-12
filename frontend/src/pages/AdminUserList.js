@@ -7,6 +7,7 @@ const AdminUserList = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -39,8 +40,49 @@ const AdminUserList = () => {
       }
     };
 
+     const fetchCurrentUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      try {
+        const response = await fetch(`${baseURL}/accounts/user.php`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data && (data.id || data.user_id)) setCurrentUserId(data.id || data.user_id);
+        }
+      } catch (e) {}
+    };
+
     fetchUsers();
+    fetchCurrentUser();
   }, []);
+
+  const handleDeleteUser = async (userId) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+    try {
+      const response = await fetch(`${baseURL}/accounts/delete_user.php`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ id: userId }),
+      });
+      if (response.ok) {
+        setUsers((prev) => prev.filter((u) => u.id !== userId));
+        alert("User deleted successfully.");
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || "Failed to delete user.");
+      }
+    } catch (err) {
+      alert("Error deleting user.");
+    }
+  };
 
   if (isLoading) {
     return <div className="loading-container">Loading...</div>;
@@ -65,6 +107,7 @@ const AdminUserList = () => {
             <th>Perekonnanimi</th>
             <th>E-post</th>
             <th>Telefon</th>
+            <th>Tegevus</th>
           </tr>
         </thead>
         <tbody>
@@ -75,6 +118,16 @@ const AdminUserList = () => {
               <td>{user.lastName || '-'}</td>
               <td>{user.email || '-'}</td>
               <td>{user.phone || '-'}</td>
+              <td>
+                {user.role !== 'owner' && (
+                  <button
+                    className="delete-user-btn"
+                    onClick={() => handleDeleteUser(user.id)}
+                  >
+                    Kustuta
+                  </button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

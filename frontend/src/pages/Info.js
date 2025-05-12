@@ -97,9 +97,9 @@ export const Info = () => {
       <div className="posts-grid">
         {posts.length > 0 ? (
           posts.map((post, index) => (
-            <div key={post.id || index} className="post-card">
-              <div className="post-image">
-                {post.image_url ? (
+            <div className="post-card">
+              {post.image_url && (
+                <div className="post-image">
                   <img
                     src={`${baseURL}${post.image_url}`}
                     alt={post.title}
@@ -109,10 +109,8 @@ export const Info = () => {
                       e.target.className = 'placeholder-image';
                     }}
                   />
-                ) : (
-                  <div className="placeholder-image"></div>
-                )}
-              </div>
+                </div>
+              )}
               <h3 className="post-title">{post.title}</h3>
               <p className="post-date">{post.time ? new Date(post.time).toLocaleString() : "Kuupäev"}</p>
               <p className="post-content">{post.body}</p>
