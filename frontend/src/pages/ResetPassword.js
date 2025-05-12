@@ -39,7 +39,7 @@ const ResetPassword = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${baseURL}/accounts/reset-password.php`, {
+      const response = await fetch(`${baseURL}/accounts/reset_password.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ const ResetPassword = () => {
             <h2>Vigane lähtestamislink</h2>
             <div className="error-message">Lähtestamislink on vigane või aegunud.</div>
             <div className="links-container">
-              <Link to="/forgot-password" className="login-button">Taotlege uus lähtestamislink</Link>
+              <Link to="/forgot_password" className="login-button">Taotlege uus lähtestamislink</Link>
             </div>
           </div>
         </div>

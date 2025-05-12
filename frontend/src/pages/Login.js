@@ -122,7 +122,7 @@ const Login = () => {
                         </button>
                         <div className="links-container">
                             <div className="forgot-password">
-                                <Link to="/forgot-password">Unustasid Parooli?</Link>
+                                <Link to="/forgot_password">Unustasid Parooli?</Link>
                             </div>
                             <div className="register-link">
                                 <span>Ei ole kasutajat? </span>

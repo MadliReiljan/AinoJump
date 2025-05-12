@@ -278,3 +278,39 @@
   margin-top: 8px;
   font-style: italic;
 }
+
+.admin-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  position: absolute;
+
+  width: 100%;
+}
+
+.admin-button-container {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  width: 100%;
+  margin-top: 20px;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.admin-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.admin-button:hover {
+  background-color: #3e8e41;
+}

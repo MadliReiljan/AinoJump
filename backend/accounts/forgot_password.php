@@ -85,7 +85,7 @@ try {
         $insertStmt->execute();
 
         $frontendUrl = "http://localhost:3000";
-        $resetLink = "$frontendUrl/reset-password?token=$token";
+        $resetLink = "$frontendUrl/reset_password?token=$token";
 
         $subject = "Parooli uuendamine - AinoJump";
         $message = "Tere,\n\n";

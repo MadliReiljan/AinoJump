@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/User.scss";
 import baseURL from "../baseURL";
 
+
 const User = () => {
   const [userData, setUserData] = useState(null);
   const [newPassword, setNewPassword] = useState("");
@@ -276,8 +277,19 @@ const User = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> 
       </div>
+      
+      {userData && userData.role === "owner" && (
+        <div className="admin-button-container">
+          <button
+            className="admin-button"
+            onClick={() => window.location.href = "/admin_user_list"}
+          >
+            Halda kontosid
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { AboutUs, MainPage, Info, Calendar } from "./pages";
 import LoginPage from "./pages/Login";
@@ -10,6 +10,7 @@ import User from "./pages/User";
 import Footer from "./components/PageFooter";
 import { AuthProvider } from "./auth/Authentication";
 import PageTransition from "./components/PageTransition";
+import AdminUserList from "./pages/AdminUserList";
 
 function App() {
     return (
@@ -25,9 +26,10 @@ function App() {
                         <Route path="Info" element={<Info />} />
                         <Route path="Login" element={<LoginPage />} />
                         <Route path="Register" element={<Register />} />
-                        <Route path="forgot-password" element={<ForgotPassword />} />
-                        <Route path="reset-password" element={<ResetPassword />} />
+                        <Route path="forgot_password" element={<ForgotPassword />} />
+                        <Route path="reset_password" element={<ResetPassword />} />
                         <Route path="User" element={<User />} />
+                        <Route path="admin_user_list" element={<AdminUserList />} />
                     </Routes>
                 </PageTransition>
                 <Footer />
