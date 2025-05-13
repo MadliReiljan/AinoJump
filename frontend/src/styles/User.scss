@@ -92,6 +92,19 @@ $color-text-muted: #999;
   }
 }
 
+.bookings-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.bookings-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 /* ===== BUTTONS ===== */
 .edit-button, .password-change-button, .add-child-button, .admin-button {
   @include button-base;
@@ -280,6 +293,31 @@ $color-text-muted: #999;
         background-color: $color-green-hover;
       }
     }
+  }
+}
+
+.children-list {
+  margin-top: 16px;
+  background: $color-bg-darker;
+  border: 1px solid $color-border;
+  border-radius: 8px;
+  padding: 5px 18px;
+  
+  h4 {
+    margin-bottom: 8px;
+    color: $color-green;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  ul {
+    list-style: disc inside;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    color: $color-text;
+    font-size: 1rem;
+    margin-bottom: 4px;
   }
 }
 

@@ -9,6 +9,8 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   const [isReserved, setIsReserved] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [reservedCount, setReservedCount] = useState(event.reserved_count || 0);
+  const [children, setChildren] = useState([]);
+  const [selectedChildId, setSelectedChildId] = useState("");
   const spotsLeft = event.max_capacity - reservedCount;
 
   useEffect(() => {
@@ -38,7 +40,26 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
       }
     };
     fetchReservationStatus();
-  }, [event.id]);
+
+    if (event.is_for_children) {
+      const token = localStorage.getItem("token");
+      fetch(`${baseURL}/accounts/get_children.php`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.ok ? res.json() : Promise.reject("Failed to fetch children"))
+        .then((data) => {
+          setChildren(data || []);
+          if (data && data.length > 0) {
+            setSelectedChildId(data[0].id);
+          }
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [event.id, event.is_for_children]);
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -49,15 +70,23 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   const handleReserve = async () => {
     const token = localStorage.getItem("token");
     try {
+      let body;
+      if (event.is_for_children) {
+        if (!selectedChildId) {
+          alert("Palun vali laps, kelle registreerida.");
+          return;
+        }
+        body = { eventId: event.id, childId: selectedChildId };
+      } else {
+        body = { eventId: event.id };
+      }
       const response = await fetch(`${baseURL}/events/reserve_event.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          eventId: event.id,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
@@ -78,15 +107,23 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   const handleUnreserve = async () => {
     const token = localStorage.getItem("token");
     try {
+      let body;
+      if (event.is_for_children) {
+        if (!selectedChildId) {
+          alert("Palun vali laps, kellelt broneering eemaldada.");
+          return;
+        }
+        body = { eventId: event.id, childId: selectedChildId };
+      } else {
+        body = { eventId: event.id };
+      }
       const response = await fetch(`${baseURL}/events/reserve_event.php`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          eventId: event.id,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
@@ -161,6 +198,36 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
         <p><strong>Kogus:</strong> {event.max_capacity}</p>
         <p><strong>Vabu kohti:</strong> {spotsLeft}</p>
         <p><strong>Laste trenn?</strong> {event.is_for_children ? "Jah" : "Ei"}</p>
+
+        {event.is_for_children === 1 && !isReserved && (
+          <div className="child-select-container">
+            {children.length > 0 ? (
+              <>
+                <label htmlFor="child-select"><strong>Vali laps:</strong></label>
+                <select
+                  id="child-select"
+                  value={selectedChildId}
+                  onChange={e => setSelectedChildId(e.target.value)}
+                >
+                  <option value="">-- Vali laps --</option>
+                  {children.map(child => (
+                    <option key={child.id} value={child.id}>
+                      {child.full_name}
+                    </option>
+                  ))}
+                </select>
+              </>
+            ) : (
+              <p>Sa ei ole veel lisanud ühtegi last oma kontole.</p>
+            )}
+          </div>
+        )}
+
+        {Boolean(event.is_for_children) && Boolean(selectedChildId) && (
+          <button type="button" onClick={handleUnreserve} className="reserve-button">
+            Vabasta valitud lapse koht
+          </button>
+        )}
 
         {isReserved && (
           <p className="reserved-message">Oled juba registreeritud!</p>

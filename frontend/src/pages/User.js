@@ -20,6 +20,8 @@ const User = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [bookings, setBookings] = useState([]);
+  const [children, setChildren] = useState([]);
+  const [childrenBookings, setChildrenBookings] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -66,15 +68,60 @@ const User = () => {
         if (response.ok) {
           const data = await response.json();
           setBookings(data);
+        } else {
+          const errorData = await response.json();
+          setError(errorData.message || "Broneeringute laadimine ebaõnnestus.");
         }
       } catch (e) {
-        // Optionally handle error
+        setError(e.message || "Võrgu viga broneeringute laadimisel.");
+      }
+    };
+
+    const fetchChildrenBookings = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      try {
+        const response = await fetch(`${baseURL}/accounts/get_children_bookings.php`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setChildrenBookings(data);
+        } else {
+          const errorData = await response.json();
+          setError(errorData.message || "Laste broneeringute laadimine ebaõnnestus.");
+        }
+      } catch (e) {
+        setError(e.message || "Võrgu viga laste broneeringute laadimisel.");
       }
     };
 
     fetchUserData();
     fetchBookings();
+    fetchChildrenBookings();
   }, []);
+
+  const fetchChildren = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const response = await fetch(`${baseURL}/accounts/get_children.php`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setChildren(data);
+      }
+    } catch (e) {
+      setError(e.message || "Võrgu viga laste andmete laadimisel.");
+    }
+  };
 
   const handleAddChild = async () => {
     if (!childName.trim()) {
@@ -175,8 +222,67 @@ const User = () => {
     }
   };
 
+  const handleRemoveBooking = async (bookingId, eventId) => {
+    if (!window.confirm("Kas oled kindel, et soovid selle broneeringu eemaldada?")) return;
+    const token = localStorage.getItem("token");
+    if (!eventId) {
+      alert("Broneeringu eemaldamiseks puudub eventId. Palun teavita administraatorit.");
+      return;
+    }
+    try {
+      const response = await fetch(`${baseURL}/events/reserve_event.php`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ eventId }),
+      });
+      const responseData = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(responseData.message || "Broneeringu eemaldamine ebaõnnestus.");
+      }
+      setBookings((prev) => prev.filter((b) => b.id !== bookingId));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleRemoveChildBooking = async (bookingId, childId, eventId) => {
+    if (!window.confirm("Kas oled kindel, et soovid selle broneeringu eemaldada?")) return;
+    const token = localStorage.getItem("token");
+    if (!eventId) {
+      alert("Lapse broneeringu eemaldamiseks puudub eventId. Palun teavita administraatorit.");
+      return;
+    }
+    try {
+      const response = await fetch(`${baseURL}/events/reserve_event.php`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ eventId, childId }),
+      });
+      const responseData = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(responseData.message || "Broneeringu eemaldamine ebaõnnestus.");
+      }
+      setChildrenBookings((prev) => prev.map(childObj =>
+        childObj.child.id === childId
+          ? { ...childObj, bookings: childObj.bookings.filter(b => b.id !== bookingId) }
+          : childObj
+      ));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   const toggleAddChild = () => {
     setIsAddingChild(!isAddingChild);
+    if (!isAddingChild) {
+      fetchChildren();
+    }
   };
 
   const toggleChangePassword = () => {
@@ -389,21 +495,43 @@ const User = () => {
           <div className="children-section">
             <h3>Lisa laps {!isEditing && <span className="add-button" onClick={toggleAddChild}>+</span>}</h3>
             {(isEditing || isAddingChild) && (
-              <div className="add-child-form">
-                <input
-                  type="text"
-                  value={childName}
-                  onChange={(e) => setChildName(e.target.value)}
-                  placeholder="Enter child's name"
-                  className="child-input"
-                />
-                <button onClick={handleAddChild} className="add-child-button">Lisa</button>
-                {!isEditing && (
-                  <button onClick={cancelAddChild} className="cancel-button">Tühista</button>
+              <div className="add-child-form" style={{flexDirection: 'column', alignItems: 'flex-start', gap: '10px'}}>
+                <div style={{display: 'flex', width: '100%', gap: '10px'}}>
+                  <input
+                    type="text"
+                    value={childName}
+                    onChange={(e) => setChildName(e.target.value)}
+                    placeholder="Enter child's name"
+                    className="child-input"
+                  />
+                  <button onClick={handleAddChild} className="add-child-button">Lisa</button>
+                  {!isEditing && (
+                    <button onClick={cancelAddChild} className="cancel-button">Tühista</button>
+                  )}
+                </div>
+                {children.length > 0 && (
+                  <div className="children-list">
+                    <h4>Sinu lapsed:</h4>
+                    <ul>
+                      {children.map(child => (
+                        <li key={child.id}>{child.full_name}</li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </div>
             )}
           </div>
+          {userData && userData.role === "owner" && (
+            <div className="admin-button-container">
+              <button
+                className="admin-button"
+                onClick={() => window.location.href = "/admin_user_list"}
+              >
+                Halda kontosid
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="bookings-section">
@@ -411,7 +539,13 @@ const User = () => {
           <div className="bookings-grid">
             {bookings.length > 0 ? (
               bookings.map((booking, index) => (
-                <div key={booking.id || index} className="booking-item">
+                <div
+                  key={booking.id || index}
+                  className="booking-item"
+                  style={{ cursor: 'pointer' }}
+                  title="Eemalda broneering"
+                  onClick={() => handleRemoveBooking(booking.id, booking.event_id)}
+                >
                   {booking.title} <span className="booking-date">{booking.time ? new Date(booking.time).toLocaleString() : ''}</span>
                   <div className="booking-time">Broneeritud: {booking.reservation_time ? new Date(booking.reservation_time).toLocaleString() : ''}</div>
                 </div>
@@ -420,19 +554,37 @@ const User = () => {
               <div className="booking-item">Sul pole ühtegi broneeringut.</div>
             )}
           </div>
-        </div> 
-      </div>
-      
-      {userData && userData.role === "owner" && (
-        <div className="admin-button-container">
-          <button
-            className="admin-button"
-            onClick={() => window.location.href = "/admin_user_list"}
-          >
-            Halda kontosid
-          </button>
+
+          <h2 style={{marginTop: '2rem'}}>Laste broneeringud</h2>
+          {childrenBookings.length === 0 ? (
+            <div className="booking-item">Sul pole ühtegi last ega nende broneeringut.</div>
+          ) : (
+            childrenBookings.map(childObj => (
+              <div key={childObj.child.id} className="child-bookings-block">
+                <h3>{childObj.child.full_name}</h3>
+                <div className="bookings-grid">
+                  {childObj.bookings.length > 0 ? (
+                    childObj.bookings.map((booking, idx) => (
+                      <div
+                        key={booking.id || idx}
+                        className="booking-item"
+                        style={{ cursor: 'pointer' }}
+                        title="Eemalda broneering"
+                        onClick={() => handleRemoveChildBooking(booking.id, childObj.child.id, booking.event_id)}
+                      >
+                        {booking.title} <span className="booking-date">{booking.time ? new Date(booking.time).toLocaleString() : ''}</span>
+                        <div className="booking-time">Broneeritud: {booking.reservation_time ? new Date(booking.reservation_time).toLocaleString() : ''}</div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="booking-item">Sellel lapsel pole broneeringuid.</div>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
