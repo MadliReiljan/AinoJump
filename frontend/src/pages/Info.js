@@ -101,10 +101,10 @@ export const Info = () => {
               {post.image_url && (
                 <div className="post-image">
                   <img
-                    src={`${baseURL}${post.image_url}`}
+                    src={`${baseURL}/backend${post.image_url}`}
                     alt={post.title}
                     onError={(e) => {
-                      console.error("Image failed to load:", `${baseURL}${post.image_url}`);
+                      console.error("Image failed to load:", `${baseURL}/backend${post.image_url}`);
                       e.target.onerror = null;
                       e.target.className = 'placeholder-image';
                     }}

@@ -40,7 +40,7 @@ try {
     $imagePath = null;
 
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . "/../../uploads/";
+        $uploadDir = __DIR__ . "/../uploads/";
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
