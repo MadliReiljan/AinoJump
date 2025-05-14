@@ -5,6 +5,10 @@
   @include container-base;
   margin-top: 10rem;
   min-height: 100vh;
+  
+  @include respond-to(mobile) {
+    padding: 0 $spacing-xs;
+  }
 }
 
 .page-title {
@@ -12,22 +16,49 @@
   font-size: $font-size-heading-medium;
   margin-bottom: $spacing-lg;
   color: $color-text;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-heading-small;
+    margin-bottom: $spacing-md;
+  }
 }
 
 .admin-controls {
   margin-bottom: $spacing-xs;
   text-align: right;
+  
+  @include respond-to(mobile) {
+    text-align: center;
+    width: 100%;
+    
+    button {
+      width: 100%;
+      max-width: 200px;
+    }
+  }
 }
 
 button.neutral {
   margin-bottom: $spacing-xs;
 }
 
+// Simplified approach to posts grid
 .posts-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: $spacing-xl;
   margin-top: $spacing-xs;
+  width: 100%;
+  
+  @include respond-to(tablet) {
+    gap: $spacing-md;
+  }
+  
+  @include respond-to(mobile) {
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
 }
 
 .post-card {
@@ -41,10 +72,23 @@ button.neutral {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  max-width: 600px;
-
-  &:hover {
-    box-shadow: 0 4px 15px rgba(191,255,127,0.12);
+  width: calc(50% - #{$spacing-xl/2});
+  box-sizing: border-box;
+  
+  // New custom breakpoint at 1200px
+  @media (max-width: 1200px) {
+    width: 100%;
+    margin: 16px 0;
+  }
+  
+  @include respond-to(tablet) {
+    padding: 20px 16px;
+    margin: 14px 0;
+  }
+  
+  @include respond-to(mobile) {
+    padding: 16px 12px;
+    margin: 10px 0;
   }
 
   .post-image {
@@ -63,18 +107,34 @@ button.neutral {
     &.placeholder-image {
       background-color: #ddd;
     }
+    
+    @include respond-to(tablet) {
+      height: 240px;
+    }
+    
+    @include respond-to(mobile) {
+      height: 180px;
+    }
   }
 
   .post-title {
     margin: $spacing-xs 0 0.33rem;
     font-size: $font-size-heading-small;
     color: #fff;
+    
+    @include respond-to(mobile) {
+      font-size: 18px;
+    }
   }
 
   .post-date {
     margin: 0 0 0.67rem;
     font-size: 14.4px;
     color: #aaa;
+    
+    @include respond-to(mobile) {
+      font-size: 12px;
+    }
   }
 
   .post-content {
@@ -84,8 +144,14 @@ button.neutral {
     color: #ffffff;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    white-space: normal;     
-    max-width: 100%; 
+    white-space: normal;
+    width: 100%;
+    
+    @include respond-to(mobile) {
+      font-size: 14px;
+      max-height: 120px;
+      overflow-y: auto;
+    }
 
     .content-line {
       width: 100%;
@@ -99,11 +165,17 @@ button.neutral {
     margin: $spacing-xs 0;
     display: flex;
     gap: 0.67rem;
-  }
-}
-
-@include respond-to(tablet) {
-  .posts-grid {
-    grid-template-columns: 1fr;
+    
+    @include respond-to(mobile) {
+      width: 100%;
+      justify-content: space-between;
+      
+      button {
+        flex: 1;
+        margin: 0 4px;
+        padding: 8px;
+        font-size: 14px;
+      }
+    }
   }
 }

@@ -35,7 +35,6 @@ if ($user['role'] !== 'owner') {
     exit();
 }
 
-// Handle both POST with _method=PUT and regular PUT
 $isPut = $_SERVER['REQUEST_METHOD'] === 'PUT' || 
         ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method']) && $_POST['_method'] === 'PUT');
 
@@ -45,7 +44,6 @@ if (!$isPut) {
     exit();
 }
 
-// For POST with FormData
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = $_POST;
     
@@ -57,8 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $db->beginTransaction();
-        
-        // Handle image upload if included
+
         $imagePath = null;
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = __DIR__ . "/../../uploads/";
@@ -120,7 +117,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(["message" => "Internal server error: " . $e->getMessage()]);
     }
 } else {
-    // Original PUT handling with JSON
     $data = json_decode(file_get_contents("php://input"));
 
     if (!empty($data->id) && !empty($data->title) && !empty($data->body)) {

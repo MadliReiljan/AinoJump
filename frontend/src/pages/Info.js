@@ -97,7 +97,7 @@ export const Info = () => {
       <div className="posts-grid">
         {posts.length > 0 ? (
           posts.map((post, index) => (
-            <div className="post-card">
+            <div className="post-card" key={post.id}>
               {post.image_url && (
                 <div className="post-image">
                   <img
