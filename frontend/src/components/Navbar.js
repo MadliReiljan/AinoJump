@@ -13,10 +13,17 @@ export const Navbar = () => {
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
+        // Prevent scrolling when menu is open
+        if (!menuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
     };
 
     const closeMenu = () => {
         setMenuOpen(false);
+        document.body.style.overflow = 'auto';
     };
 
     const isLoginPage = location.pathname === `${BASE_PATH}/login`;

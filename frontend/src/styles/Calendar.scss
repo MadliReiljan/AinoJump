@@ -324,50 +324,125 @@
 }
 
 @include respond-to(tablet) {
+  .calendar-page {
+    margin-top: 6rem;
+  }
+
   .calendar-content {
     flex-direction: column;
     align-items: center;
+    width: 100%;
   }
   
   .info-box {
     margin-bottom: $spacing-md;
     max-width: 100%;
+    padding: 20px;
   }
 
+  .calendar-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .fc .fc-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
   .fc-header-toolbar {
-    flex-direction: column;
-    gap: 16px;
+    padding: 12px !important;
     
     .fc-toolbar-chunk {
+      margin-bottom: 8px;
+      width: 100%;
       display: flex;
       justify-content: center;
-      width: 100%;
+      
+      &:last-child {
+        justify-content: center;
+      }
     }
   }
   
-  .fc .fc-toolbar-title {
-    font-size: 1.3rem !important;
+  // Improve event display
+  .fc-event {
+    font-size: 13px !important;
+    
+    .fc-event-time {
+      font-size: 12px;
+    }
+  }
+  
+  .fc .fc-button-group {
+    gap: 4px;
   }
 }
 
 @include respond-to(mobile) {
-  .calendar-container {
-    padding: $spacing-xs;
-    max-width: 95%;
+  .calendar-page {
+    margin-top: 4rem;
+    padding: 10px;
+  }
+  
+  .calendar-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
   }
 
+  .calendar-content {
+    gap: $spacing-xs;
+  }
+  
+  .info-box {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  // Calendar day view adjustments
+  .fc-dayGridMonth-view .fc-daygrid-day {
+    min-height: 60px !important;
+  }
+  
+  // Make events more compact but readable
+  .fc-event {
+    padding: 3px !important;
+    margin: 1px 0 !important;
+    font-size: 12px !important;
+    
+    .fc-event-time {
+      font-size: 11px;
+      margin-right: 2px;
+    }
+    
+    .fc-event-title {
+      display: block;
+    }
+  }
+  
+  // Better button layout
+  .fc .fc-toolbar-title {
+    font-size: 1.1rem !important;
+  }
+  
   .fc-header-toolbar {
-    padding: 12px !important;
+    flex-direction: column;
+    padding: 8px !important;
+    gap: 10px;
   }
   
   .fc .fc-button-primary {
-    padding: 6px 12px !important;
-    font-size: 0.9rem;
+    padding: 5px 10px !important;
+    font-size: 0.8rem !important;
   }
   
-  .fc-right .fc-button-group {
+  // Stack view buttons vertically
+  .fc .fc-toolbar-chunk:last-child .fc-button-group {
     display: flex;
-    flex-direction: column;
-    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
   }
 }

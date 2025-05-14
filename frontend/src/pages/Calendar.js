@@ -136,7 +136,7 @@ export const Calendar = () => {
         <h3>Tere{fullName ? `, ${fullName}` : ""}!</h3>
         <p className="info-instruction">
           Kui tuled jumpingu trenni, siis võta kaasa trennikaaslased, hea tuju, 
-          trenniriided ja sisetossud, joogivesi ja higirätik!
+          trenniriided, sisetossud, joogivesi ja higirätik!
         </p>
         
         <h4 className="schedule-heading">Trennid toimuvad täiskasvanutel:</h4>

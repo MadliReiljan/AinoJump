@@ -374,7 +374,7 @@ const User = () => {
               <div className="password-change-form">
                 <div className="password-field">
                   <label>Praegune parool:</label>
-                  <div className="password-input-wrapper">
+                  <div className="password-input-wrapper2">
                     <input
                       type={showCurrentPassword ? "text" : "password"}
                       value={currentPassword}
@@ -404,7 +404,7 @@ const User = () => {
                 </div>
                 <div className="password-field">
                   <label>Uus parool:</label>
-                  <div className="password-input-wrapper">
+                  <div className="password-input-wrapper2">
                     <input
                       type={showNewPassword ? "text" : "password"}
                       value={newPassword}
@@ -434,7 +434,7 @@ const User = () => {
                 </div>
                 <div className="password-field">
                   <label>Kinnita uus parool:</label>
-                  <div className="password-input-wrapper">
+                  <div className="password-input-wrapper2">
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       value={confirmPassword}

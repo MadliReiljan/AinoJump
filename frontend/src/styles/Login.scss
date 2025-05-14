@@ -1,51 +1,148 @@
+@import 'Variables.scss';
+@import 'Mixins.scss';
+
 .background {
-  background-color: #1C1C1C;
+  background-color: $color-background;
   min-height: 100vh;
   margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  padding: $spacing-xs;
+  box-sizing: border-box;
 }
 
 .login-page-container {
   display: flex;
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   background-color: white;
+  
+  @include respond-to(tablet) {
+    max-width: 90%;
+    flex-direction: column;
+  }
+  
+  @include respond-to(mobile) {
+    max-width: 90%;
+    border-radius: 10px;
+  }
 }
 
 .image-container {
-  flex: 1;
+  flex: 1.2;
   overflow: hidden;
+  position: relative;
   
-  @media (max-width: 768px) {
-    display: none; // Hide on mobile
+  @include respond-to(tablet) {
+    display: none;
   }
 }
-// ...existing code...
+
+.login-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.03);
+  }
+}
+
+.login-container {
+  flex: 1;
+  padding: $spacing-md;
+  background: #ffffff;
+  
+  @include respond-to(mobile) {
+    padding: $spacing-sm;
+    width: 90%;
+  }
+}
+
+.login-container h2 {
+  margin-bottom: $spacing-sm;
+  color: #000;
+  text-align: left;
+  font-weight: 600;
+  font-size: $font-size-heading-small;
+  font-family: $font-family-base;
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: 2px solid $color-highlight;
+  padding-bottom: 4px;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  margin-bottom: $spacing-xs;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #8F8F8F;
+  font-size: $font-size-base;
+  font-family: $font-family-base;
+  font-weight: 500;
+}
+
+.login-container input[type="email"],
+.login-container input[type="password"] {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  font-size: $font-size-base;
+  color: black;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.login-container input:focus {
+  outline: none;
+  border-color: #66b366;
+}
 
 .password-input-wrapper {
   position: relative;
   width: 100%;
   
   input {
-    width: 94%;
-    padding: 12px;
-    padding-right: 40px; // Make space for the icon
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: #f7f7f7;
+    width: 100%;
+    padding: 14px;
+    padding-right: 45px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    font-size: $font-size-base;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: #f5f5f5;
+    }
   }
   
   .password-toggle-icon {
     position: absolute;
-    right: 12px;
+    right: 14px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
@@ -56,11 +153,12 @@
     justify-content: center;
     padding: 0;
     color: #8F8F8F;
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
+    transition: color 0.2s ease;
     
     &:hover {
-      color: #66b366;
+      color: darken($color-highlight, 20%);
     }
     
     &:focus {
@@ -73,72 +171,10 @@
   }
 }
 
-.login-image {
-  width: 450px;
-  height: 100%;
-  object-fit: cover;
-}
-
-.login-container {
-  width: 100%;
-  max-width: 400px;
-  padding: 30px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.login-container h2 {
-  margin-bottom: 25px;
-  color: #000;
-  text-align: left;
-  font-weight: bold;
-  font-size: 24px;
-  font-family: 'roboto', sans-serif;
-  text-decoration: none;
-  display: inline-block;
-  border-bottom: 2px solid #53A953;
-  padding-bottom: 2px;
-}
-
-.login-container form {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-group {
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #8F8F8F;
-  font-size: 16px;
-  font-family: "inter", sans-serif;
-}
-
-.login-container input[type="email"],
-.login-container input[type="password"] {
-  width: 94%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-  color: black;
-  background-color: #f7f7f7;
-}
-
-.login-container input:focus {
-  outline: none;
-  border-color: #66b366;
-}
-
 .checkbox-container {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: $spacing-sm;
   text-align: left;
 }
 
@@ -146,34 +182,52 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-}
-
-.checkbox-label input[type="checkbox"] {
-  margin-right: 8px;
+  font-family: $font-family-base;
+  font-size: 15px;
+  
+  input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: #66b366;
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .login-button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: bold;
+  border-radius: 8px;
+  font-size: $font-size-base;
+  font-weight: 600;
   cursor: pointer;
   background-color: #66b366;
   color: white;
-  margin-bottom: 15px;
-}
-
-.login-button:hover {
-  background-color: #5ca15c;
+  margin-bottom: $spacing-xs;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  font-family: $font-family-base;
+  
+  &:hover {
+    background-color: #66b366;
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(1px);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
 }
 
 .links-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 15px;
+  margin-top: $spacing-xs;
+  font-family: $font-family-base;
 }
 
 .forgot-password {
@@ -184,18 +238,22 @@
 .register-link a {
   color: #66b366;
   text-decoration: none;
-}
-
-.forgot-password a:hover,
-.register-link a:hover {
-  text-decoration: underline;
+  transition: color 0.2s ease;
+  
+  &:hover {
+    text-decoration: underline;
+    color: #66b366;
+  }
 }
 
 .error-message {
-  color: #ff0000;
-  margin-bottom: 1rem;
+  color: #e53935;
+  margin-bottom: $spacing-xs;
   text-align: center;
-  padding: 0.5rem;
-  background-color: rgba(255, 0, 0, 0.1);
-  border-radius: 4px;
+  padding: 12px;
+  background-color: rgba(229, 57, 53, 0.1);
+  border-radius: 8px;
+  font-family: $font-family-base;
+  font-size: 15px;
+  border-left: 3px solid #e53935;
 }

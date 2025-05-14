@@ -44,10 +44,10 @@ export const MainPage = () => {
             <span className="highlight-text">Jumping</span>, mis see on?
           </h2>
             <p className="paragraph">
-            Jumpingu batuuditreening on dünaamiline treeningvorm, mis ühendab aeglased ja kiiremad hüpped, traditsioonilise aeroobika sammude variatsioonid ning kiirus- ja jõuelementide kombinatsiooni. Selle treeningu juured ulatuvad tagasi trampoliinide arenguni 1930. aastatel, mil Ameerika sportlased ja leiutajad nagu George Nissen ja Larry Griswold hakkasid kasutama hüppamist treeninguna, et parandada koordinatsiooni, jõudu ja vastupidavust. Alguses mõeldud peamiselt sportlikeks ja akrobaatlikeks harjutusteks, on jumping arenenud üldiseks kehalise aktiivsuse vormiks, mis rõhutab kogu keha lihaste töö ja pidevaid gravitatsioonilisi muutusi – protsessi, kus ühes treeningus aktiveeritakse üle 400 lihast. 
+            Jumpingu batuuditreening on dünaamiline treeningvorm, mis ühendab aeglased ja kiiremad hüpped, traditsioonilise aeroobika sammude variatsioonid ning kiirus- ja jõuelementide kombinatsiooni. Selle treeningu juured ulatuvad tagasi trampoliinide arenguni 1930. aastatel, mil Ameerika sportlased ja leiutajad nagu George Nissen ja Larry Griswold hakkasid kasutama hüppamist treeninguna, et parandada koordinatsiooni, jõudu ja vastupidavust. Alguses mõeldud peamiselt sportlikeks ja akrobaatlikeks harjutusteks, on jumping arenenud üldiseks kehalise aktiivsuse vormiks, mis rõhutab kogu keha lihaste töö ja pidevaid gravitatsioonilisi muutusi — protsessi, kus ühes treeningus aktiveeritakse üle 400 lihast. 
             </p>
             <p className="paragraph">
-            Selline intensiivne ja mitmekülgne liikumine muudab jumping treeningu kolm korda efektiivsemaks kui jooksmine, pakkudes samal ajal ka palju rõõmu ja motivatsiooni. Treeningu eesmärk on mitte ainult füüsiline tugevdamine, vaid ka lõbus liikumisvorm, mis sobib kõigile – olenemata vanusest või varasemast treeningukogemusest.
+            Selline intensiivne ja mitmekülgne liikumine muudab jumping treeningu kolm korda efektiivsemaks kui jooksmine, pakkudes samal ajal ka palju rõõmu ning motivatsiooni. Treeningu eesmärk on mitte ainult füüsiline tugevdamine, vaid ka lõbus liikumisvorm, mis sobib kõigile — olenemata vanusest või varasemast treeningukogemusest.
             </p>
           </div>
           
@@ -81,8 +81,8 @@ export const MainPage = () => {
               </div>
               <h3 className="benefit-title">Südame tervis ja vereringe</h3>
               <p className="benefit-description">
-                Jumping treening tõstab pulssi ja soodustab vereringe paranemist,
-                aidates parandada südant ja parandada kardiovaskulaarset vastupidavust.
+                Jumping tõstab pulssi ja soodustab vereringe paranemist,
+                aidates parandada südant ning parandada kardiovaskulaarset vastupidavust.
               </p>
             </div>
             
@@ -96,7 +96,7 @@ export const MainPage = () => {
               </div>
               <h3 className="benefit-title">Koordinatsioon ja tasakaal</h3>
               <p className="benefit-description">
-                Treening kõigus kasutatavad hüpped ja pöörded aitavad arendada
+                Treening käigus kasutatavad hüpped ja pöörded aitavad arendada
                 keha koordinatsiooni ja tasakaalu, mis tõstab igapäevast liikumisoskust.
               </p>
             </div>
@@ -113,8 +113,8 @@ export const MainPage = () => {
               </div>
               <h3 className="benefit-title">Kalorite põletus ja vormisolek</h3>
               <p className="benefit-description">
-                Hüpped on suurepärane viis kaloreid põletada, muutes treeningud
-                dünaamiliseks ja motiveerivaks ning toetades kehalise vormi sailitamist.
+                Jumping on suurepärane viis kaloreid põletada, muutes treeningud
+                dünaamiliseks ja motiveerivaks ning toetades kehalise vormi säilitamist.
               </p>
             </div>
             
@@ -128,7 +128,7 @@ export const MainPage = () => {
               </div>
               <h3 className="benefit-title">Stressi maandamine ja heaolu</h3>
               <p className="benefit-description">
-              Jumping treening aitab vabastada pinget ja stressi, 
+              Jumping aitab vabastada pinget ja stressi, 
               pakkudes võimalust nautida lõbusat ja energilist liikumist,
               mis parandab meeleolu ning üldist heaolu.
               </p>
@@ -143,7 +143,7 @@ export const MainPage = () => {
             <span className="highlight-text">Tule trenni!</span>
           </h2>
             <p className="paragraph">
-            Astuge samm tervislikuma elu suunas! Broneeri trenni ja avasta, kuidas jumping võib muuta teie treeningrutiini, pakkudes lõbusat ja efektiivset viisi keha vormis hoidmiseks. Liitu meiega, et kogeda positiivset muutust nii füüsiliselt kui ka vaimselt – treeningud on loodud igas vanuses ja igas kehalises vormis inimestele.
+            Astuge samm tervislikuma elu suunas! Broneeri trenn ja avasta, kuidas jumping võib muuta Teie treeningrutiini, mis pakub lõbusat ja efektiivset viisi keha vormis hoidmiseks. Liitu meiega, et kogeda positiivset muutust nii füüsiliselt kui ka vaimselt — treeningud on loodud igas vanuses ja igas kehalises vormis inimestele.
             </p>
             <NavLink to="/broneeri" style={styles.booking} className="booking-link"> Broneeri trenn </NavLink>
           </div>
