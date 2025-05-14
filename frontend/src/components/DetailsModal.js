@@ -8,6 +8,7 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   const { userEmail, userRole } = useContext(AuthContext);
   const [isReserved, setIsReserved] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [reservedCount, setReservedCount] = useState(event.reserved_count || 0);
   const [children, setChildren] = useState([]);
   const [selectedChildId, setSelectedChildId] = useState("");
@@ -149,11 +150,17 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
     setIsEditing(false);
   };
 
-  const handleDelete = async () => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this event?");
-    if (!confirmDelete) return;
+  const handleDelete = () => {
+  setShowConfirmDelete(true);
+  };
 
+  const cancelDeletion = () => {
+    setShowConfirmDelete(false);
+  };
+
+  const confirmDeletion = async () => {
     const token = localStorage.getItem("token");
+    try {
     const response = await fetch(`${baseURL}/events/delete_event.php`, {
       method: "DELETE",
       headers: {
@@ -166,16 +173,34 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
     });
 
     if (response.ok) {
-      alert("Event deleted successfully!");
       onClose();
       if (onReservationChange) {
         onReservationChange();
       }
     } else {
-      const errorData = await response.json();
-      alert(errorData.message || "Failed to delete the event. Please try again.");
+      const text = await response.text();
+      let errorMessage = "Failed to delete the event. Please try again.";
+      
+      if (text) {
+        try {
+          const errorData = JSON.parse(text);
+          if (errorData.message) {
+            errorMessage = errorData.message;
+          }
+        } catch (jsonError) {
+          console.error("Failed to parse error response:", jsonError);
+        }
+      }
+      
+      alert(errorMessage);
     }
-  };
+  } catch (error) {
+    console.error("Error during deletion:", error);
+    alert("An error occurred. Please try again.");
+  } finally {
+    setShowConfirmDelete(false);
+  }
+};
 
   const handleEventUpdated = (updatedEvent) => {
   setIsEditing(false);
@@ -199,48 +224,64 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
         <p><strong>Vabu kohti:</strong> {spotsLeft}</p>
         <p><strong>Laste trenn?</strong> {event.is_for_children ? "Jah" : "Ei"}</p>
 
-        {event.is_for_children === 1 && !isReserved && (
-          <div className="child-select-container">
-            {children.length > 0 ? (
-              <>
-                <label htmlFor="child-select"><strong>Vali laps:</strong></label>
-                <select
-                  id="child-select"
-                  value={selectedChildId}
-                  onChange={e => setSelectedChildId(e.target.value)}
-                >
-                  <option value="">-- Vali laps --</option>
-                  {children.map(child => (
-                    <option key={child.id} value={child.id}>
-                      {child.full_name}
-                    </option>
-                  ))}
-                </select>
-              </>
-            ) : (
-              <p>Sa ei ole veel lisanud ühtegi last oma kontole.</p>
-            )}
+        {showConfirmDelete && (
+        <div className="confirm-delete-overlay">
+          <div className="confirm-delete-modal">
+            <p>Kas olete kindel, et soovite selle sündmuse kustutada?</p>
+            <div className="confirm-delete-buttons">
+              <button onClick={confirmDeletion} className="confirm-yes-button">Jah</button>
+              <button onClick={cancelDeletion} className="confirm-no-button">Ei</button>
+            </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {Boolean(event.is_for_children) && Boolean(selectedChildId) && (
-          <button type="button" onClick={handleUnreserve} className="reserve-button">
-            Vabasta valitud lapse koht
-          </button>
-        )}
+      {userRole !== "owner" && (
+          <>
+            {event.is_for_children === 1 && !isReserved && (
+              <div className="child-select-container">
+                {children.length > 0 ? (
+                  <>
+                    <label htmlFor="child-select"><strong>Vali laps:</strong></label>
+                    <select
+                      id="child-select"
+                      value={selectedChildId}
+                      onChange={e => setSelectedChildId(e.target.value)}
+                    >
+                      <option value="">-- Vali laps --</option>
+                      {children.map(child => (
+                        <option key={child.id} value={child.id}>
+                          {child.full_name}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                ) : (
+                  <p>Sa ei ole veel lisanud ühtegi last oma kontole.</p>
+                )}
+              </div>
+            )}
 
-        {isReserved && (
-          <p className="reserved-message">Oled juba registreeritud!</p>
-        )}
+            {isReserved && (
+              <p className="reserved-message">Oled juba registreeritud!</p>
+            )}
 
-        {isReserved ? (
-          <button type="button" onClick={handleUnreserve} className="reserve-button">
-            Vabasta koht
-          </button>
-        ) : (
-          <button type="button" onClick={handleReserve} disabled={spotsLeft <= 0} className="reserve-button">
-            {spotsLeft <= 0 ? "Kohad täis" : "Reserveeri koht"}
-          </button>
+            {isReserved && !event.is_for_children ? (
+              <button type="button" onClick={handleUnreserve} className="reserve-button">
+                Vabasta koht
+              </button>
+            ) : !isReserved ? (
+              <button type="button" onClick={handleReserve} disabled={spotsLeft <= 0} className="reserve-button">
+                {spotsLeft <= 0 ? "Kohad täis" : "Reserveeri koht"}
+              </button>
+            ) : null}
+
+            {Boolean(event.is_for_children) && isReserved && (
+              <button type="button" onClick={handleUnreserve} className="reserve-button">
+                Vabasta valitud lapse koht
+              </button>
+            )}
+          </>
         )}
 
         {isEditing && (
@@ -253,11 +294,11 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
 
         {userRole === "owner" && (
           <div className="admin-buttons">
-            <button type="button" onClick={handleDelete} className="delete-button">
-              Kustuta sündmus
-            </button>
             <button type="button" onClick={handleEdit} className="edit-button2">
               Muuda sündmust
+            </button>
+            <button type="button" onClick={handleDelete} className="subtle-delete-button">
+              Kustuta see sündmus
             </button>
           </div>
         )}
