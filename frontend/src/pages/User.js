@@ -24,86 +24,80 @@ const User = () => {
   const [childrenBookings, setChildrenBookings] = useState([]);
   const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("No token found. Please log in.");
-        setIsLoading(false);
-        return;
+  const fetchUserData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("No token found. Please log in.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${baseURL}/accounts/user.php`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data.");
       }
 
-      try {
-        const response = await fetch(`${baseURL}/accounts/user.php`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const data = await response.json();
+      setUserData(data);
+      setPhoneNumber(data.phone || "");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch user data.");
-        }
-
+  const fetchBookings = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const response = await fetch(`${baseURL}/accounts/get_user_bookings.php`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
         const data = await response.json();
-        setUserData(data);
-        setPhoneNumber(data.phone || "");
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
+        setBookings(data);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Broneeringute laadimine ebaõnnestus.");
       }
-    };
+    } catch (e) {
+      setError(e.message || "Võrgu viga broneeringute laadimisel.");
+    }
+  };
 
-    const fetchBookings = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      try {
-        const response = await fetch(`${baseURL}/accounts/get_user_bookings.php`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setBookings(data);
-        } else {
-          const errorData = await response.json();
-          setError(errorData.message || "Broneeringute laadimine ebaõnnestus.");
-        }
-      } catch (e) {
-        setError(e.message || "Võrgu viga broneeringute laadimisel.");
+  const fetchChildrenBookings = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const response = await fetch(`${baseURL}/accounts/get_children_bookings.php`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setChildrenBookings(data);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Laste broneeringute laadimine ebaõnnestus.");
       }
-    };
-
-    const fetchChildrenBookings = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      try {
-        const response = await fetch(`${baseURL}/accounts/get_children_bookings.php`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setChildrenBookings(data);
-        } else {
-          const errorData = await response.json();
-          setError(errorData.message || "Laste broneeringute laadimine ebaõnnestus.");
-        }
-      } catch (e) {
-        setError(e.message || "Võrgu viga laste broneeringute laadimisel.");
-      }
-    };
-
-    fetchUserData();
-    fetchBookings();
-    fetchChildrenBookings();
-  }, []);
+    } catch (e) {
+      setError(e.message || "Võrgu viga laste broneeringute laadimisel.");
+    }
+  };
 
   const fetchChildren = async () => {
     const token = localStorage.getItem("token");
@@ -124,34 +118,55 @@ const User = () => {
     }
   };
 
+  useEffect(() => {
+    fetchUserData();
+    fetchBookings();
+    fetchChildrenBookings();
+    fetchChildren();
+  }, []);
+
   const handleAddChild = async () => {
-    if (!childName.trim()) {
-      setModal({ open: true, title: 'Viga', message: 'Palun sisestage lapse nimi.', onClose: () => setModal(m => ({ ...m, open: false })) });
-      return;
+  if (!childName.trim()) {
+    setModal({ open: true, title: 'Viga', message: 'Palun sisestage lapse nimi.', onClose: () => setModal(m => ({ ...m, open: false })) });
+    return;
+  }
+
+  try {
+    const response = await fetch(`${baseURL}/accounts/add_child.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ childName }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to add child.");
     }
-  
-    try {
-      const response = await fetch(`${baseURL}/accounts/add_child.php`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ childName }),
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to add child.");
+
+    const refreshData = () => {
+      fetchChildren();
+      fetchChildrenBookings(); 
+    };
+
+    setModal({ 
+      open: true, 
+      title: 'Õnnestus', 
+      message: 'Lapse lisamine õnnestus!', 
+      onClose: () => {
+        setModal(m => ({ ...m, open: false }));
+        refreshData();
       }
-  
-      setModal({ open: true, title: 'Õnnestus', message: 'Lapse lisamine õnnestus!', onClose: () => setModal(m => ({ ...m, open: false })) });
-      setChildName("");
-      setIsAddingChild(false);
-    } catch (err) {
-      setModal({ open: true, title: 'Viga', message: err.message, onClose: () => setModal(m => ({ ...m, open: false })) });
-    }
-  };
+    });
+    
+    setChildName("");
+    setIsAddingChild(false);
+  } catch (err) {
+    setModal({ open: true, title: 'Viga', message: err.message, onClose: () => setModal(m => ({ ...m, open: false })) });
+  }
+};
 
   const handleUpdateProfile = async () => {
     if (isChangingPassword && (currentPassword || newPassword || confirmPassword)) {

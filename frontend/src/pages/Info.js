@@ -138,12 +138,18 @@ export const Info = () => {
               
               {userRole === "owner" && (
                 <div className="post-actions">
-                  <Button onClick={() => handleEditPost(post)} className="neutral">
-                    Edit
-                  </Button>
-                  <Button onClick={() => handleDeletePost(post.id)} className="danger">
-                    Delete
-                  </Button>
+                  <button 
+                    onClick={() => handleEditPost(post)} 
+                    className="post-edit-button"
+                  >
+                    Muuda
+                  </button>
+                  <button 
+                    onClick={() => handleDeletePost(post.id)} 
+                    className="post-delete-button"
+                  >
+                    Kustuta
+                  </button>
                 </div>
               )}
             </div>

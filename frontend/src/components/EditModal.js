@@ -240,7 +240,7 @@ const EventEditModal = ({ event, onClose, onEventUpdated }) => {
               </div>
             </div>
           </div>
-          <h5>PS! Parema hiire klõpsuga saab värvi ära kustutada</h5>
+          <h5>NB! Parema hiire klõpsuga saab värvi ära kustutada</h5>
         </label>
           
           <label className="checkbox-label">
@@ -262,12 +262,17 @@ const EventEditModal = ({ event, onClose, onEventUpdated }) => {
             />
           </label>
           <div className="button-group">
-            <Button type="button" variant="danger" onClick={onClose}>
-              Tühista
-            </Button>
-            <Button type="submit" variant="neutral">
+            <button 
+              type="submit" 
+              className="modal-edit-button">
               Salvesta muudatused
-            </Button>
+            </button>
+            <button 
+              type="button" 
+              className="modal-delete-button" 
+              onClick={onClose}>
+              Tühista
+            </button>
           </div>
         </form>
       </div>

@@ -46,11 +46,14 @@ try {
     ) {
         $db->beginTransaction();
 
+        $currentDate = new DateTime($data->time);
+        
         $isForChildren = isset($data->is_for_children) ? $data->is_for_children : false;
         $isRecurring = isset($data->is_recurring) ? $data->is_recurring : false;
+        $color = isset($data->color) ? $data->color : "#4caf50";
 
-        $query = "INSERT INTO event (title, body, time, max_capacity, is_for_children, is_recurring, created_at)
-                  VALUES (:title, :body, :time, :max_capacity, :is_for_children, :is_recurring, NOW())";
+        $query = "INSERT INTO event (title, body, time, max_capacity, is_for_children, is_recurring, color, created_at)
+                VALUES (:title, :body, :time, :max_capacity, :is_for_children, :is_recurring, :color, NOW())";
         $stmt = $db->prepare($query);
 
         $stmt->bindParam(":title", $data->title);
@@ -59,6 +62,7 @@ try {
         $stmt->bindParam(":max_capacity", $data->max_capacity, PDO::PARAM_INT);
         $stmt->bindParam(":is_for_children", $isForChildren, PDO::PARAM_BOOL);
         $stmt->bindParam(":is_recurring", $isRecurring, PDO::PARAM_BOOL);
+        $stmt->bindParam(":color", $color, PDO::PARAM_STR);
 
         if (!$stmt->execute()) {
             throw new Exception("Sündmuse loomine nurjus.");
@@ -71,8 +75,8 @@ try {
             while ($currentDate < $endDate) {
                 $currentDate->modify('+1 week');
 
-                $query = "INSERT INTO event (title, body, time, max_capacity, is_for_children, is_recurring, created_at)
-                          VALUES (:title, :body, :time, :max_capacity, :is_for_children, :is_recurring, NOW())";
+                $query = "INSERT INTO event (title, body, time, max_capacity, is_for_children, is_recurring, color, created_at)
+                          VALUES (:title, :body, :time, :max_capacity, :is_for_children, :is_recurring, :color, NOW())";
                 $stmt = $db->prepare($query);
 
                 $stmt->bindParam(":title", $data->title);
@@ -81,6 +85,7 @@ try {
                 $stmt->bindParam(":max_capacity", $data->max_capacity, PDO::PARAM_INT);
                 $stmt->bindParam(":is_for_children", $isForChildren, PDO::PARAM_BOOL);
                 $stmt->bindParam(":is_recurring", $isRecurring, PDO::PARAM_BOOL);
+                $stmt->bindParam(":color", $color, PDO::PARAM_STR);
 
                 if (!$stmt->execute()) {
                     throw new Exception("Korduva sündmuse loomine nurjus.");

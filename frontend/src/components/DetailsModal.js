@@ -219,12 +219,25 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
       <div className="modal-content">
         <button className="close-button" onClick={onClose}>×</button>
         <h2>{event.title}</h2>
-        <p><strong>Kirjeldus:</strong> {event.body}</p>
-        <p><strong>Kuupäev:</strong> {new Date(event.time).toLocaleDateString('et-EE')}</p>
-        <p><strong>Aeg:</strong> {new Date(event.time).toLocaleTimeString('et-EE', { hour: '2-digit', minute: '2-digit' })}</p>
-        <p><strong>Kogus:</strong> {event.max_capacity}</p>
-        <p><strong>Vabu kohti:</strong> {spotsLeft}</p>
-        <p><strong>Laste trenn?</strong> {event.is_for_children ? "Jah" : "Ei"}</p>
+        <div className="event-details-grid">
+          <div className="detail-label">Kirjeldus:</div>
+          <div className="detail-value">{event.body}</div>
+          
+          <div className="detail-label">Kuupäev:</div>
+          <div className="detail-value">{new Date(event.time).toLocaleDateString('et-EE')}</div>
+          
+          <div className="detail-label">Aeg:</div>
+          <div className="detail-value">{new Date(event.time).toLocaleTimeString('et-EE', { hour: '2-digit', minute: '2-digit' })}</div>
+          
+          <div className="detail-label">Kogus:</div>
+          <div className="detail-value">{event.max_capacity}</div>
+          
+          <div className="detail-label">Vabu kohti:</div>
+          <div className="detail-value">{spotsLeft}</div>
+          
+          <div className="detail-label">Laste trenn?</div>
+          <div className="detail-value">{event.is_for_children ? "Jah" : "Ei"}</div>
+        </div>
 
         {showConfirmDelete && (
         <div className="confirm-delete-overlay">

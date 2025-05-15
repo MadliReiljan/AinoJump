@@ -1,3 +1,6 @@
+@import 'Variables.scss';
+@import 'Mixins.scss';
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -28,9 +31,9 @@
 }
 
 .modal-content p {
-  text-align: center;
+  text-align: left;
   margin: 16px 0 0 0;
-  font-size: 1.08rem;
+  font-size: $font-size-base;
   line-height: 1.5;
 }
 
@@ -72,25 +75,76 @@
 
 .modal-content form .checkbox-label {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 70px;
-  white-space: nowrap; 
+  margin-bottom: 15px;
+  white-space: nowrap;
+}
+
+.modal-content form .checkbox-label p {
+  margin: 0;
+  flex-grow: 1;
+}
+
+.modal-content form .checkbox-label input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+  height: 18px;
+  width: 18px;
 }
 
 .button-group {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  
+  .modal-edit-button, .modal-delete-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: $font-size-base;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    border: none;
+    width: 100%;
+    
+    &:hover {
+      transform: translateY(-1px);
+    }
+    
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+  
+  .modal-edit-button {
+    background-color: #66b656;
+    color: white;
+    
+    &:hover {
+      background-color: lighten(#47803C, 5%);
+    }
+  }
+  
+  .modal-delete-button {
+    background-color: #D32F2F;
+    color: white;
+    
+    &:hover {
+      background-color: lighten(#D32F2F, 5%);
+    }
+  }
 }
 
 .modal-content form button[type="button"] {
   background: #f44336;
 }
 
-.drag-drop-area {
+.drag-drop-area p {
   border: 2px dashed #ccc;
   border-radius: 8px;
-  padding: 20px;
+  padding: 30px;
   text-align: center;
   cursor: pointer;
   margin-bottom: 20px;
@@ -171,4 +225,53 @@
 }
 .modal-btn.no:hover {
   background: #b71c1c;
+}
+
+.current-image-container {
+  margin-bottom: $spacing-xs;
+  
+  .current-image-preview {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+  }
+  
+  button {
+    margin-top: $spacing-xs;
+  }
+}
+
+.remove-image {
+  background: #f44336;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  margin-top: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
+  
+  &:hover {
+    background-color: #b32727;
+  }
+}
+
+.event-details-grid {
+  display: grid;
+  grid-template-columns: 35% 75%;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.detail-label {
+  font-weight: bold;
+  color: #aaaaaa;
+  text-align: left;
+  padding-right: 10px;
+}
+
+.detail-value {
+  text-align: left;
 }

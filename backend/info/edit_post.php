@@ -57,6 +57,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db->beginTransaction();
 
         $imagePath = null;
+        $removeImage = isset($data['remove_image']) && $data['remove_image'] === '1';
+
+        if ($removeImage) {
+            $getImageQuery = "SELECT image_url FROM post WHERE id = :id";
+            $imageStmt = $db->prepare($getImageQuery);
+            $imageStmt->bindParam(":id", $data['id'], PDO::PARAM_INT);
+            $imageStmt->execute();
+            $currentImageUrl = $imageStmt->fetchColumn();
+            
+            if ($currentImageUrl) {
+                $fullImagePath = __DIR__ . "/.." . $currentImageUrl;
+                if (file_exists($fullImagePath)) {
+                    unlink($fullImagePath);
+                }
+            }
+        }
+
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = __DIR__ . "/../uploads/";
             if (!is_dir($uploadDir)) {
@@ -77,6 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($imagePath) {
             $query .= ", image_url = :image_url";
+        } elseif ($removeImage) {
+            $query .= ", image_url = NULL";
         }
 
         $query .= " WHERE id = :id";

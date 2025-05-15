@@ -10,6 +10,7 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
     body: editingPost?.body || "",
   });
   const [imageFile, setImageFile] = useState(null);
+  const [removeImage, setRemoveImage] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
   const fileInputRef = useRef(null);
@@ -55,7 +56,7 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
     fileInputRef.current.click();
   };
 
-  const handleSubmit = async (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
@@ -71,6 +72,8 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
       
       if (imageFile) {
         formDataToSend.append("image", imageFile);
+      } else if (removeImage) {
+        formDataToSend.append("remove_image", "1");
       }
 
       const url = editingPost
@@ -128,6 +131,24 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
               required
             />
           </label>
+
+          {editingPost?.image_url && !removeImage && !imageFile && (
+            <div className="current-image-container">
+              <img 
+                src={`${baseURL}${editingPost.image_url}`} 
+                alt="Current" 
+                className="current-image-preview" 
+              />
+              <button 
+                type="button" 
+                onClick={() => setRemoveImage(true)} 
+                className="remove-image"
+              >
+                Eemalda pilt
+              </button>
+            </div>
+          )}
+
           <div
             className={`drag-drop-area ${dragging ? "dragging" : ""}`}
             onDragOver={handleDragOver}
@@ -138,7 +159,7 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
             {imageFile ? (
               <p>Pilt valitud: {imageFile.name}</p>
             ) : (
-              <p>Lohista siia pilt või klõpsa valimiseks.</p>
+              <p>Lohista siia pilt või klõpsa pildi valimiseks.</p>
             )}
           </div>
           <input 
