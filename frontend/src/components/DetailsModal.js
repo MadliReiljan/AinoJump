@@ -155,7 +155,28 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   };
 
   const handleDelete = () => {
-  setShowConfirmDelete(true);
+    if (event.is_recurring) {
+      setModal({
+        open: true,
+        title: 'Korduv sündmus',
+        message: 'Kas soovid kustutada ainult selle sündmuse või kõik selle sarja sündmused?',
+        onClose: () => setModal(m => ({ ...m, open: false })),
+        onConfirm: () => {
+          setShowConfirmDelete(true);
+          setModal(m => ({ ...m, open: false }));
+          event.deleteAllRecurring = true;
+        },
+        onCancel: () => {
+          setShowConfirmDelete(true);
+          setModal(m => ({ ...m, open: false }));
+          event.deleteAllRecurring = false;
+        },
+        confirmText: 'Kõik',
+        cancelText: 'Ainult see'
+      });
+    } else {
+      setShowConfirmDelete(true);
+    }
   };
 
   const cancelDeletion = () => {
@@ -165,56 +186,58 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   const confirmDeletion = async () => {
     const token = localStorage.getItem("token");
     try {
-    const response = await fetch(`${baseURL}/events/delete_event.php`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
+      const body = {
         eventId: event.id,
-      }),
-    });
+        deleteAllRecurring: event.deleteAllRecurring || false
+      };
+      const response = await fetch(`${baseURL}/events/delete_event.php`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
 
-    if (response.ok) {
-      onClose();
-      if (onReservationChange) {
-        onReservationChange();
-      }
-    } else {
-      const text = await response.text();
-      let errorMessage = "Sündmuse kustutamine ebaõnnestus. Palun proovi uuesti.";
-      
-      if (text) {
-        try {
-          const errorData = JSON.parse(text);
-          if (errorData.message) {
-            errorMessage = errorData.message;
-          }
-        } catch (jsonError) {
-          console.error("Failed to parse error response:", jsonError);
+      if (response.ok) {
+        onClose();
+        if (onReservationChange) {
+          onReservationChange();
         }
+      } else {
+        const text = await response.text();
+        let errorMessage = "Sündmuse kustutamine ebaõnnestus. Palun proovi uuesti.";
+        
+        if (text) {
+          try {
+            const errorData = JSON.parse(text);
+            if (errorData.message) {
+              errorMessage = errorData.message;
+            }
+          } catch (jsonError) {
+            console.error("Failed to parse error response:", jsonError);
+          }
+        }
+        
+        setModal({ open: true, title: 'Viga', message: errorMessage, onClose: () => setModal(m => ({ ...m, open: false })) });
       }
-      
-      setModal({ open: true, title: 'Viga', message: errorMessage, onClose: () => setModal(m => ({ ...m, open: false })) });
+    } catch (error) {
+      console.error("Error during deletion:", error);
+      setModal({ open: true, title: 'Viga', message: 'Tekkis viga. Palun proovi uuesti.', onClose: () => setModal(m => ({ ...m, open: false })) });
+    } finally {
+      setShowConfirmDelete(false);
     }
-  } catch (error) {
-    console.error("Error during deletion:", error);
-    setModal({ open: true, title: 'Viga', message: 'Tekkis viga. Palun proovi uuesti.', onClose: () => setModal(m => ({ ...m, open: false })) });
-  } finally {
-    setShowConfirmDelete(false);
-  }
-};
+  };
 
   const handleEventUpdated = (updatedEvent) => {
-  setIsEditing(false);
+    setIsEditing(false);
 
-  Object.assign(event, updatedEvent);
+    Object.assign(event, updatedEvent);
 
-  if (onReservationChange) {
-    onReservationChange();
-  }
-};
+    if (onReservationChange) {
+      onReservationChange();
+    }
+  };
 
  return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
@@ -242,16 +265,15 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
         </div>
 
         {showConfirmDelete && (
-        <div className="confirm-delete-overlay">
-          <div className="confirm-delete-modal">
-            <p>Kas olete kindel, et soovite selle sündmuse kustutada?</p>
-            <div className="confirm-delete-buttons">
-              <button onClick={confirmDeletion} className="confirm-yes-button">Jah</button>
-              <button onClick={cancelDeletion} className="confirm-no-button">Ei</button>
-            </div>
-          </div>
-        </div>
-      )}
+          <ModalMessage
+            open={showConfirmDelete}
+            title="Kinnitus"
+            message="Kas olete kindel, et soovite selle sündmuse kustutada?"
+            onClose={cancelDeletion}
+            onConfirm={confirmDeletion}
+            onCancel={cancelDeletion}
+          />
+        )}
 
       {userRole !== "owner" && (
           <>
@@ -329,6 +351,10 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
           title={modal.title}
           message={modal.message}
           onClose={modal.onClose}
+          onConfirm={modal.onConfirm}
+          onCancel={modal.onCancel}
+          confirmText={modal.confirmText}
+          cancelText={modal.cancelText}
         />
       )}
       {showParticipants && (

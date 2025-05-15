@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/EventModal.scss";
 
-const ModalMessage = ({ open, onClose, title, message, onConfirm, onCancel }) => {
+const ModalMessage = ({ open, onClose, title, message, onConfirm, onCancel, confirmText, cancelText }) => {
   if (!open) return null;
   return (
     <div className="modal-overlay" onClick={onCancel || onClose}>
@@ -11,8 +11,8 @@ const ModalMessage = ({ open, onClose, title, message, onConfirm, onCancel }) =>
         <p>{message}</p>
         {(onConfirm && onCancel) ? (
           <div className="modal-actions">
-            <button className="modal-btn yes" onClick={onConfirm}>Jah</button>
-            <button className="modal-btn no" onClick={onCancel}>Ei</button>
+            <button className="modal-btn yes" onClick={onConfirm}>{confirmText || 'Jah'}</button>
+            <button className="modal-btn no" onClick={onCancel}>{cancelText || 'Ei'}</button>
           </div>
         ) : null}
       </div>
