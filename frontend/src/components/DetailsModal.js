@@ -4,6 +4,7 @@ import "../styles/EventDetailsModal.scss";
 import EventEditModal from "./EditModal";
 import baseURL from "../baseURL";
 import ModalMessage from "./ModalMessage";
+import ParticipationsModal from "./ParticipationsModal";
 
 const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   const { userEmail, userRole } = useContext(AuthContext);
@@ -14,6 +15,7 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   const [children, setChildren] = useState([]);
   const [selectedChildId, setSelectedChildId] = useState("");
   const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
+  const [showParticipants, setShowParticipants] = useState(false);
   const spotsLeft = event.max_capacity - reservedCount;
 
   useEffect(() => {
@@ -309,7 +311,7 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
 
         {userRole === "owner" && (
           <div className="admin-buttons">
-            <button type="button" className="view-participants-button">
+            <button type="button" className="view-participants-button" onClick={() => setShowParticipants(true)}>
               Vaata osalejaid
             </button>
             <button type="button" onClick={handleEdit} className="edit-button2">
@@ -328,6 +330,9 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
           message={modal.message}
           onClose={modal.onClose}
         />
+      )}
+      {showParticipants && (
+        <ParticipationsModal eventId={event.id} onClose={() => setShowParticipants(false)} />
       )}
     </div>
   );
