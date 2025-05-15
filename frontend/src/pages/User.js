@@ -310,6 +310,51 @@ const User = () => {
     });
   };
 
+  const handleRemoveChild = async (childId, childName) => {
+    setModal({
+      open: true,
+      title: 'Kinnitus',
+      message: `Kas oled kindel, et soovid eemaldada lapse "${childName}"?`,
+      onConfirm: async () => {
+        setModal(m => ({ ...m, open: false }));
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch(`${baseURL}/accounts/remove_child.php`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ childId }),
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Lapse eemaldamine ebaõnnestus.");
+          }
+
+          setChildren(prev => prev.filter(child => child.id !== childId));
+          setChildrenBookings(prev => prev.filter(childObj => childObj.child.id !== childId));
+          
+          setModal({ 
+            open: true, 
+            title: 'Õnnestus', 
+            message: 'Laps on edukalt eemaldatud!', 
+            onClose: () => setModal(m => ({ ...m, open: false }))
+          });
+        } catch (err) {
+          setModal({ 
+            open: true, 
+            title: 'Viga', 
+            message: err.message, 
+            onClose: () => setModal(m => ({ ...m, open: false })) 
+          });
+        }
+      },
+      onCancel: () => setModal(m => ({ ...m, open: false })),
+    });
+  };
+
   const toggleAddChild = () => {
     setIsAddingChild(!isAddingChild);
     if (!isAddingChild) {
@@ -533,7 +578,34 @@ const User = () => {
           </div>
           
           <div className="children-section">
-            <h3>Lisa laps {!isEditing && <span className="add-button" onClick={toggleAddChild}>+</span>}</h3>
+            {children.length > 0 && (
+              <div className="children-list">
+                <h2>Sinu lapsed</h2>
+                <div className={`children-items ${children.length <= 2 ? 'few-children' : ''}`}>
+                  {children.map(child => (
+                    <div key={child.id} className="child-item">
+                      <span className="child-name">{child.full_name}</span>
+                      {isEditing && (
+                        <button 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleRemoveChild(child.id, child.full_name);
+                          }}
+                          className="remove-child-button"
+                          title="Eemalda laps"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M18 6L6 18M6 6l12 12"></path>
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <h2>Lisa laps {!isEditing && <span className="add-button" onClick={toggleAddChild}>+</span>}</h2>
             {(isEditing || isAddingChild) && (
               <div className="add-child-form" style={{flexDirection: 'column', alignItems: 'flex-start', gap: '10px'}}>
                 <div style={{display: 'flex', width: '100%', gap: '10px'}}>
@@ -549,16 +621,6 @@ const User = () => {
                     <button onClick={cancelAddChild} className="cancel-button">Tühista</button>
                   )}
                 </div>
-                {children.length > 0 && (
-                  <div className="children-list">
-                    <h4>Sinu lapsed:</h4>
-                    <ul>
-                      {children.map(child => (
-                        <li key={child.id}>{child.full_name}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </div>
             )}
           </div>
@@ -576,21 +638,40 @@ const User = () => {
 
         <div className="bookings-section">
           <h2>Sinu broneeringud</h2>
-          <p>PS. Vajutades vasaku klõpsuga broneeringu peale saad seda eemaldada.</p>
+          <p>NB! Vajutades vasaku klõpsuga broneeringu peale saad seda eemaldada.</p>
           <div className="bookings-grid">
             {bookings.length > 0 ? (
-              bookings.map((booking, index) => (
-                <div
-                  key={booking.id || index}
-                  className="booking-item"
-                  style={{ cursor: 'pointer' }}
-                  title="Eemalda broneering"
-                  onClick={() => handleRemoveBooking(booking.id, booking.event_id)}
-                >
-                  {booking.title} <span className="booking-date">{booking.time ? new Date(booking.time).toLocaleString() : ''}</span>
-                  <div className="booking-time">Broneeritud: {booking.reservation_time ? new Date(booking.reservation_time).toLocaleString() : ''}</div>
-                </div>
-              ))
+              [...bookings]
+                .sort((a, b) => new Date(a.time) - new Date(b.time))
+                .map((booking, index) => (
+                  <div
+                    key={booking.id || index}
+                    className="booking-item"
+                    title="Eemalda broneering"
+                    onClick={() => handleRemoveBooking(booking.id, booking.event_id)}
+                  >
+                    <h4 className="booking-title">{booking.title}</h4>
+                    {booking.time && (
+                      <div className="booking-time-info">
+                        <div className="booking-event-time">
+                          <span className="booking-value">
+                            {new Date(booking.time).toLocaleDateString('et-EE', { 
+                              day: 'numeric', 
+                              month: 'numeric', 
+                              year: 'numeric' 
+                            })}
+                          </span>
+                          <span className="booking-value time-value">
+                            {new Date(booking.time).toLocaleTimeString('et-EE', { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))
             ) : (
               <div className="booking-item">Sul pole ühtegi broneeringut.</div>
             )}
@@ -605,18 +686,37 @@ const User = () => {
                 <h3>{childObj.child.full_name}</h3>
                 <div className="bookings-grid">
                   {childObj.bookings.length > 0 ? (
-                    childObj.bookings.map((booking, idx) => (
-                      <div
-                        key={booking.id || idx}
-                        className="booking-item"
-                        style={{ cursor: 'pointer' }}
-                        title="Eemalda broneering"
-                        onClick={() => handleRemoveChildBooking(booking.id, childObj.child.id, booking.event_id)}
-                      >
-                        {booking.title} <span className="booking-date">{booking.time ? new Date(booking.time).toLocaleString() : ''}</span>
-                        <div className="booking-time">Broneeritud: {booking.reservation_time ? new Date(booking.reservation_time).toLocaleString() : ''}</div>
-                      </div>
-                    ))
+                    [...childObj.bookings]
+                      .sort((a, b) => new Date(a.time) - new Date(b.time))
+                      .map((booking, idx) => (
+                        <div
+                          key={booking.id || idx}
+                          className="booking-item"
+                          title="Eemalda broneering"
+                          onClick={() => handleRemoveChildBooking(booking.id, childObj.child.id, booking.event_id)}
+                        >
+                          <h4 className="booking-title">{booking.title}</h4>
+                          {booking.time && (
+                            <div className="booking-time-info">
+                              <div className="booking-event-time">
+                                <span className="booking-value">
+                                  {new Date(booking.time).toLocaleDateString('et-EE', { 
+                                    day: 'numeric', 
+                                    month: 'numeric', 
+                                    year: 'numeric' 
+                                  })}
+                                </span>
+                                <span className="booking-value time-value">
+                                  {new Date(booking.time).toLocaleTimeString('et-EE', { 
+                                    hour: '2-digit', 
+                                    minute: '2-digit' 
+                                  })}
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))
                   ) : (
                     <div className="booking-item">Sellel lapsel pole broneeringuid.</div>
                   )}
