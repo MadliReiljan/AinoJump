@@ -309,6 +309,9 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
 
         {userRole === "owner" && (
           <div className="admin-buttons">
+            <button type="button" className="view-participants-button">
+              Vaata osalejaid
+            </button>
             <button type="button" onClick={handleEdit} className="edit-button2">
               Muuda sündmust
             </button>
