@@ -22,7 +22,7 @@ if (!isset($headers['Authorization']) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZA
 
 if (!isset($headers['Authorization'])) {
     http_response_code(401);
-    echo json_encode(["message" => "Authorization header missing."]);
+    echo json_encode(["message" => "Autoriseerimine puudub."]);
     exit();
 }
 
@@ -32,14 +32,14 @@ $token = str_replace('Bearer ', '', $authHeader);
 $user = validateToken($db, $token);
 if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Invalid or expired token."]);
+    echo json_encode(["message" => "Token on vale või aegunud."]);
     exit();
 }
 
 $personId = $user['person_id'];
 
 try {
-    $query = "SELECT e.id, e.title, e.time, e.created_at, r.created_at AS reservation_time
+    $query = "SELECT e.id AS event_id, e.title, e.time, e.created_at, r.created_at AS reservation_time
               FROM reservations r
               INNER JOIN event e ON r.event_id = e.id
               WHERE r.person_id = :personId
@@ -52,5 +52,5 @@ try {
     echo json_encode($bookings);
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(["message" => "Database error: " . $e->getMessage()]);
+    echo json_encode(["message" => "Serveri viga: " . $e->getMessage()]);
 }

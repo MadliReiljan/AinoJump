@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Robustly fetch Authorization header
 function getAuthorizationHeader() {
     $headers = [];
     if (function_exists('getallheaders')) {
@@ -47,7 +46,7 @@ $pdo = $database->getConnection();
 $authHeader = getAuthorizationHeader();
 if (!$authHeader) {
     http_response_code(401);
-    echo json_encode(["error" => "Authorization header missing."]);
+    echo json_encode(["error" => "Autoriseerimine puudub."]);
     exit;
 }
 $token = str_replace('Bearer ', '', $authHeader);
@@ -56,7 +55,7 @@ try {
     $user = validateToken($pdo, $token);
     if (!$user) {
         http_response_code(401);
-        echo json_encode(["error" => "Unauthorized"]);
+        echo json_encode(["error" => "Keelatud"]);
         exit;
     }
     $parent_id = $user['person_id'];
@@ -96,6 +95,6 @@ try {
     exit;
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(["error" => "Server error", "details" => $e->getMessage()]);
+    echo json_encode(["error" => "Serveri viga", "details" => $e->getMessage()]);
     exit;
 }

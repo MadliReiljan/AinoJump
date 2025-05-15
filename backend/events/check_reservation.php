@@ -25,7 +25,7 @@ $user = validateToken($db, $token);
 
 if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Unauthorized - Invalid token"]);
+    echo json_encode(["message" => "Autoriseerimine puudub - Vale tooken"]);
     exit();
 }
 
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 if (!$eventId) {
     http_response_code(400);
-    echo json_encode(["message" => "Event ID is required"]);
+    echo json_encode(["message" => "Event ID on vajalik"]);
     exit();
 }
 

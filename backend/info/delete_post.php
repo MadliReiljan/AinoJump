@@ -25,13 +25,13 @@ $token = str_replace('Bearer ', '', $authHeader);
 $user = validateToken($db, $token);
 if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Unauthorized - Invalid token."]);
+    echo json_encode(["message" => "Autoriseerimine puudub - Vale tooken."]);
     exit();
 }
 
 if ($user['role'] !== 'owner') {
     http_response_code(403);
-    echo json_encode(["message" => "Access denied. Only owners can delete posts."]);
+    echo json_encode(["message" => "Sissepääs keelatud. Ainult omanikel on õigus postitusi kustutada."]);
     exit();
 }
 
@@ -45,18 +45,17 @@ if (!empty($data->id)) {
 
         if ($stmt->execute()) {
             http_response_code(200);
-            echo json_encode(["message" => "Post deleted successfully."]);
+            echo json_encode(["message" => "Postituse kustutamine õnnestus."]);
         } else {
             http_response_code(500);
-            echo json_encode(["message" => "Failed to delete post."]);
+            echo json_encode(["message" => "Postituse kustutamine nurjus."]);
         }
     } catch (Exception $e) {
-        error_log("Error deleting post: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(["message" => "Internal server error."]);
+        echo json_encode(["message" => "Serveri viga tühistamise ajal."]);
     }
 } else {
     http_response_code(400);
-    echo json_encode(["message" => "Invalid input. Post ID is required."]);
+    echo json_encode(["message" => "Vale sisend. Postituse ID on vajalik."]);
 }
 ?>

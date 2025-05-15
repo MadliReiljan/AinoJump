@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "../styles/Register.scss";
 import loginImage from "../images/registerimg.png"; 
 import baseURL from "../baseURL";
+import ModalMessage from "../components/ModalMessage";
 
 const Register = () => {
   const [fullName, setFullName] = useState("");
@@ -11,6 +12,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -19,10 +21,15 @@ const Register = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
+      setModal({
+        open: true,
+        title: "Viga",
+        message: "Palun sisestage kehtiv e-posti aadress.",
+        onClose: () => setModal({ ...modal, open: false })
+      });
       setError("Palun sisestage kehtiv e-posti aadress.");
       return;
     }
-    
     setError("");
     setIsLoading(true);
 
@@ -45,13 +52,33 @@ const Register = () => {
       const data = await response.json();
 
       if (response.ok) {
-        navigate("/login"); 
+        setModal({
+          open: true,
+          title: "Registreerimine õnnestus",
+          message: "Konto on loodud! Nüüd saate sisse logida.",
+          onClose: () => {
+            setModal({ ...modal, open: false });
+            navigate("/login");
+          }
+        });
       } else {
-        setError(data.message || "Regitreerimine ebaõnnestus.");
+        setModal({
+          open: true,
+          title: "Registreerimine ebaõnnestus",
+          message: data.message || "Registreerimine ebaõnnestus.",
+          onClose: () => setModal({ ...modal, open: false })
+        });
+        setError(data.message || "Registreerimine ebaõnnestus.");
       }
     } catch (err) {
       console.error("Registration error:", err);
-      setError("Network error. Please try again.");
+      setModal({
+        open: true,
+        title: "Võrgu viga",
+        message: "Võrgu viga. Palun proovige uuesti.",
+        onClose: () => setModal({ ...modal, open: false })
+      });
+      setError("Võrgu viga. Palun proovige uuesti.");
     } finally {
       setIsLoading(false);
     }
@@ -121,7 +148,7 @@ const Register = () => {
             </div>
 
             <button type="submit" className="login-button" disabled={isLoading}>
-              {isLoading ? "Registreerimine..." : "Registreeri mind"}
+              {isLoading ? "Registreerimine..." : "Registreeri"}
             </button>
             <div className="links-container">
               <div className="register-link">
@@ -132,6 +159,14 @@ const Register = () => {
           </form>
         </div>
       </div>
+      {modal.open && (
+        <ModalMessage
+          open={modal.open}
+          title={modal.title}
+          message={modal.message}
+          onClose={modal.onClose}
+        />
+      )}
     </div>
   );
 };

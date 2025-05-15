@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Button from "./Button";
+import ModalMessage from "./ModalMessage";
 import "../styles/EventModal.scss";
 import baseURL from "../baseURL";
 
@@ -19,6 +20,8 @@ const EventEditModal = ({ event, onClose, onEventUpdated }) => {
     const savedColors = localStorage.getItem("favoriteColors");
     return savedColors ? JSON.parse(savedColors) : ["#4caf50", "#2196F3", "#f44336", "#9c27b0"];
   });
+
+  const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
 
   useEffect(() => {
     localStorage.setItem("favoriteColors", JSON.stringify(favoriteColors));
@@ -96,22 +99,32 @@ const EventEditModal = ({ event, onClose, onEventUpdated }) => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
 
-    let updateAll = false;
     if (formData.is_recurring) {
-      updateAll = window.confirm(
-        "Kas soovid värskendada kõiki korduvaid sündmusi selles sarjas?"
-      );
+      setModal({
+        open: true,
+        title: 'Korduv sündmus',
+        message: 'Kas soovid värskendada kõiki korduvaid sündmusi selles sarjas?',
+        onConfirm: () => {
+          setModal(m => ({ ...m, open: false }));
+          submitEdit(true);
+        },
+        onCancel: () => {
+          setModal(m => ({ ...m, open: false }));
+          onClose();
+        },
+      });
+      return;
     }
+    submitEdit(false);
+  };
 
+  const submitEdit = async (updateAll) => {
+    const token = localStorage.getItem("token");
     try {
       const eventDateTime = `${event.time.split(" ")[0]} ${formData.time}:00`;
-
-      console.log("Submitting form data with color:", formData.color);
-
       const response = await fetch(`${baseURL}/events/edit_event.php`, {
         method: "PUT",
         headers: {
@@ -130,22 +143,16 @@ const EventEditModal = ({ event, onClose, onEventUpdated }) => {
           update_all: updateAll
         }),
       });
-
       if (response.ok) {
         const updatedEvent = await response.json();
-        console.log("Updated event received:", updatedEvent);
-        
         onEventUpdated(updatedEvent);
-        alert("Event updated successfully!");
-
-        window.location.reload();
+        setModal({ open: true, title: 'Õnnestus', message: 'Sündmus edukalt uuendatud!', onClose: () => { setModal(m => ({ ...m, open: false })); window.location.reload(); } });
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.message}`);
+        setModal({ open: true, title: 'Viga', message: `Viga: ${errorData.message}`, onClose: () => setModal(m => ({ ...m, open: false })) });
       }
     } catch (error) {
-      console.error("Error updating event:", error);
-      alert("An error occurred while updating the event.");
+      setModal({ open: true, title: 'Viga', message: 'Sündmuse uuendamisel tekkis viga.', onClose: () => setModal(m => ({ ...m, open: false })) });
     }
   };
 
@@ -264,6 +271,16 @@ const EventEditModal = ({ event, onClose, onEventUpdated }) => {
           </div>
         </form>
       </div>
+      {modal.open && (
+        <ModalMessage
+          open={modal.open}
+          title={modal.title}
+          message={modal.message}
+          onClose={modal.onClose}
+          onConfirm={modal.onConfirm}
+          onCancel={modal.onCancel}
+        />
+      )}
     </div>
   );
 };

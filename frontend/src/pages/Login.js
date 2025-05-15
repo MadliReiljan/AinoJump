@@ -4,6 +4,7 @@ import { AuthContext } from "../auth/Authentication";
 import loginImage from "../images/loginimg.png";
 import baseURL from "../baseURL";
 import "../styles/Login.scss";
+import ModalMessage from "../components/ModalMessage";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ const Login = () => {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
     const { login } = useContext(AuthContext);
     const navigate = useNavigate(); 
 
@@ -42,11 +44,23 @@ const Login = () => {
                 login(data.token, email); 
                 navigate("/"); 
             } else {
-                setError(data.message || "Login failed.");
+                setModal({
+                    open: true,
+                    title: "Sisselogimine ebaõnnestus",
+                    message: data.message || "Sisselogimine ebaõnnestus.",
+                    onClose: () => setModal({ ...modal, open: false })
+                });
+                setError(data.message || "Sisselogimine ebaõnnestus.");
             }
         } catch (err) {
             console.error("Login error:", err);
-            setError("Network error. Please try again.");
+            setModal({
+                open: true,
+                title: "Võrgu viga",
+                message: "Võrgu viga. Palun proovige uuesti.",
+                onClose: () => setModal({ ...modal, open: false })
+            });
+            setError("Võrgu viga. Palun proovige uuesti.");
         } finally {
             setIsLoading(false);
         }
@@ -118,7 +132,7 @@ const Login = () => {
                             </label>
                         </div>
                         <button type="submit" className="login-button" disabled={isLoading}>
-                            {isLoading ? "Loading..." : "Logige sisse"}
+                            {isLoading ? "Sisselogimine..." : "Logi sisse"}
                         </button>
                         <div className="links-container">
                             <div className="forgot-password">
@@ -132,6 +146,14 @@ const Login = () => {
                     </form>
                 </div>
             </div>
+            {modal.open && (
+                <ModalMessage
+                    open={modal.open}
+                    title={modal.title}
+                    message={modal.message}
+                    onClose={modal.onClose}
+                />
+            )}
         </div>
     );
 };

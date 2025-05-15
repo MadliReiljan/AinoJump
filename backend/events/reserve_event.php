@@ -30,7 +30,7 @@ $user = validateToken($db, $token);
 
 if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Unauthorized - Invalid token"]);
+    echo json_encode(["message" => "Autoriseerimine puudub - Vale tooken"]);
     exit();
 }
 
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $childStmt->execute();
                 if ($childStmt->rowCount() === 0) {
                     http_response_code(403);
-                    echo json_encode(["message" => "Child does not belong to this account."]);
+                    echo json_encode(["message" => "See laps ei kuulu sellele kontole."]);
                     exit();
                 }
                 $unreservePersonId = $childId;
@@ -69,28 +69,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($stmt->rowCount() > 0) {
                 http_response_code(200);
-                echo json_encode(["message" => "Reservation canceled successfully"]);
+                echo json_encode(["message" => "Reservatsioon tühistatud edukalt"]);
             } else {
                 http_response_code(404);
-                echo json_encode(["message" => "No reservation found to cancel"]);
+                echo json_encode(["message" => "Reservatsiooni tühistamine nurjus. Kontrollige, kas see on olemas."]);
             }
         } catch (PDOException $e) {
-            error_log("Database error: " . $e->getMessage());
             http_response_code(500);
             echo json_encode([
-                "message" => "Internal server error during cancellation", 
+                "message" => "Serveri viga tühistamise ajal",
                 "error" => $e->getMessage()
             ]);
         } catch (Exception $e) {
-            error_log("General error: " . $e->getMessage());
             http_response_code(500);
-            echo json_encode(["message" => "Internal server error"]);
+            echo json_encode(["message" => "Serveri viga"]);
         }
         return;
     }
     if (!$eventId) {
         http_response_code(400);
-        echo json_encode(["message" => "Invalid or missing event ID."]);
+        echo json_encode(["message" => "Vale või puuduv ürituse ID."]);
         exit();
     }
 
@@ -102,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $event = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$event) {
             http_response_code(404);
-            echo json_encode(["message" => "Event not found"]);
+            echo json_encode(["message" => "Üritust ei leitud"]);
             exit();
         }
 
@@ -110,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $childId = $data['childId'] ?? null;
             if (!$childId) {
                 http_response_code(400);
-                echo json_encode(["message" => "Missing childId for children's event."]);
+                echo json_encode(["message" => "Puudub ID laste ürituse jaoks."]);
                 exit();
             }
 
@@ -121,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $childStmt->execute();
             if ($childStmt->rowCount() === 0) {
                 http_response_code(403);
-                echo json_encode(["message" => "Child does not belong to this account."]);
+                echo json_encode(["message" => "See laps ei kuulu sellele kontole."]);
                 exit();
             }
             $reservationPersonId = $childId;
@@ -136,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
             http_response_code(400);
-            echo json_encode(["message" => "You have already reserved a spot for this event."]);
+            echo json_encode(["message" => "Te olete juba selle ürituse jaoks koha broneerinud."]);
             exit();
         }
 
@@ -155,13 +153,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $event = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$event) {
             http_response_code(404);
-            echo json_encode(["message" => "Event not found"]);
+            echo json_encode(["message" => "Üritust ei leitud"]);
             exit();
         }
 
         if ($event['reserved_count'] >= $event['max_capacity']) {
             http_response_code(400);
-            echo json_encode(["message" => "Event is fully booked"]);
+            echo json_encode(["message" => "Üritus on täis broneeritud"]);
             exit();
         }
 
@@ -172,20 +170,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
 
         http_response_code(200);
-        echo json_encode(["message" => "Reservation successful"]);
+        echo json_encode(["message" => "Reservatsioon edukalt loodud"]);
 
     } catch (PDOException $e) {
-        error_log("Database error: " . $e->getMessage());
         http_response_code(500);
         echo json_encode([
-            "message" => "Internal server error during reservation", 
+            "message" => "Serveri viga reservatsiooni ajal",
             "error" => $e->getMessage()
         ]);
     } catch (Exception $e) {
-        error_log("General error: " . $e->getMessage());
         http_response_code(500);
         echo json_encode([
-            "message" => "Internal server error", 
+            "message" => "Serveri viga",
             "error" => $e->getMessage()
         ]);
     }
@@ -195,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $childId = $deleteData['childId'] ?? $_GET['childId'] ?? null;
     if (!$eventId) {
         http_response_code(400);
-        echo json_encode(["message" => "Invalid or missing event ID."]);
+        echo json_encode(["message" => "Vale või puuduv ürituse ID."]);
         exit();
     }
     try {
@@ -212,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $childStmt->execute();
             if ($childStmt->rowCount() === 0) {
                 http_response_code(403);
-                echo json_encode(["message" => "Child does not belong to this account."]);
+                echo json_encode(["message" => "See laps ei kuulu sellele kontole."]);
                 exit();
             }
             $unreservePersonId = $childId;
@@ -227,25 +223,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->rowCount() > 0) {
             http_response_code(200);
-            echo json_encode(["message" => "Reservation canceled successfully"]);
+            echo json_encode(["message" => "Reservatsioon tühistatud edukalt"]);
         } else {
             http_response_code(404);
-            echo json_encode(["message" => "No reservation found to cancel"]);
+            echo json_encode(["message" => "Reservatsiooni tühistamine nurjus. Kontrollige, kas see on olemas."]);
         }
     } catch (PDOException $e) {
-        error_log("Database error: " . $e->getMessage());
         http_response_code(500);
         echo json_encode([
-            "message" => "Internal server error during cancellation", 
+            "message" => "Serveri viga tühistamise ajal",
             "error" => $e->getMessage()
         ]);
     } catch (Exception $e) {
-        error_log("General error: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(["message" => "Internal server error"]);
+        echo json_encode(["message" => "Serveri viga"]);
     }
 } else {
     http_response_code(405);
-    echo json_encode(["message" => "Method not allowed"]);
+    echo json_encode(["message" => "Meetod ei ole lubatud"]);
 }
 ?>

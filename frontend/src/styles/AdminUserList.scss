@@ -90,3 +90,20 @@
     background: #b71c1c;
   }
 }
+
+.back-button {
+  background: #47803C;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.back-button:hover {
+  background: #35662b;
+}

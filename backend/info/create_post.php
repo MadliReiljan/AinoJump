@@ -25,13 +25,13 @@ $token = str_replace('Bearer ', '', $authHeader);
 $user = validateToken($db, $token);
 if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Unauthorized - Invalid token."]);
+    echo json_encode(["message" => "Autoriseerimine puudub - Vale tooken."]);
     exit();
 }
 
 if ($user['role'] !== 'owner') {
     http_response_code(403);
-    echo json_encode(["message" => "Access denied. Only owners can create posts."]);
+    echo json_encode(["message" => "Sissepääs keelatud. Ainult omanikel on õigus postitusi luua."]);
     exit();
 }
 
@@ -51,7 +51,7 @@ try {
         if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
             $imagePath = "/uploads/" . $fileName;
         } else {
-            throw new Exception("Failed to upload image.");
+            throw new Exception("Pildi üleslaadimine nurjus.");
         }
     }
 
@@ -64,11 +64,11 @@ try {
 
         $stmt->bindParam(":title", $data['title']);
         $stmt->bindParam(":body", $data['body']);
-        $stmt->bindParam(":user_id", $user['user_id'], PDO::PARAM_INT); // Use user_id from validateToken
+        $stmt->bindParam(":user_id", $user['user_id'], PDO::PARAM_INT);
         $stmt->bindParam(":image_url", $imagePath, PDO::PARAM_STR);
 
         if (!$stmt->execute()) {
-            throw new Exception("Failed to create the post.");
+            throw new Exception("Postituse loomine nurjus.");
         }
 
         $postId = $db->lastInsertId();
@@ -89,12 +89,11 @@ try {
         echo json_encode($createdPost);
     } else {
         http_response_code(400);
-        echo json_encode(["message" => "Invalid input. Please provide all required fields."]);
+        echo json_encode(["message" => "Vale sisend. Palun esitage kõik vajalikud väljad."]);
     }
 } catch (Exception $e) {
     $db->rollBack();
-    error_log("Error creating post: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(["message" => "Internal server error."]);
+    echo json_encode(["message" => "Serveri viga."]);
 }
 ?>

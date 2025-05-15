@@ -27,11 +27,19 @@
   color: white;
 }
 
+.modal-content p {
+  text-align: center;
+  margin: 16px 0 0 0;
+  font-size: 1.08rem;
+  line-height: 1.5;
+}
+
 .modal-content form label {
   display: block;
   margin-bottom: 10px;
   font-weight: 600;
-  color: white;;
+  color: white;
+  text-align: left;
 }
 
 .modal-content form input,
@@ -48,6 +56,7 @@
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: border-color 0.2s ease-in-out;
   box-sizing: border-box;
+  text-align: left;
 }
 
 .modal-content form input:focus,
@@ -127,4 +136,39 @@
 .time-input::-webkit-calendar-picker-indicator {
   filter: invert(1);
   cursor: pointer;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.modal-btn {
+  min-width: 80px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.modal-btn.yes {
+  background: #47803C;
+  color: #fff;
+}
+.modal-btn.yes:hover {
+  background: #35662b;
+}
+
+.modal-btn.no {
+  background: #f44336;
+  color: #fff;
+}
+.modal-btn.no:hover {
+  background: #b71c1c;
 }

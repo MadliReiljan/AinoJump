@@ -3,12 +3,14 @@ import { useNavigate, Link } from "react-router-dom";
 import "../styles/Register.scss";
 import loginImage from "../images/registerimg.png"; 
 import baseURL from "../baseURL";
+import ModalMessage from "../components/ModalMessage";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [modal, setModal] = useState({ open: false, title: "", message: "", onClose: null });
   const navigate = useNavigate();
 
   const handlePasswordReset = async (e) => {
@@ -17,10 +19,14 @@ const ForgotPassword = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
-      setError("Palun sisestage kehtiv e-posti aadress.");
+      setModal({
+        open: true,
+        title: "Viga",
+        message: "Palun sisestage kehtiv e-posti aadress.",
+        onClose: () => setModal({ ...modal, open: false })
+      });
       return;
     }
-    
     setError("");
     setSuccess("");
     setIsLoading(true);
@@ -38,13 +44,31 @@ const ForgotPassword = () => {
       const data = await response.json();
 
       if (response.ok) {
+        setModal({
+          open: true,
+          title: "Õnnestus",
+          message: "Parooli uudendamise link on saadetud teie e-posti aadressile.",
+          onClose: () => setModal({ ...modal, open: false })
+        });
         setSuccess("Parooli uudendamise link on saadetud teie e-posti aadressile.");
         setEmail("");
       } else {
+        setModal({
+          open: true,
+          title: "Viga",
+          message: data.message || "Parooli lähtestamine ebaõnnestus.",
+          onClose: () => setModal({ ...modal, open: false })
+        });
         setError(data.message || "Parooli lähtestamine ebaõnnestus.");
       }
     } catch (err) {
       console.error("Password reset error:", err);
+      setModal({
+        open: true,
+        title: "Võrgu viga",
+        message: "Võrgu viga. Palun proovige uuesti.",
+        onClose: () => setModal({ ...modal, open: false })
+      });
       setError("Võrgu viga. Palun proovige uuesti.");
     } finally {
       setIsLoading(false);
@@ -63,8 +87,14 @@ const ForgotPassword = () => {
         </div>
         <div className="login-container">
           <h2>Unustasin parooli</h2>
-          {error && <div className="error-message">{error}</div>}
-          {success && <div className="success-message" style={{ marginBottom: '20px' }}>{success}</div>}
+          {modal.open && (
+            <ModalMessage
+              open={modal.open}
+              title={modal.title}
+              message={modal.message}
+              onClose={modal.onClose}
+            />
+          )}
           <form onSubmit={handlePasswordReset}>
             <div className="input-group">
               <label>E-post *</label>

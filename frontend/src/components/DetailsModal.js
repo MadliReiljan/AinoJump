@@ -3,6 +3,7 @@ import { AuthContext } from "../auth/Authentication";
 import "../styles/EventDetailsModal.scss";
 import EventEditModal from "./EditModal";
 import baseURL from "../baseURL";
+import ModalMessage from "./ModalMessage";
 
 const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   const { userEmail, userRole } = useContext(AuthContext);
@@ -12,6 +13,7 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   const [reservedCount, setReservedCount] = useState(event.reserved_count || 0);
   const [children, setChildren] = useState([]);
   const [selectedChildId, setSelectedChildId] = useState("");
+  const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
   const spotsLeft = event.max_capacity - reservedCount;
 
   useEffect(() => {
@@ -74,7 +76,7 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
       let body;
       if (event.is_for_children) {
         if (!selectedChildId) {
-          alert("Palun vali laps, kelle registreerida.");
+          setModal({ open: true, title: 'Viga', message: 'Palun vali laps, kelle registreerida.', onClose: () => setModal(m => ({ ...m, open: false })) });
           return;
         }
         body = { eventId: event.id, childId: selectedChildId };
@@ -98,10 +100,10 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
         }
       } else {
         const errorData = await response.json().catch(() => null);
-        alert(errorData?.message || "Failed to reserve the spot.");
+        setModal({ open: true, title: 'Viga', message: errorData?.message || 'Koha broneerimine ebaõnnestus.', onClose: () => setModal(m => ({ ...m, open: false })) });
       }
     } catch (error) {
-      alert("An error occurred. Please try again.");
+      setModal({ open: true, title: 'Viga', message: 'Tekkis viga. Palun proovi uuesti.', onClose: () => setModal(m => ({ ...m, open: false })) });
     }
   };
 
@@ -111,7 +113,7 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
       let body;
       if (event.is_for_children) {
         if (!selectedChildId) {
-          alert("Palun vali laps, kellelt broneering eemaldada.");
+          setModal({ open: true, title: 'Viga', message: 'Palun vali laps, kellelt broneering eemaldada.', onClose: () => setModal(m => ({ ...m, open: false })) });
           return;
         }
         body = { eventId: event.id, childId: selectedChildId };
@@ -135,10 +137,10 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
         }
       } else {
         const errorData = await response.json().catch(() => null);
-        alert(errorData?.message || "Failed to unreserve the spot.");
+        setModal({ open: true, title: 'Viga', message: errorData?.message || 'Koha vabastamine ebaõnnestus.', onClose: () => setModal(m => ({ ...m, open: false })) });
       }
     } catch (error) {
-      alert("An error occurred. Please try again.");
+      setModal({ open: true, title: 'Viga', message: 'Tekkis viga. Palun proovi uuesti.', onClose: () => setModal(m => ({ ...m, open: false })) });
     }
   };
 
@@ -179,7 +181,7 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
       }
     } else {
       const text = await response.text();
-      let errorMessage = "Failed to delete the event. Please try again.";
+      let errorMessage = "Sündmuse kustutamine ebaõnnestus. Palun proovi uuesti.";
       
       if (text) {
         try {
@@ -192,11 +194,11 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
         }
       }
       
-      alert(errorMessage);
+      setModal({ open: true, title: 'Viga', message: errorMessage, onClose: () => setModal(m => ({ ...m, open: false })) });
     }
   } catch (error) {
     console.error("Error during deletion:", error);
-    alert("An error occurred. Please try again.");
+    setModal({ open: true, title: 'Viga', message: 'Tekkis viga. Palun proovi uuesti.', onClose: () => setModal(m => ({ ...m, open: false })) });
   } finally {
     setShowConfirmDelete(false);
   }
@@ -303,6 +305,14 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
           </div>
         )}
       </div>
+      {modal.open && (
+        <ModalMessage
+          open={modal.open}
+          title={modal.title}
+          message={modal.message}
+          onClose={modal.onClose}
+        />
+      )}
     </div>
   );
 };

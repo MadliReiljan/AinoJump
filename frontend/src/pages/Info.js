@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../auth/Authentication";
 import PostModal from "../components/PostModal";
 import Button from "../components/Button";
+import ModalMessage from "../components/ModalMessage";
 import "../styles/Info.scss";
 import baseURL from "../baseURL";
 
@@ -10,6 +11,7 @@ export const Info = () => {
   const [posts, setPosts] = useState([]);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [editingPost, setEditingPost] = useState(null);
+  const [modal, setModal] = useState({ open: false, title: "", message: "", onClose: null });
 
   useEffect(() => {
     fetchPosts();
@@ -34,31 +36,50 @@ export const Info = () => {
   };
 
   const handleDeletePost = async (postId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this post?");
-    if (!confirmDelete) return;
+    setModal({
+      open: true,
+      title: "Kustuta postitus",
+      message: "Kas oled kindel, et soovid selle postituse kustutada?",
+      onClose: () => setModal({ ...modal, open: false }),
+      onConfirm: async () => {
+        setModal({ ...modal, open: false });
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch(`${baseURL}/info/delete_post.php`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ id: postId }),
+          });
 
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${baseURL}/info/delete_post.php`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ id: postId }),
-      });
-
-      if (response.ok) {
-        alert("Post deleted successfully!");
-        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
-      } else {
-        const errorData = await response.json();
-        alert(`Error: ${errorData.message}`);
+          if (response.ok) {
+            setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+            setModal({
+              open: true,
+              title: "Kustutatud",
+              message: "Postitus on edukalt kustutatud.",
+              onClose: () => setModal({ ...modal, open: false })
+            });
+          } else {
+            setModal({
+              open: true,
+              title: "Viga",
+              message: "Postituse kustutamine ebaõnnestus.",
+              onClose: () => setModal({ ...modal, open: false })
+            });
+          }
+        } catch (error) {
+          setModal({
+            open: true,
+            title: "Viga",
+            message: "Tekkis viga postituse kustutamisel.",
+            onClose: () => setModal({ ...modal, open: false })
+          });
+        }
       }
-    } catch (error) {
-      console.error("Error deleting post:", error);
-      alert("An error occurred while deleting the post.");
-    }
+    });
   };
 
   const handleEditPost = (post) => {
@@ -101,10 +122,10 @@ export const Info = () => {
               {post.image_url && (
                 <div className="post-image">
                   <img
-                    src={`${baseURL}/backend${post.image_url}`}
+                    src={`${baseURL}${post.image_url}`}
                     alt={post.title}
                     onError={(e) => {
-                      console.error("Image failed to load:", `${baseURL}/backend${post.image_url}`);
+                      console.error("Image failed to load:", `${baseURL}${post.image_url}`);
                       e.target.onerror = null;
                       e.target.className = 'placeholder-image';
                     }}
@@ -131,6 +152,15 @@ export const Info = () => {
           <p>Postitusi hetkel pole.</p>
         )}
       </div>
+      {modal.open && (
+        <ModalMessage
+          open={modal.open}
+          title={modal.title}
+          message={modal.message}
+          onClose={modal.onClose}
+          onConfirm={modal.onConfirm}
+        />
+      )}
     </div>
   );
 }

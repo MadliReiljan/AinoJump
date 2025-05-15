@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "./Button";
+import ModalMessage from "./ModalMessage";
 import "../styles/EventModal.scss";
 import baseURL from "../baseURL";
 
@@ -11,6 +12,8 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
     max_capacity: 32,
     is_for_children: false,
   });
+
+  const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,17 +44,20 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
       });
   
       if (response.ok) {
-        alert("Event created successfully!");
-        const newEvent = await response.json();
-        onEventCreated(newEvent);
-        onClose();
+        const responseData = await response.json();
+        if (responseData.events) {
+          responseData.events.forEach(ev => onEventCreated(ev));
+        } else if (responseData.event) {
+          onEventCreated(responseData.event);
+        }
+        setModal({ open: true, title: 'Õnnestus', message: 'Sündmus loodud edukalt!', onClose: () => { setModal(m => ({ ...m, open: false })); onClose(); } });
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.message}`);
+        setModal({ open: true, title: 'Viga', message: `Viga: ${errorData.message}`, onClose: () => setModal(m => ({ ...m, open: false })) });
       }
     } catch (error) {
       console.error("Error creating event:", error);
-      alert("An error occurred while creating the event.");
+      setModal({ open: true, title: 'Viga', message: 'Sündmuse loomisel tekkis viga.', onClose: () => setModal(m => ({ ...m, open: false })) });
     }
   };
 
@@ -127,6 +133,14 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
           </div>
         </form>
       </div>
+      {modal.open && (
+        <ModalMessage
+          open={modal.open}
+          title={modal.title}
+          message={modal.message}
+          onClose={modal.onClose}
+        />
+      )}
     </div>
   );
 };

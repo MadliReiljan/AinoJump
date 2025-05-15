@@ -25,21 +25,21 @@ $token = str_replace('Bearer ', '', $authHeader);
 $user = validateToken($db, $token);
 if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Unauthorized - Invalid token."]);
+    echo json_encode(["message" => "Keelatud - Token on vale."]);
     exit();
 }
 
 $parentId = $user['person_id']; 
 if (!$parentId) {
     http_response_code(401);
-    echo json_encode(["message" => "Invalid token."]);
+    echo json_encode(["message" => "Token on vale."]);
     exit();
 }
 
 $data = json_decode(file_get_contents("php://input"));
 if (!isset($data->childName) || !trim($data->childName)) {
     http_response_code(400);
-    echo json_encode(["message" => "Child name is required."]);
+    echo json_encode(["message" => "Lapse nimi on kohustuslik."]);
     exit();
 }
 
@@ -53,13 +53,12 @@ try {
 
     if ($stmt->execute()) { 
         http_response_code(201);
-        echo json_encode(["message" => "Child added successfully."]);
+        echo json_encode(["message" => "Laps lisatud."]);
     } else {
         http_response_code(500);
-        echo json_encode(["message" => "Failed to add child."]);
+        echo json_encode(["message" => "Lapse lisamine ebaõnnestus."]);
     }
 } catch (Exception $e) {
-    error_log($e->getMessage());
     http_response_code(500);
-    echo json_encode(["message" => "Internal server error."]);
+    echo json_encode(["message" => "Serveri viga."]);
 }

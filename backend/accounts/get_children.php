@@ -22,7 +22,7 @@ if (!isset($headers['Authorization']) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZA
 
 if (!isset($headers['Authorization'])) {
     http_response_code(401);
-    echo json_encode(["message" => "Authorization header missing."]);
+    echo json_encode(["message" => "Autoriseerimine puudub."]);
     exit();
 }
 
@@ -32,7 +32,7 @@ $token = str_replace('Bearer ', '', $authHeader);
 $user = validateToken($db, $token);
 if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Invalid or expired token."]);
+    echo json_encode(["message" => "Token on vale või aegunud."]);
     exit();
 }
 
@@ -48,5 +48,5 @@ try {
     echo json_encode($children);
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(["message" => "Database error: " . $e->getMessage()]);
+    echo json_encode(["message" => "Serveri viga: " . $e->getMessage()]);
 }

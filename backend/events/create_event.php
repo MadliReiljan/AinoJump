@@ -25,13 +25,13 @@ $token = str_replace('Bearer ', '', $authHeader);
 $user = validateToken($db, $token);
 if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Unauthorized - Invalid token."]);
+    echo json_encode(["message" => "Autoriseerimine puudub - Vale tooken."]);
     exit();
 }
 
 if ($user['role'] !== 'owner') {
     http_response_code(403);
-    echo json_encode(array("message" => "Access denied. Only owners can create events."));
+    echo json_encode(array("message" => "Sissepääs keelatud. Ainult omanikel on õigus sündmusi luua."));
     exit();
 }
 
@@ -61,7 +61,7 @@ try {
         $stmt->bindParam(":is_recurring", $isRecurring, PDO::PARAM_BOOL);
 
         if (!$stmt->execute()) {
-            throw new Exception("Failed to create the initial event.");
+            throw new Exception("Sündmuse loomine nurjus.");
         }
 
         if ($isRecurring) {
@@ -83,21 +83,48 @@ try {
                 $stmt->bindParam(":is_recurring", $isRecurring, PDO::PARAM_BOOL);
 
                 if (!$stmt->execute()) {
-                    throw new Exception("Failed to create a recurring event.");
+                    throw new Exception("Korduva sündmuse loomine nurjus.");
                 }
             }
         }
 
         $db->commit();
-        http_response_code(201);
-        echo json_encode(array("message" => "Event created successfully."));
+        if ($isRecurring) {
+            $startDate = new DateTime($data->time);
+            $endDate = (new DateTime($data->time))->modify('+3 months');
+            $eventsStmt = $db->prepare("SELECT * FROM event WHERE title = :title AND body = :body AND max_capacity = :max_capacity AND is_for_children = :is_for_children AND is_recurring = :is_recurring AND time >= :startDate AND time < :endDate ORDER BY time ASC");
+            $eventsStmt->bindParam(":title", $data->title);
+            $eventsStmt->bindParam(":body", $data->body);
+            $eventsStmt->bindParam(":max_capacity", $data->max_capacity, PDO::PARAM_INT);
+            $eventsStmt->bindParam(":is_for_children", $isForChildren, PDO::PARAM_BOOL);
+            $eventsStmt->bindParam(":is_recurring", $isRecurring, PDO::PARAM_BOOL);
+            $eventsStmt->bindParam(":startDate", $startDate->format('Y-m-d H:i:s'));
+            $eventsStmt->bindParam(":endDate", $endDate->format('Y-m-d H:i:s'));
+            $eventsStmt->execute();
+            $createdEvents = $eventsStmt->fetchAll(PDO::FETCH_ASSOC);
+            http_response_code(201);
+            echo json_encode(array(
+                "message" => "Sündmused loodud edukalt.",
+                "events" => $createdEvents
+            ));
+        } else {
+            $lastEventId = $db->lastInsertId();
+            $eventStmt = $db->prepare("SELECT * FROM event WHERE id = :id");
+            $eventStmt->bindParam(":id", $lastEventId, PDO::PARAM_INT);
+            $eventStmt->execute();
+            $createdEvent = $eventStmt->fetch(PDO::FETCH_ASSOC);
+            http_response_code(201);
+            echo json_encode(array(
+                "message" => "Sündmus loodud edukalt.",
+                "event" => $createdEvent
+            ));
+        }
     } else {
         http_response_code(400);
-        echo json_encode(array("message" => "Invalid input. Please provide all required fields."));
+        echo json_encode(array("message" => "Vale sisend. Palun esitage kõik vajalikud väljad."));
     }
 } catch (Exception $e) {
     $db->rollBack();
-    error_log("Error creating event: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(array("message" => "Internal server error."));
+    echo json_encode(array("message" => "Serveri viga."));
 }

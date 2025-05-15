@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/User.scss";
 import baseURL from "../baseURL";
-
+import ModalMessage from "../components/ModalMessage";
 
 const User = () => {
   const [userData, setUserData] = useState(null);
@@ -22,6 +22,7 @@ const User = () => {
   const [bookings, setBookings] = useState([]);
   const [children, setChildren] = useState([]);
   const [childrenBookings, setChildrenBookings] = useState([]);
+  const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -125,7 +126,7 @@ const User = () => {
 
   const handleAddChild = async () => {
     if (!childName.trim()) {
-      alert("Please enter a valid child name.");
+      setModal({ open: true, title: 'Viga', message: 'Palun sisestage lapse nimi.', onClose: () => setModal(m => ({ ...m, open: false })) });
       return;
     }
   
@@ -144,28 +145,28 @@ const User = () => {
         throw new Error(errorData.message || "Failed to add child.");
       }
   
-      alert("Child added successfully!");
+      setModal({ open: true, title: 'Õnnestus', message: 'Lapse lisamine õnnestus!', onClose: () => setModal(m => ({ ...m, open: false })) });
       setChildName("");
       setIsAddingChild(false);
     } catch (err) {
-      setError(err.message);
+      setModal({ open: true, title: 'Viga', message: err.message, onClose: () => setModal(m => ({ ...m, open: false })) });
     }
   };
 
   const handleUpdateProfile = async () => {
     if (isChangingPassword && (currentPassword || newPassword || confirmPassword)) {
       if (!currentPassword) {
-        setPasswordError("Please enter your current password");
+        setPasswordError("Palun sisestage oma praegune parool.");
         return;
       }
       
       if (newPassword !== confirmPassword) {
-        setPasswordError("New passwords do not match");
+        setPasswordError("Uued paroolid ei kattu.");
         return;
       }
       
       if (newPassword.length < 8) {
-        setPasswordError("Password must be at least 8 characters");
+        setPasswordError("Parool peab olema vähemalt 8 tähemärki pikk.");
         return;
       }
       
@@ -184,7 +185,7 @@ const User = () => {
         
         if (!passwordResponse.ok) {
           const errorData = await passwordResponse.json();
-          throw new Error(errorData.message || "Failed to update password");
+          throw new Error(errorData.message || "Parooli uuendamine ebaõnnestus.");
         }
       } catch (err) {
         setPasswordError(err.message);
@@ -206,7 +207,7 @@ const User = () => {
   
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update profile.");
+        throw new Error(errorData.message || "Profiili uuendamine ebaõnnestus.");
       }
 
       setCurrentPassword("");
@@ -216,66 +217,82 @@ const User = () => {
       
       setIsEditing(false);
       setIsChangingPassword(false);
-      alert("Profile updated successfully!");
+      setModal({ open: true, title: 'Õnnestus', message: 'Profiil on edukalt uuendatud!', onClose: () => setModal(m => ({ ...m, open: false })) });
     } catch (err) {
-      setError(err.message);
+      setModal({ open: true, title: 'Viga', message: err.message, onClose: () => setModal(m => ({ ...m, open: false })) });
     }
   };
 
   const handleRemoveBooking = async (bookingId, eventId) => {
-    if (!window.confirm("Kas oled kindel, et soovid selle broneeringu eemaldada?")) return;
-    const token = localStorage.getItem("token");
-    if (!eventId) {
-      alert("Broneeringu eemaldamiseks puudub eventId. Palun teavita administraatorit.");
-      return;
-    }
-    try {
-      const response = await fetch(`${baseURL}/events/reserve_event.php`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ eventId }),
-      });
-      const responseData = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(responseData.message || "Broneeringu eemaldamine ebaõnnestus.");
-      }
-      setBookings((prev) => prev.filter((b) => b.id !== bookingId));
-    } catch (err) {
-      alert(err.message);
-    }
+    setModal({
+      open: true,
+      title: 'Kinnitus',
+      message: 'Kas oled kindel, et soovid selle broneeringu eemaldada?',
+      onConfirm: async () => {
+        setModal(m => ({ ...m, open: false }));
+        if (!eventId) {
+          setModal({ open: true, title: 'Viga', message: 'Broneeringu eemaldamiseks puudub eventId. Palun teavita administraatorit.', onClose: () => setModal(m => ({ ...m, open: false })) });
+          return;
+        }
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch(`${baseURL}/events/reserve_event.php`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ eventId }),
+          });
+          const responseData = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            throw new Error(responseData.message || "Broneeringu eemaldamine ebaõnnestus.");
+          }
+          setBookings((prev) => prev.filter((b) => b.id !== bookingId));
+        } catch (err) {
+          setModal({ open: true, title: 'Viga', message: err.message, onClose: () => setModal(m => ({ ...m, open: false })) });
+        }
+      },
+      onCancel: () => setModal(m => ({ ...m, open: false })),
+    });
   };
 
   const handleRemoveChildBooking = async (bookingId, childId, eventId) => {
-    if (!window.confirm("Kas oled kindel, et soovid selle broneeringu eemaldada?")) return;
-    const token = localStorage.getItem("token");
-    if (!eventId) {
-      alert("Lapse broneeringu eemaldamiseks puudub eventId. Palun teavita administraatorit.");
-      return;
-    }
-    try {
-      const response = await fetch(`${baseURL}/events/reserve_event.php`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ eventId, childId }),
-      });
-      const responseData = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(responseData.message || "Broneeringu eemaldamine ebaõnnestus.");
-      }
-      setChildrenBookings((prev) => prev.map(childObj =>
-        childObj.child.id === childId
-          ? { ...childObj, bookings: childObj.bookings.filter(b => b.id !== bookingId) }
-          : childObj
-      ));
-    } catch (err) {
-      alert(err.message);
-    }
+    setModal({
+      open: true,
+      title: 'Kinnitus',
+      message: 'Kas oled kindel, et soovid selle broneeringu eemaldada?',
+      onConfirm: async () => {
+        setModal(m => ({ ...m, open: false }));
+        if (!eventId) {
+          setModal({ open: true, title: 'Viga', message: 'Lapse broneeringu eemaldamiseks puudub eventId. Palun teavita administraatorit.', onClose: () => setModal(m => ({ ...m, open: false })) });
+          return;
+        }
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch(`${baseURL}/events/reserve_event.php`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ eventId, childId }),
+          });
+          const responseData = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            throw new Error(responseData.message || "Broneeringu eemaldamine ebaõnnestus.");
+          }
+          setChildrenBookings((prev) => prev.map(childObj =>
+            childObj.child.id === childId
+              ? { ...childObj, bookings: childObj.bookings.filter(b => b.id !== bookingId) }
+              : childObj
+          ));
+        } catch (err) {
+          setModal({ open: true, title: 'Viga', message: err.message, onClose: () => setModal(m => ({ ...m, open: false })) });
+        }
+      },
+      onCancel: () => setModal(m => ({ ...m, open: false })),
+    });
   };
 
   const toggleAddChild = () => {
@@ -305,7 +322,7 @@ const User = () => {
   };
 
   if (isLoading) {
-    return <div className="loading-container">Loading...</div>;
+    return <div className="loading-container">Laen...</div>;
   }
 
   if (error) {
@@ -314,6 +331,14 @@ const User = () => {
 
   return (
     <div className="account-container">
+      <ModalMessage 
+        open={modal.open} 
+        title={modal.title} 
+        message={modal.message} 
+        onClose={modal.onClose} 
+        onConfirm={modal.onConfirm} 
+        onCancel={modal.onCancel} 
+      />
       <h1 className="account-title">Konto</h1>
       
       <div className="account-content">
@@ -390,7 +415,7 @@ const User = () => {
                     >
                       {showCurrentPassword ? (
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
-                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                           <line x1="1" y1="1" x2="23" y2="23"></line>
                         </svg>
                       ) : (
@@ -420,7 +445,7 @@ const User = () => {
                     >
                       {showNewPassword ? (
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
-                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                           <line x1="1" y1="1" x2="23" y2="23"></line>
                         </svg>
                       ) : (
@@ -450,7 +475,7 @@ const User = () => {
                     >
                       {showConfirmPassword ? (
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
-                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                           <line x1="1" y1="1" x2="23" y2="23"></line>
                         </svg>
                       ) : (
@@ -501,7 +526,7 @@ const User = () => {
                     type="text"
                     value={childName}
                     onChange={(e) => setChildName(e.target.value)}
-                    placeholder="Enter child's name"
+                    placeholder="Sisestage lapse nimi"
                     className="child-input"
                   />
                   <button onClick={handleAddChild} className="add-child-button">Lisa</button>
@@ -536,6 +561,7 @@ const User = () => {
 
         <div className="bookings-section">
           <h2>Sinu broneeringud</h2>
+          <p>PS. Vajutades vasaku klõpsuga broneeringu peale saad seda eemaldada.</p>
           <div className="bookings-grid">
             {bookings.length > 0 ? (
               bookings.map((booking, index) => (

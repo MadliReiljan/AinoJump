@@ -25,13 +25,13 @@ $token = str_replace('Bearer ', '', $authHeader);
 $user = validateToken($db, $token);
 if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Unauthorized - Invalid token."]);
+    echo json_encode(["message" => "Autoriseerimine puudub - Vale tooken."]);
     exit();
 }
 
 if ($user['role'] !== 'owner') {
     http_response_code(403);
-    echo json_encode(["message" => "Access denied. Only owners can edit posts."]);
+    echo json_encode(["message" => "Sissepääs keelatud. Ainult omanikel on õigus postitusi redigeerida."]);
     exit();
 }
 
@@ -40,7 +40,7 @@ $isPut = $_SERVER['REQUEST_METHOD'] === 'PUT' ||
 
 if (!$isPut) {
     http_response_code(405);
-    echo json_encode(["message" => "Method not allowed."]);
+    echo json_encode(["message" => "Meetod ei ole lubatud."]);
     exit();
 }
 
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (empty($data['id']) || empty($data['title']) || empty($data['body'])) {
         http_response_code(400);
-        echo json_encode(["message" => "Invalid input. Post ID, title, and body are required."]);
+        echo json_encode(["message" => "Vale sisend. Postituse ID, pealkiri ja sisu on vajalikud."]);
         exit();
     }
 
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
                 $imagePath = "/uploads/" . $fileName;
             } else {
-                throw new Exception("Failed to upload image.");
+                throw new Exception("Pildi üleslaadimine nurjus.");
             }
         }
 
@@ -108,13 +108,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $db->rollBack();
             http_response_code(500);
-            echo json_encode(["message" => "Failed to update post."]);
+            echo json_encode(["message" => "Postituse uuendamine nurjus."]);
         }
     } catch (Exception $e) {
         $db->rollBack();
-        error_log("Error updating post: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(["message" => "Internal server error: " . $e->getMessage()]);
+        echo json_encode(["message" => "Serveri viga: " . $e->getMessage()]);
     }
 } else {
     $data = json_decode(file_get_contents("php://input"));
@@ -155,16 +154,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode($updatedPost);
             } else {
                 http_response_code(500);
-                echo json_encode(["message" => "Failed to update post."]);
+                echo json_encode(["message" => "Postituse uuendamine nurjus."]);
             }
         } catch (Exception $e) {
-            error_log("Error updating post: " . $e->getMessage());
             http_response_code(500);
-            echo json_encode(["message" => "Internal server error."]);
+            echo json_encode(["message" => "Serveri viga."]);
         }
     } else {
         http_response_code(400);
-        echo json_encode(["message" => "Invalid input. Post ID, title, and body are required."]);
+        echo json_encode(["message" => "Vale sisend. Postituse ID, pealkiri ja sisu on vajalikud."]);
     }
 }
 ?>

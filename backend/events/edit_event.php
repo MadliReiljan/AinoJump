@@ -25,13 +25,13 @@ $token = str_replace('Bearer ', '', $authHeader);
 $user = validateToken($db, $token);
 if (!$user) {
     http_response_code(401);
-    echo json_encode(["message" => "Unauthorized - Invalid token."]);
+    echo json_encode(["message" => "Autoriseerimine puudub - Vale tooken."]);
     exit();
 }
 
 if ($user['role'] !== 'owner') {
     http_response_code(403);
-    echo json_encode(["message" => "Access denied. Only owners can edit events."]);
+    echo json_encode(["message" => "Sissepääs keelatud. Ainult omanikel on õigus sündmusi redigeerida."]);
     exit();
 }
 
@@ -116,11 +116,10 @@ if (
         echo json_encode($updatedEvent);
         
     } catch (Exception $e) {
-        error_log("Error updating event: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(["message" => "Internal server error: " . $e->getMessage()]);
+        echo json_encode(["message" => "Serveri viga: " . $e->getMessage()]);
     }
 } else {
     http_response_code(400);
-    echo json_encode(["message" => "Invalid input. Please provide all required fields."]);
+    echo json_encode(["message" => "Vale sisend. Palun esitage kõik vajalikud väljad."]);
 }

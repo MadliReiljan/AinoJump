@@ -22,7 +22,7 @@ if (!isset($headers['Authorization']) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZA
 
 if (!isset($headers['Authorization'])) {
     http_response_code(401);
-    echo json_encode(array("message" => "Authorization header missing."));
+    echo json_encode(array("message" => "Autoriseerimine puudub."));
     exit();
 }
 
@@ -32,13 +32,13 @@ $token = str_replace('Bearer ', '', $authHeader);
 $userData = validateToken($db, $token);
 if (!$userData) {
     http_response_code(401);
-    echo json_encode(array("message" => "Invalid or expired token."));
+    echo json_encode(array("message" => "Token on vale või aegunud."));
     exit();
 }
 
 if ($userData['role'] !== 'owner') {
     http_response_code(403);
-    echo json_encode(array("message" => "Access denied. Only owners can view all users."));
+    echo json_encode(array("message" => "Sissepääs keelatud. Ainult omanikud saavad kõiki kasutajaid vaadata."));
     exit();
 }
 
@@ -67,11 +67,9 @@ try {
     http_response_code(200);
     echo json_encode($users);
 } catch (PDOException $e) {
-    error_log("PDOException in get_all_users.php: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(array("message" => "Database error: " . $e->getMessage()));
+    echo json_encode(array("message" => "Serveri viga: " . $e->getMessage()));
 } catch (Throwable $e) {
-    error_log("Error in get_all_users.php: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(array("message" => "Server error: " . $e->getMessage()));
+    echo json_encode(array("message" => "Serveri viga: " . $e->getMessage()));
 }

@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import "../styles/User.scss";
 import "../styles/AdminUserList.scss";
 import baseURL from "../baseURL";
+import ModalMessage from "../components/ModalMessage";
 
 const AdminUserList = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null, onConfirm: null, onCancel: null });
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -62,30 +64,38 @@ const AdminUserList = () => {
   }, []);
 
   const handleDeleteUser = async (userId) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) return;
-    try {
-      const response = await fetch(`${baseURL}/accounts/delete_user.php`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ id: userId }),
-      });
-      if (response.ok) {
-        setUsers((prev) => prev.filter((u) => u.id !== userId));
-        alert("User deleted successfully.");
-      } else {
-        const errorData = await response.json();
-        alert(errorData.message || "Failed to delete user.");
-      }
-    } catch (err) {
-      alert("Error deleting user.");
-    }
+    setModal({
+      open: true,
+      title: 'Kinnitus',
+      message: 'Kas oled kindel, et soovid selle kasutaja kustutada?',
+      onConfirm: async () => {
+        setModal(m => ({ ...m, open: false }));
+        try {
+          const response = await fetch(`${baseURL}/accounts/delete_user.php`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ id: userId }),
+          });
+          if (response.ok) {
+            setUsers((prev) => prev.filter((u) => u.id !== userId));
+            setModal({ open: true, title: 'Õnnestus', message: 'Kasutaja kustutati edukalt.', onClose: () => setModal(m => ({ ...m, open: false })) });
+          } else {
+            const errorData = await response.json();
+            setModal({ open: true, title: 'Viga', message: errorData.message || 'Kasutaja kustutamine ebaõnnestus.', onClose: () => setModal(m => ({ ...m, open: false })) });
+          }
+        } catch (err) {
+          setModal({ open: true, title: 'Viga', message: 'Kasutaja kustutamisel tekkis viga.', onClose: () => setModal(m => ({ ...m, open: false })) });
+        }
+      },
+      onCancel: () => setModal(m => ({ ...m, open: false })),
+    });
   };
 
   if (isLoading) {
-    return <div className="loading-container">Loading...</div>;
+    return <div className="loading-container">Laadimine...</div>;
   }
 
   if (error) {
@@ -93,11 +103,20 @@ const AdminUserList = () => {
   }
 
   if (!Array.isArray(users) || users.length === 0) {
-    return <div className="error-message">No users found.</div>;
+    return <div className="error-message">Kasutajaid ei leitud.</div>;
   }
 
   return (
     <div className="admin-user-list-container">
+      <ModalMessage
+        open={modal.open}
+        title={modal.title}
+        message={modal.message}
+        onClose={modal.onClose}
+        onConfirm={modal.onConfirm}
+        onCancel={modal.onCancel}
+      />
+      <button className="back-button" onClick={() => window.history.back()} style={{marginBottom: '1rem'}}>Tagasi</button>
       <h1>Kõik Kasutajad</h1>
       <table className="user-table">
         <thead>

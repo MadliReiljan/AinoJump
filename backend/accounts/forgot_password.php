@@ -56,7 +56,7 @@ try {
     }
 
     if (!isset($data->email)) {
-        echo json_encode(['success' => false, 'message' => 'Email is required']);
+        echo json_encode(['success' => false, 'message' => 'Email on kohustuslik']);
         exit;
     }
 

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import Button from "./Button";
+import ModalMessage from "./ModalMessage";
 import "../styles/EventModal.scss";
 import baseURL from "../baseURL";
 
@@ -10,6 +11,7 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
   });
   const [imageFile, setImageFile] = useState(null);
   const [dragging, setDragging] = useState(false);
+  const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
   const fileInputRef = useRef(null);
 
   const handleChange = (e) => {
@@ -36,21 +38,19 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
     if (file && file.type.startsWith("image/")) {
       setImageFile(file);
     } else {
-      alert("Please drop a valid image file.");
+      setModal({ open: true, title: 'Viga', message: 'Palun lohista siia sobiv pildifail.', onClose: () => setModal(m => ({ ...m, open: false })) });
     }
   };
   
-  // New handler for file input changes
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       setImageFile(file);
     } else if (file) {
-      alert("Please select a valid image file.");
+      setModal({ open: true, title: 'Viga', message: 'Palun vali sobiv pildifail.', onClose: () => setModal(m => ({ ...m, open: false })) });
     }
   };
   
-  // New handler for clicking on the drop area
   const handleAreaClick = () => {
     fileInputRef.current.click();
   };
@@ -64,32 +64,22 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
       formDataToSend.append("title", formData.title);
       formDataToSend.append("body", formData.body);
       
-      // If editing, include the post ID
       if (editingPost) {
         formDataToSend.append("id", editingPost.id);
-        // Add _method parameter to simulate PUT request
         formDataToSend.append("_method", "PUT");
-        console.log("Editing post with ID:", editingPost.id);
       }
       
-      // Add the image file if one was selected
       if (imageFile) {
         formDataToSend.append("image", imageFile);
-        console.log("Image attached:", imageFile.name);
       }
-  
-      // Always use POST for FormData to ensure proper processing
+
       const url = editingPost
         ? `${baseURL}/info/edit_post.php`
         : `${baseURL}/info/create_post.php`;
       
-      console.log("Submitting to:", url, "with method:", editingPost ? "POST (simulating PUT)" : "POST");
-      console.log("Form data contains ID:", formDataToSend.has("id"));
-      console.log("Form data contains title:", formDataToSend.has("title"));
-      console.log("Form data contains body:", formDataToSend.has("body"));
   
       const response = await fetch(url, {
-        method: "POST", // Always use POST for FormData
+        method: "POST", 
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -103,25 +93,24 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
         } else {
           onPostCreated(post);
         }
+        setModal({ open: true, title: 'Õnnestus', message: 'Postitus edukalt loodud/muudetud!', onClose: () => setModal(m => ({ ...m, open: false })) });
         onClose();
       } else {
         const errorData = await response.json();
-        console.error("Server responded with error:", errorData);
-        alert(`Error: ${errorData.message}`);
+        setModal({ open: true, title: 'Viga', message: `Viga: ${errorData.message}`, onClose: () => setModal(m => ({ ...m, open: false })) });
       }
     } catch (error) {
-      console.error("Error submitting post:", error);
-      alert("An error occurred while submitting the post.");
+      setModal({ open: true, title: 'Viga', message: 'Postituse saatmisel tekkis viga.', onClose: () => setModal(m => ({ ...m, open: false })) });
     }
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>{editingPost ? "Edit Post" : "Create a New Post"}</h2>
+        <h2>{editingPost ? "Muuda postitust" : "Loo uus postitus"}</h2>
         <form onSubmit={handleSubmit}>
           <label>
-            Title:
+            Pealkiri:
             <input
               type="text"
               name="title"
@@ -131,7 +120,7 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
             />
           </label>
           <label>
-            Body:
+            Sisu:
             <textarea
               name="body"
               value={formData.body}
@@ -147,12 +136,11 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
             onClick={handleAreaClick}
           >
             {imageFile ? (
-              <p>Image Selected: {imageFile.name}</p>
+              <p>Pilt valitud: {imageFile.name}</p>
             ) : (
-              <p>Drag and drop an image here, or click to select one.</p>
+              <p>Lohista siia pilt või klõpsa valimiseks.</p>
             )}
           </div>
-          {/* Hidden file input */}
           <input 
             type="file"
             ref={fileInputRef}
@@ -162,14 +150,22 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
           />
           <div className="button-group">
             <Button type="button" variant="danger" onClick={onClose}>
-              Cancel
+              Loobu
             </Button>
             <Button type="submit" variant="neutral">
-              {editingPost ? "Update Post" : "Create Post"}
+              {editingPost ? "Uuenda postitust" : "Loo postitus"}
             </Button>
           </div>
         </form>
       </div>
+      {modal.open && (
+        <ModalMessage
+          open={modal.open}
+          title={modal.title}
+          message={modal.message}
+          onClose={modal.onClose}
+        />
+      )}
     </div>
   );
 };

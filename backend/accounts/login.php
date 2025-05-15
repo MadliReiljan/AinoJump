@@ -16,7 +16,7 @@ $db = $database->getConnection();
 
 if (!$db) {
     http_response_code(500);
-    echo json_encode(array("message" => "Database connection failed."));
+    echo json_encode(array("message" => "Puudub ühendus andmebaasiga."));
     exit();
 }
 
@@ -25,7 +25,7 @@ $data = json_decode(file_get_contents("php://input"));
 if (!empty($data->email) && !empty($data->password)) {
 } else {
     http_response_code(400);
-    echo json_encode(array("message" => "Unable to login. Data is incomplete."));
+    echo json_encode(array("message" => "Ebaõnnestunud sisselogimine. Andmed on puudulikud."));
     exit();
 }
 if (!empty($data->email) && !empty($data->password)) {
@@ -56,7 +56,7 @@ if (!empty($data->email) && !empty($data->password)) {
             
                 http_response_code(200);
                 echo json_encode(array(
-                    "message" => "Login successful",
+                    "message" => "Sisselogimine õnnestus.",
                     "id" => $row['id'],
                     "fullname" => $row['full_name'],
                     "email" => $row['email'],
@@ -65,18 +65,17 @@ if (!empty($data->email) && !empty($data->password)) {
                 ));
             } else {
                 http_response_code(401);
-                echo json_encode(array("message" => "Invalid credentials."));
+                echo json_encode(array("message" => "Vale kasutajanimi või parool."));
             }
         } else {
             http_response_code(401);
-            echo json_encode(array("message" => "Invalid credentials."));
+            echo json_encode(array("message" => "Vale kasutajanimi või parool."));
         }
     } catch (Exception $e) {
-        error_log("Error during login: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(array("message" => "Internal server error."));
+        echo json_encode(array("message" => "Serveri viga."));
     }
 } else {
     http_response_code(400);
-    echo json_encode(array("message" => "Unable to login. Data is incomplete."));
+    echo json_encode(array("message" => "Ebaõnnestunud sisselogimine. Andmed on puudulikud."));
 }

@@ -15,11 +15,7 @@ $database = new Database();
 $db = $database->getConnection();
 
 $raw_data = file_get_contents("php://input");
-error_log("Received data: " . $raw_data);
-
 $data = json_decode($raw_data);
-
-error_log("Parsed data: " . print_r($data, true));
 
 if (
     isset($data->fullname) && 
@@ -36,7 +32,7 @@ if (
         
         if ($check_stmt->rowCount() > 0) {
             http_response_code(400);
-            echo json_encode(array("message" => "Email already exists."));
+            echo json_encode(array("message" => "Email juba eksisteerib."));
             exit();
         }
 
@@ -58,23 +54,21 @@ if (
         $user_stmt->bindParam(":person_id", $person_id);
 
         if (!$user_stmt->execute()) {
-            error_log("Error inserting into user table: " . print_r($user_stmt->errorInfo(), true));
             http_response_code(500);
-            echo json_encode(array("message" => "Failed to insert into user table."));
+            echo json_encode(array("message" => "Andmebaasi viga."));
             exit();
         }
 
         http_response_code(201);
-        echo json_encode(array("message" => "User registered successfully."));
+        echo json_encode(array("message" => "Kasutaja registreerimine õnnestus."));
     } catch (Exception $e) {
-        error_log("Error during registration: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(array("message" => "Internal server error."));
+        echo json_encode(array("message" => "Serveri viga."));
     }
 } else {
     http_response_code(400);
     echo json_encode(array(
-        "message" => "Unable to register user. Data is incomplete.",
+        "message" => "Registreerimine ebaõnnestus. Andmed on puudulikud.",
         "received" => $data
     ));
 }

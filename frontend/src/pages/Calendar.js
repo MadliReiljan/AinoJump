@@ -92,7 +92,7 @@ export const Calendar = () => {
   const handleCloseDetailsModal = () => {
     setIsDetailsModalOpen(false);
     setSelectedEvent(null);
-    refreshEvents(); // Always refresh events when modal closes
+    refreshEvents(); 
   };
 
   const handleCloseCreateModal = () => {
@@ -203,7 +203,6 @@ export const Calendar = () => {
         eventClick={handleEventClick}
         dateClick={handleDateClick}
         eventDidMount={(info) => {
-          // Apply the color to the outer element (the anchor tag)
           const color = info.event.extendedProps.customColor || "#4caf50";
           info.el.style.backgroundColor = color;
           info.el.style.borderColor = color;

@@ -22,7 +22,7 @@ if (!isset($headers['Authorization']) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZA
 
 if (!isset($headers['Authorization'])) {
     http_response_code(401);
-    echo json_encode(array("message" => "Authorization header missing."));
+    echo json_encode(array("message" => "Autoriseerimine puudub."));
     exit();
 }
 
@@ -32,20 +32,20 @@ $token = str_replace('Bearer ', '', $authHeader);
 $userData = validateToken($db, $token);
 if (!$userData) {
     http_response_code(401);
-    echo json_encode(array("message" => "Invalid or expired token."));
+    echo json_encode(array("message" => "Token on vale või aegunud."));
     exit();
 }
 
 if ($userData['role'] !== 'owner') {
     http_response_code(403);
-    echo json_encode(array("message" => "Access denied. Only owners can delete users."));
+    echo json_encode(array("message" => "Sissepääs keelatud. Ainult omanikud saavad kasutajaid kustutada."));
     exit();
 }
 
 $input = json_decode(file_get_contents("php://input"), true);
 if (!isset($input['id'])) {
     http_response_code(400);
-    echo json_encode(["message" => "User ID required."]);
+    echo json_encode(["message" => "Kasutaja ID on kohustuslik."]);
     exit();
 }
 $userId = intval($input['id']);
@@ -57,7 +57,7 @@ try {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$row) {
         http_response_code(404);
-        echo json_encode(["message" => "User not found."]);
+        echo json_encode(["message" => "Kasutajat ei leitud."]);
         exit();
     }
     $personId = $row['person_id'];
@@ -67,9 +67,8 @@ try {
     $stmt->execute([$userId]);
 
     http_response_code(200);
-    echo json_encode(["message" => "User deleted."]);
+    echo json_encode(["message" => "Kasutaja kustutatud."]);
 } catch (PDOException $e) {
-    error_log("PDOException in delete_user.php: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(["message" => "Database error: " . $e->getMessage()]);
+    echo json_encode(["message" => "Serveri viga: " . $e->getMessage()]);
 }
