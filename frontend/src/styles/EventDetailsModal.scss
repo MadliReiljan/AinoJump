@@ -54,7 +54,7 @@
 }
 
 .reserved-message {
-  color: #4CAF50;
+  color: #BFFF7F;
   padding: 10px;
   text-align: center;
   font-weight: bold;
@@ -300,4 +300,52 @@
 
 .confirm-no-button:hover {
   background-color: #616161;
+}
+
+.child-select-container {
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.child-select-container label {
+  font-size: 16px;
+  color: #BFFF7F;
+  margin-bottom: 5px;
+}
+
+.child-select-container select {
+  background-color: #2a2a2a;
+  border: 1px solid #4a4a4a;
+  color: white;
+  padding: 12px 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-family: 'Montserrat', sans-serif;
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+
+.child-select-container select:focus {
+  outline: none;
+  border-color: #BFFF7F;
+}
+
+.child-select-container select option {
+  background-color: #2a2a2a;
+  color: white;
+  padding: 10px;
+}
+
+.child-select-container p {
+  color: #ff6b6b;
+  font-style: italic;
+  padding: 10px;
+  text-align: center;
 }
