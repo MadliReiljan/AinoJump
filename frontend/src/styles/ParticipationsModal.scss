@@ -1,0 +1,15 @@
+.participants-list {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.participants-list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.participants-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}

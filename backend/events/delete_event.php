@@ -43,6 +43,44 @@ if (!$eventId) {
     exit();
 }
 
+$deleteAllRecurring = $data['deleteAllRecurring'] ?? false;
+
+if ($deleteAllRecurring) {
+    // Find the event to get its recurring properties
+    $eventStmt = $db->prepare("SELECT * FROM event WHERE id = :eventId");
+    $eventStmt->bindParam(':eventId', $eventId, PDO::PARAM_INT);
+    $eventStmt->execute();
+    $event = $eventStmt->fetch(PDO::FETCH_ASSOC);
+    if (!$event) {
+        http_response_code(404);
+        echo json_encode(["message" => "Sündmust ei leitud antud ID-ga."]);
+        exit();
+    }
+    // Delete all events in the series (same title, body, max_capacity, is_for_children, is_recurring)
+    $seriesStmt = $db->prepare("SELECT id FROM event WHERE title = :title AND body = :body AND max_capacity = :max_capacity AND is_for_children = :is_for_children AND is_recurring = :is_recurring");
+    $seriesStmt->bindParam(':title', $event['title']);
+    $seriesStmt->bindParam(':body', $event['body']);
+    $seriesStmt->bindParam(':max_capacity', $event['max_capacity'], PDO::PARAM_INT);
+    $seriesStmt->bindParam(':is_for_children', $event['is_for_children'], PDO::PARAM_BOOL);
+    $seriesStmt->bindParam(':is_recurring', $event['is_recurring'], PDO::PARAM_BOOL);
+    $seriesStmt->execute();
+    $seriesIds = $seriesStmt->fetchAll(PDO::FETCH_COLUMN);
+    if ($seriesIds) {
+        // Delete reservations for all events in the series
+        $inQuery = implode(',', array_fill(0, count($seriesIds), '?'));
+        $db->prepare("DELETE FROM reservations WHERE event_id IN ($inQuery)")->execute($seriesIds);
+        // Delete all events in the series
+        $db->prepare("DELETE FROM event WHERE id IN ($inQuery)")->execute($seriesIds);
+        http_response_code(200);
+        echo json_encode(["message" => "Kõik selle sarja sündmused kustutatud."]);
+        exit();
+    } else {
+        http_response_code(404);
+        echo json_encode(["message" => "Sarja sündmusi ei leitud."]);
+        exit();
+    }
+}
+
 $reservationDeleteQuery = "DELETE FROM reservations WHERE event_id = :eventId";
 $reservationDeleteStmt = $db->prepare($reservationDeleteQuery);
 $reservationDeleteStmt->bindParam(':eventId', $eventId, PDO::PARAM_INT);
