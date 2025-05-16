@@ -1,5 +1,9 @@
 {
   "devDependencies": {
-    "cypress": "^14.3.3"
+    "cypress": "^14.3.3",
+    "dotenv": "^16.5.0"
+  },
+  "dependencies": {
+    "mysql2": "^3.14.1"
   }
 }
