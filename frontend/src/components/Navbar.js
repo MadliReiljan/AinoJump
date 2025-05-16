@@ -26,9 +26,9 @@ export const Navbar = () => {
         document.body.style.overflow = 'auto';
     };
 
-    const isLoginPage = location.pathname === `${BASE_PATH}/login`;
+    const isLoginPage = location.pathname.endsWith("/login");
     const authButtonText = isLoginPage ? "Loo konto" : "Logi sisse";
-    const authButtonLink = isLoginPage ? `${BASE_PATH}/register` : `${BASE_PATH}/login`;
+    const authButtonLink = isLoginPage ? "/register" : "/login";
 
     return (
         <nav>
