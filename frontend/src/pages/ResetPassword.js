@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import "../styles/Register.scss";
-import loginImage from "../images/registerimg.png";
+import loginImage from "../images/registerimg.webp";
 import baseURL from "../baseURL";
 
 const ResetPassword = () => {

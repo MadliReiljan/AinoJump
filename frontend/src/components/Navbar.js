@@ -1,10 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "../styles/Navbar.scss";
-import logoImage from "../images/Logo3.png";
+import logoImage from "../images/Logo3.webp";
 import { AuthContext } from "../auth/Authentication";
-
-const BASE_PATH = process.env.NODE_ENV === "production" ? "/ainojump/frontend" : "";
 
 export const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -84,6 +82,11 @@ export const Navbar = () => {
                             <NavLink to="/user" onClick={closeMenu}>
                                 Konto
                             </NavLink>
+                            {userEmail && (
+                                <span className="user-email" style={{ marginLeft: 10, color: '#BFFF7F', fontWeight: 500 }}>
+                                    {userEmail}
+                                </span>
+                            )}
                             <NavLink to="/" onClick={() => {logout(); closeMenu();}} className="logout-link">
                                 Logi välja
                             </NavLink>

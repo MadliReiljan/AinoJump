@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../styles/Register.scss";
-import loginImage from "../images/registerimg.png"; 
+import loginImage from "../images/registerimg.webp"; 
 import baseURL from "../baseURL";
 import ModalMessage from "../components/ModalMessage";
 
@@ -11,7 +11,6 @@ const ForgotPassword = () => {
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState({ open: false, title: "", message: "", onClose: null });
-  const navigate = useNavigate();
 
   const handlePasswordReset = async (e) => {
     e.preventDefault();
@@ -87,6 +86,7 @@ const ForgotPassword = () => {
         </div>
         <div className="login-container">
           <h2>Unustasin parooli</h2>
+          {error && <div className="error-message">{error}</div>}
           {modal.open && (
             <ModalMessage
               open={modal.open}

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/Authentication";
-import loginImage from "../images/loginimg.png";
+import loginImage from "../images/loginimg.webp";
 import baseURL from "../baseURL";
 import "../styles/Login.scss";
 import ModalMessage from "../components/ModalMessage";

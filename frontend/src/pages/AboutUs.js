@@ -1,8 +1,8 @@
 import React from 'react';
 import '../styles/AboutUs.scss';
-import contentImage1 from "../images/Anna.jpg";
-import contentImage2 from "../images/Aino-Anna.jpg";
-import contentImage3 from "../images/Aino.jpg";
+import contentImage1 from "../images/Anna.webp";
+import contentImage2 from "../images/Aino-Anna.webp";
+import contentImage3 from "../images/Aino.webp";
 
 export const AboutUs = () => {
   return (

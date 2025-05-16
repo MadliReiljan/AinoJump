@@ -1,12 +1,12 @@
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import "../styles/GlobalContainer.scss"
-import heroImage from "../images/IMG_4844.jpg";
-import mainImg from "../images/main1.png";
-import mainImg2 from "../images/main2.png";
-import mainImg3 from "../images/main3.png"; 
-import mainImg4 from "../images/main4.png";
-import contentImage from "../images/MainImage.jpg";
+import heroImage from "../images/IMG_4844.webp";
+import mainImg from "../images/main1.webp";
+import mainImg2 from "../images/main2.webp";
+import mainImg3 from "../images/main3.webp"; 
+import mainImg4 from "../images/main4.webp";
+import contentImage from "../images/MainImage.webp";
 import CircleBackground from "../components/CircleBackground";
 
 export const MainPage = () => {
