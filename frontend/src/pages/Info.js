@@ -101,9 +101,9 @@ export const Info = () => {
       
       {userRole === "owner" && (
         <div className="admin-controls">
-          <Button onClick={() => setIsPostModalOpen(true)} className="neutral">
+          <button onClick={() => setIsPostModalOpen(true)} className="neutral">
             Loo postitus
-          </Button>
+          </button>
           {isPostModalOpen && (
             <PostModal
               onClose={() => setIsPostModalOpen(false)}

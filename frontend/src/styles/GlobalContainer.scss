@@ -172,6 +172,17 @@ body {
   margin-top: -50px;
 }
 
+.booking-link {
+  &:hover {
+    background-color: rgba(173, 221, 109, 0.2); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
 // Responsive styles
 @include respond-to(medium) {
   .benefits-grid:before {
