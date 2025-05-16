@@ -9,6 +9,7 @@ import ParticipationsModal from "./ParticipationsModal";
 const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
   const { userEmail, userRole } = useContext(AuthContext);
   const [isReserved, setIsReserved] = useState(false);
+  const [reservedChildIds, setReservedChildIds] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [reservedCount, setReservedCount] = useState(event.reserved_count || 0);
@@ -37,6 +38,15 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
         if (response.ok) {
           const data = await response.json();
           setIsReserved(data.isReserved);
+          setReservedChildIds(data.reservedChildIds || []); 
+          if (event.is_for_children && children.length > 0) {
+            const reserved = children.find(child => (data.reservedChildIds || []).includes(Number(child.id)));
+            if (reserved) {
+              setSelectedChildId(reserved.id);
+            } else {
+              setSelectedChildId(children[0].id);
+            }
+          }
         } else {
           console.error("Failed to fetch reservation status");
         }
@@ -59,7 +69,12 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
         .then((data) => {
           setChildren(data || []);
           if (data && data.length > 0) {
-            setSelectedChildId(data[0].id);
+            const reserved = data.find(child => reservedChildIds.includes(Number(child.id)));
+            if (reserved) {
+              setSelectedChildId(reserved.id);
+            } else {
+              setSelectedChildId(data[0].id);
+            }
           }
         })
         .catch((err) => console.error(err));
@@ -97,6 +112,12 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
       if (response.ok) {
         setIsReserved(true);
         setReservedCount(prev => prev + 1);
+        if (event.is_for_children) {
+          setReservedChildIds(prev => [...prev, Number(selectedChildId)]);
+          setModal({ open: true, title: 'Õnnestus', message: 'Koht on edukalt broneeritud!', onClose: () => setModal(m => ({ ...m, open: false })) });
+        } else {
+          setModal({ open: true, title: 'Õnnestus', message: 'Koht on edukalt broneeritud!', onClose: () => setModal(m => ({ ...m, open: false })) });
+        }
         if (onReservationChange) {
           onReservationChange();
         }
@@ -134,6 +155,12 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
       if (response.ok) {
         setIsReserved(false);
         setReservedCount(prev => prev - 1);
+        if (event.is_for_children) {
+          setReservedChildIds(prev => prev.filter(id => id !== Number(selectedChildId)));
+          setModal({ open: true, title: 'Õnnestus', message: 'Koht on edukalt vabastatud!', onClose: () => setModal(m => ({ ...m, open: false })) });
+        } else {
+          setModal({ open: true, title: 'Õnnestus', message: 'Koht on edukalt vabastatud!', onClose: () => setModal(m => ({ ...m, open: false })) });
+        }
         if (onReservationChange) {
           onReservationChange();
         }
@@ -239,6 +266,8 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
     }
   };
 
+  const isSelectedChildReserved = event.is_for_children && reservedChildIds.includes(Number(selectedChildId));
+
  return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-content">
@@ -277,7 +306,12 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
 
       {userRole !== "owner" && (
           <>
-            {event.is_for_children === 1 && !isReserved && (
+            {!userEmail && (
+              <div className="not-logged-in-message">
+                <p>Sa ei ole sisse loginud. Palun logi sisse, et broneerida kohti.</p>
+              </div>
+            )}
+            {userEmail && event.is_for_children === 1 && (
               <div className="child-select-container">
                 {children.length > 0 ? (
                   <>
@@ -294,31 +328,36 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
                         </option>
                       ))}
                     </select>
+                    {selectedChildId && (
+                      isSelectedChildReserved ? (
+                        <button type="button" onClick={handleUnreserve} className="reserve-button">
+                          Vabasta koht
+                        </button>
+                      ) : (
+                        <button type="button" onClick={handleReserve} disabled={spotsLeft <= 0} className="reserve-button">
+                          {spotsLeft <= 0 ? "Kohad täis" : "Reserveeri koht"}
+                        </button>
+                      )
+                    )}
                   </>
                 ) : (
                   <p>Sa ei ole veel lisanud ühtegi last oma kontole.</p>
                 )}
               </div>
             )}
-
-            {isReserved && (
-              <p className="reserved-message">Oled juba registreeritud!</p>
-            )}
-
-            {isReserved && !event.is_for_children ? (
-              <button type="button" onClick={handleUnreserve} className="reserve-button">
-                Vabasta koht
-              </button>
-            ) : !isReserved ? (
-              <button type="button" onClick={handleReserve} disabled={spotsLeft <= 0} className="reserve-button">
-                {spotsLeft <= 0 ? "Kohad täis" : "Reserveeri koht"}
-              </button>
-            ) : null}
-
-            {Boolean(event.is_for_children) && isReserved && (
-              <button type="button" onClick={handleUnreserve} className="reserve-button">
-                Vabasta valitud lapse koht
-              </button>
+            {userEmail && !event.is_for_children && (
+              isReserved ? (
+                <>
+                  <p className="reserved-message">Oled juba registreeritud!</p>
+                  <button type="button" onClick={handleUnreserve} className="reserve-button">
+                    Vabasta koht
+                  </button>
+                </>
+              ) : (
+                <button type="button" onClick={handleReserve} disabled={spotsLeft <= 0} className="reserve-button">
+                  {spotsLeft <= 0 ? "Kohad täis" : "Reserveeri koht"}
+                </button>
+              )
             )}
           </>
         )}
