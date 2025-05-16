@@ -1,3 +1,4 @@
+// filepath: c:\Users\madli\AinoJump\frontend\src\App.js
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
@@ -11,11 +12,13 @@ import Footer from "./components/PageFooter";
 import { AuthProvider } from "./auth/Authentication";
 import PageTransition from "./components/PageTransition";
 import AdminUserList from "./pages/AdminUserList";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
     return (
         <AuthProvider>
             <div className="App">
+                <ScrollToTop />
                 <Navbar />
                 <PageTransition>
                     <Routes>
