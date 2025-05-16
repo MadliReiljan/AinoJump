@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../auth/Authentication";
 import PostModal from "../components/PostModal";
-import Button from "../components/Button";
 import ModalMessage from "../components/ModalMessage";
 import "../styles/Info.scss";
 import baseURL from "../baseURL";
@@ -165,6 +164,7 @@ export const Info = () => {
           message={modal.message}
           onClose={modal.onClose}
           onConfirm={modal.onConfirm}
+          onCancel={modal.onCancel || modal.onClose}
         />
       )}
     </div>
