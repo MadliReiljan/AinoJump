@@ -117,11 +117,11 @@ export const Calendar = () => {
       author: "Annika"
     },
     {
-      text: "Parim treening, mida olen kunagi proovinud!",
+      text: "Parim treen, mida olen kunagi proovinud!",
       author: "Liisa"
     },
     {
-      text: "Jumpingus on parim kombinatsioon treenivast koormusest ja lõbust.",
+      text: "Jumping pakub korraga nii head treeningut kui ka palju lõbu.",
       author: "Kadri"
     }
   ];
