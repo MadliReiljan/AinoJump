@@ -7,7 +7,6 @@ xit('should display login form', () => {
     cy.get('input[type="email"]').should('be.visible');
     cy.get('.password-input-wrapper input').should('be.visible');
     cy.get('.login-button').should('be.visible');
-    // Removed Google auth button check as it's not in your component
   });
 
   it('should show error message for invalid credentials', () => {
@@ -19,15 +18,12 @@ xit('should display login form', () => {
   });
 
   xit('should successfully log in with valid credentials', () => {
-  // First enter credentials
     cy.get('input[type="email"]').type(Cypress.env('CYPRESS_USERNAME'));
     cy.get('.password-input-wrapper input').type(Cypress.env('CYPRESS_PASSWORD'));
-    cy.get('input[type="checkbox"]').check(); // Test remember me
+    cy.get('input[type="checkbox"]').check(); 
 
-    // Now click login
     cy.get('.login-button').click();
-    
-    // Verify redirect
+
     cy.url().should('eq', Cypress.config().baseUrl + '/');
   });
 
