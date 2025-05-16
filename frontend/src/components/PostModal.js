@@ -113,7 +113,7 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
         <h2>{editingPost ? "Muuda postitust" : "Loo uus postitus"}</h2>
         <form onSubmit={handleSubmit}>
           <label>
-            Pealkiri:
+            <p>Pealkiri:</p>
             <input
               type="text"
               name="title"
@@ -123,7 +123,7 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
             />
           </label>
           <label>
-            Sisu:
+            <p>Sisu:</p>
             <textarea
               name="body"
               value={formData.body}
@@ -169,13 +169,20 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
             onChange={handleFileInputChange}
             accept="image/*"
           />
-          <div className="button-group">
-            <Button type="button" variant="danger" onClick={onClose}>
+          <div className="post-actions">
+            <button 
+              type="submit" 
+              className="post-edit-button"
+            >
+              {editingPost ? "Uuenda postitus" : "Loo postitus"}
+            </button>
+            <button 
+              type="button" 
+              onClick={onClose} 
+              className="post-delete-button"
+            >
               Loobu
-            </Button>
-            <Button type="submit" variant="neutral">
-              {editingPost ? "Uuenda postitust" : "Loo postitus"}
-            </Button>
+            </button>
           </div>
         </form>
       </div>

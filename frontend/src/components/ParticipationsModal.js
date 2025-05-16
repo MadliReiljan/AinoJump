@@ -29,7 +29,7 @@ const ParticipationsModal = ({ eventId, onClose }) => {
         ) : (
           <div className="participants-list">
             {participants.length === 0 ? (
-              <p>Ühtegi osalejat pole.</p>
+              <p>Ühtegi osalejat ei ole.</p>
             ) : (
               <ul>
                 {participants.map((p, idx) => (

@@ -39,7 +39,7 @@
 
 .modal-content form label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   font-weight: 600;
   color: white;
   text-align: left;
@@ -275,3 +275,56 @@
 .detail-value {
   text-align: left;
 }
+
+.post-actions {
+    margin: $spacing-xs 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.67rem;
+    
+    .post-edit-button, .post-delete-button {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      border: none;
+      width: 100%;
+      
+      &:hover {
+        transform: translateY(-1px);
+      }
+      
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+    
+    .post-edit-button {
+      background-color: #66b656;
+      color: white;
+      
+      &:hover {
+        background-color: lighten(#47803C, 5%);
+      }
+    }
+    
+    .post-delete-button {
+      background-color: #D32F2F;
+      color: white;
+      
+      &:hover {
+        background-color: lighten(#D32F2F, 5%);
+      }
+    }
+    
+    @include respond-to(mobile) {
+      width: 100%;
+      
+      .post-edit-button, .post-delete-button {
+        margin: 0;
+        padding: 8px;
+        font-size: 14px;
+      }
+    }
+  }

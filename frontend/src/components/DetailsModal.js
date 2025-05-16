@@ -330,7 +330,7 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
                     </select>
                     {selectedChildId && (
                       isSelectedChildReserved ? (
-                        <button type="button" onClick={handleUnreserve} className="reserve-button">
+                        <button type="button" onClick={handleUnreserve} className="unreserve-button">
                           Vabasta koht
                         </button>
                       ) : (
@@ -349,7 +349,7 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
               isReserved ? (
                 <>
                   <p className="reserved-message">Oled juba registreeritud!</p>
-                  <button type="button" onClick={handleUnreserve} className="reserve-button">
+                  <button type="button" onClick={handleUnreserve} className="unreserve-button">
                     Vabasta koht
                   </button>
                 </>
