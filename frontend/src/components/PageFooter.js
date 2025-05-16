@@ -19,7 +19,7 @@ const Footer = () => {
                     
                     <div className="footer-column">
                         <h4>Asukoht</h4>
-                        <p>Ülenumre Spordihoone</p>
+                        <p>Ülenurme Spordihoone</p>
                     </div>
                 </div>
                 
