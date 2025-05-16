@@ -154,7 +154,7 @@ export const Info = () => {
             </div>
           ))
         ) : (
-          <p>Postitusi hetkel pole.</p>
+          <p style={{ color: "white" }}>Postitusi hetkel pole.</p>
         )}
       </div>
       {modal.open && (

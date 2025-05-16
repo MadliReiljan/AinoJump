@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/User.scss";
 import baseURL from "../baseURL";
 import ModalMessage from "../components/ModalMessage";
+import { useNavigate } from "react-router-dom";
 
 const User = () => {
   const [userData, setUserData] = useState(null);
@@ -23,6 +24,8 @@ const User = () => {
   const [children, setChildren] = useState([]);
   const [childrenBookings, setChildrenBookings] = useState([]);
   const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
+
+  const navigate = useNavigate();
 
   const fetchUserData = async () => {
     const token = localStorage.getItem("token");
@@ -628,7 +631,7 @@ const User = () => {
             <div className="admin-button-container">
               <button
                 className="admin-button"
-                onClick={() => window.location.href = "/admin_user_list"}
+                onClick={() => navigate("/admin_user_list")}
               >
                 Halda kontosid
               </button>
