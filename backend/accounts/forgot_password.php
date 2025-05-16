@@ -1,4 +1,10 @@
 <?php
+require_once __DIR__ . '/../PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/../PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/../PHPMailer/src/Exception.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 ini_set('display_errors', 0); 
 error_reporting(E_ALL);
 
@@ -94,25 +100,38 @@ try {
         $message .= "See link aegub 24 tunni pärast.\n\n";
         $message .= "Kui te ei palunud parooli uuendada, palun ignoreerige seda e-kirja.\n\n";
         $message .= "Lugupidamisega,\nAinoJump Meeskond";
-        
-        $headers = "From: noreply@ainojump.com\r\n";
-        $headers .= "Reply-To: noreply@ainojump.com\r\n";
-        $headers .= "X-Mailer: PHP/" . phpversion();
 
-        $mailSent = mail($email, $subject, $message, $headers);
-        
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'marion.poljakov@voco.ee'; 
+            $mail->Password = 'vrzy uygl uxpv uicc ';   
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+
+            $mail->setFrom('marion.poljakov@voco.ee', 'AinoJump');
+            $mail->addAddress($email);
+            $mail->Subject = $subject;
+            $mail->Body = $message;
+            $mail->AltBody = $message;
+
+            $mailSent = $mail->send();
+        } catch (Exception $e) {
+            $mailSent = false;
+            file_put_contents($logFile, "PHPMailer error: " . $mail->ErrorInfo . "\n", FILE_APPEND);
+        }
+
         if ($mailSent) {
             file_put_contents($logFile, "Reset email sent to: $email\n", FILE_APPEND);
         } else {
             file_put_contents($logFile, "Failed to send reset email to: $email\n", FILE_APPEND);
-
             file_put_contents($logFile, "Email details:\nTo: $email\nSubject: $subject\nContent: $message\n", FILE_APPEND);
-
             if (isset($_SERVER['SERVER_NAME']) && ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_NAME'] == '127.0.0.1')) {
                 file_put_contents($logFile, "Reset link for development: $resetLink\n", FILE_APPEND);
             }
         }
-        
         file_put_contents($logFile, "Reset token generated for user $userId: $token\n", FILE_APPEND);
     }
 
@@ -128,4 +147,3 @@ try {
 
 ob_end_flush();
 file_put_contents($logFile, "Script ended: " . date('Y-m-d H:i:s') . "\n\n", FILE_APPEND);
-?>
