@@ -11,13 +11,16 @@ export const AboutUs = () => {
       <div className="text-section">
         <div className="text-block">
           <p className="paragraph">
-            Aino on kogenud jumpingu­treener, kes on pühendunud sellele erivõimlemisvormile juba kahe aasta jagu. Oma teekonna alguses suundus ta Tallinnas toimuvale jumpingu koolitusele, mida viis läbi Tšehhist pärit spetsialist, keda peetakse üheks selle treeningstiili kaasasutajaks. Pärast seda täiendas Aino end Tartus Hafiti trennides, kus Eesti turul on need sessioonid olnud peamised väravad jumpingu tutvustamiseks ja levitamiseks. Oma kogemuste ja omandatud teadmiste toel asutas Aino AinoJumpi, mille raames pakub ta hetkel regulaarseid treeninguid nii algajatele kui ka edasijõudnutele.
+            Aino on kogenud jumpingu­treener, kes on pühendunud sellele erivõimlemisvormile juba üle kahe aasta jagu. 
+            Enda teekonna alguses suundus ta Tallinnas toimuvale jumpingu koolitusele, mida viis läbi Tšehhist pärit spetsialist, keda peetakse üheks selle treeningstiili kaasasutajaks. 
+            Peale seda täiendas Aino enda oskuseid Tartus, Hafiti trennides, kus Eesti turul on need sessioonid olnud peamised väravad jumpingu tutvustamiseks ja levitamiseks. Enda kogemuste ja omandatud teadmiste toel asutas Aino AinoJumpi, mille raames pakub ta hetkel regulaarseid treeninguid nii algajatele kui ka edasijõudnutele.
           </p>
         </div>
             
         <div className="text-block">
           <p className="paragraph">
-            Anna alustas jumpingu treeningutega osalejana, kuid leidis peagi, et see treeningstiil kõnetab teda sügavamalt. Tema kasvav huvi ja pühendumus viisid ta edasi treenerikoolitusele, mille ta edukalt läbis. Nüüd töötab Anna koos Ainoga, pakkudes osalejatele hea ja mõnusa õhkkonnaga jumpingu trenne, keskendudes osalejate heaolule ja korrektse sooritustehnika arendamisele.
+            Anna alustas jumpingu treeningutega osalejana, kuid leidis peagi, et see treeningstiil kõnetab teda sügavamalt. 
+            Tema kasvav huvi ja pühendumus viisid ta edasi treenerikoolitustele. Nüüd töötab Anna koos Ainoga, kus nad pakuvad osalejatele hea ja mõnusa õhkkonnaga jumpingu trenne, keskenduvad osalejate heaolule ja korrektse sooritustehnika arendamisele.
           </p>
         </div>
       </div>

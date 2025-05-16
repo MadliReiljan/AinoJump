@@ -44,10 +44,12 @@ export const MainPage = () => {
             <span className="highlight-text">Jumping</span>, mis see on?
           </h2>
             <p className="paragraph">
-            Jumpingu batuuditreening on dünaamiline treeningvorm, mis ühendab aeglased ja kiiremad hüpped, traditsioonilise aeroobika sammude variatsioonid ning kiirus- ja jõuelementide kombinatsiooni. Selle treeningu juured ulatuvad tagasi trampoliinide arenguni 1930. aastatel, mil Ameerika sportlased ja leiutajad nagu George Nissen ja Larry Griswold hakkasid kasutama hüppamist treeninguna, et parandada koordinatsiooni, jõudu ja vastupidavust. Alguses mõeldud peamiselt sportlikeks ja akrobaatlikeks harjutusteks, on jumping arenenud üldiseks kehalise aktiivsuse vormiks, mis rõhutab kogu keha lihaste töö ja pidevaid gravitatsioonilisi muutusi — protsessi, kus ühes treeningus aktiveeritakse üle 400 lihast. 
+            Jumping batuuditreening on kombinatsioon aeglastest ja kiiretest hüpetest, traditsioonilise aeroobika sammude variatsioonidest ning dünaamilistest kiirus- ja jõuspordielementidest. 
+            Selle treeningu juured ulatuvad 1930. aastatesse, mil Ameerika sportlased ja leiutajad, nagu George Nissen ja Larry Griswold, hakkasid trampoliine kasutama hüppetreeninguteks, et parandada koordinatsiooni, jõudu ja vastupidavust.
+            Alguses mõeldud peamiselt sportlikeks ja akrobaatlikeks harjutusteks, on jumping arenenud kolm korda efektiivsemaks kehalise aktiivsuse vormiks kui jooksmine. See on tingitud pidevatest gravitatsioonilistest muutustest, mis hõlmavad enam kui 400 lihase pingutust ja lõdvestust samal ajal. Seda on palju rohkem kui mistahes muu vastupidavusspordiala puhul.
             </p>
             <p className="paragraph">
-            Selline intensiivne ja mitmekülgne liikumine muudab jumping treeningu kolm korda efektiivsemaks kui jooksmine, pakkudes samal ajal ka palju rõõmu ning motivatsiooni. Treeningu eesmärk on mitte ainult füüsiline tugevdamine, vaid ka lõbus liikumisvorm, mis sobib kõigile — olenemata vanusest või varasemast treeningukogemusest.
+            Selline intensiivne ja mitmekülgne liikumisvorm aitab arendada vastupidavust, koordinatsiooni ja lihasjõudu, pakkudes samal ajal vaheldusrikast ning kaasahaaravat treeningkogemust. Jumping sobib igas vanuses ja erineva tasemega harrastajatele, olles nii tõhus kui ka lõbus viis kehalise vormi parandamiseks.
             </p>
           </div>
           
@@ -82,7 +84,7 @@ export const MainPage = () => {
               <h3 className="benefit-title">Südame tervis ja vereringe</h3>
               <p className="benefit-description">
                 Jumping tõstab pulssi ja soodustab vereringe paranemist,
-                aidates parandada südant ning parandada kardiovaskulaarset vastupidavust.
+                mis aitab parandada südant ning kardiovaskulaarset vastupidavust.
               </p>
             </div>
             
@@ -96,7 +98,7 @@ export const MainPage = () => {
               </div>
               <h3 className="benefit-title">Koordinatsioon ja tasakaal</h3>
               <p className="benefit-description">
-                Treening käigus kasutatavad hüpped ja pöörded aitavad arendada
+                Treeningu käigus kasutatavad hüpped ja pöörded aitavad arendada
                 keha koordinatsiooni ja tasakaalu, mis tõstab igapäevast liikumisoskust.
               </p>
             </div>
@@ -128,9 +130,7 @@ export const MainPage = () => {
               </div>
               <h3 className="benefit-title">Stressi maandamine ja heaolu</h3>
               <p className="benefit-description">
-              Jumping aitab vabastada pinget ja stressi, 
-              pakkudes võimalust nautida lõbusat ja energilist liikumist,
-              mis parandab meeleolu ning üldist heaolu.
+              Jumping aitab pingetest vabaneda ja stressi leevendada, pakkudes samal ajal lõbusat ja energilist liikumist, mis tõstab meeleolu ja parandab enesetunnet.
               </p>
             </div>
           </div>
