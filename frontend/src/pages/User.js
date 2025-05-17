@@ -50,7 +50,19 @@ const User = () => {
 
       const data = await response.json();
       setUserData(data);
-      setPhoneNumber(data.phone || "");
+
+      const phoneResponse = await fetch(`${baseURL}/accounts/get_user_phone.php`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
+      if (phoneResponse.ok) {
+        const phoneData = await phoneResponse.json();
+        setPhoneNumber(phoneData.phone || "");
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -222,7 +234,7 @@ const User = () => {
           phone: phoneNumber,
         }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Profiili uuendamine ebaõnnestus.");
@@ -232,6 +244,8 @@ const User = () => {
       setNewPassword("");
       setConfirmPassword("");
       setPasswordError("");
+
+      await fetchUserData();
       
       setIsEditing(false);
       setIsChangingPassword(false);
@@ -357,6 +371,7 @@ const User = () => {
       onCancel: () => setModal(m => ({ ...m, open: false })),
     });
   };
+  
 
   const toggleAddChild = () => {
     setIsAddingChild(!isAddingChild);
@@ -432,19 +447,40 @@ const User = () => {
           </div>
           
           <div className="detail-row">
-            <div className="detail-label">Telefon</div>
-            {isEditing ? (
-              <input 
-                type="tel" 
-                value={phoneNumber} 
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                className="detail-input"
-                placeholder="+372 XXXX XXXX"
-              />
-            ) : (
-              <div className="detail-value">{phoneNumber || "+372 5555 5555"}</div>
-            )}
-          </div>
+          <div className="detail-label">Telefon</div>
+          {isEditing ? (
+            <input 
+              type="tel" 
+              value={phoneNumber} 
+              onChange={(e) => {
+                const value = e.target.value;
+
+                let isValid = true;
+                for (let i = 0; i < value.length; i++) {
+                  const char = value[i];
+                  if (!(
+                    (char >= '0' && char <= '9') ||
+                    char === '+' ||
+                    char === ' '                
+                  )) {
+                    isValid = false;
+                    break;
+                  }
+                }
+                
+                if (isValid) {
+                  setPhoneNumber(value);
+                }
+              }}
+              className="detail-input"
+              placeholder="+372 XXXX XXXX"
+            />
+          ) : (
+            <div className="detail-value">
+              {phoneNumber ? (phoneNumber.startsWith('+372') ? phoneNumber : '+372 ' + phoneNumber) : "+372"}
+            </div>
+          )}
+        </div>
 
           <div className="detail-row">
             <div className="detail-label">Parool</div>

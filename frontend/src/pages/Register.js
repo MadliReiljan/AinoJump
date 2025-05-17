@@ -15,6 +15,13 @@ const Register = () => {
   const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
   const navigate = useNavigate();
 
+  const capitalizeWords = (str) => {
+    return str
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -103,7 +110,7 @@ const Register = () => {
               <input
                 type="text"
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={(e) => setFullName(capitalizeWords(e.target.value))}
                 required
               />
             </div>
