@@ -9,16 +9,15 @@
     box-sizing: border-box;
 }
 .auth-link {
-    // Add any special styling you want for auth links here
-    white-space: nowrap; // Prevents text wrapping
+    white-space: nowrap;
   }
   
   .logout-link {
-    color: white; // Override the default link color
+    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    white-space: nowrap; // Prevents text wrapping
+    white-space: nowrap;
     transition: background-color 0.3s ease;
     
     &:hover {
@@ -26,7 +25,7 @@
     }
     
     &::after {
-      display: none; // Remove the underline effect if you don't want it
+      display: none;
     }
   }
 .active {
@@ -206,12 +205,7 @@ nav .menu span {
   border-radius: 4px;
   cursor: pointer;
   white-space: nowrap;
-  background-color: #ff4d4d;
   transition: background-color 0.3s ease;
-  
-  &:hover {
-    background-color: #e60000;
-  }
   
   &::after {
     display: none;
@@ -219,8 +213,6 @@ nav .menu span {
 }
 
 @media (max-width: 1087px) {
-  // ...existing code...
-  
   .user-panel .user-info {
     flex-direction: column;
     width: 100%;

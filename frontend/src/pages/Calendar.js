@@ -133,40 +133,43 @@ export const Calendar = () => {
       </div>
       <div className="calendar-content">
         <div className="info-box">
-        <h3>Tere{fullName ? `, ${fullName}` : ""}!</h3>
-        <p className="info-instruction">
-          Kui tuled jumpingu trenni, siis võta kaasa trennikaaslased, hea tuju, 
-          trenniriided, sisetossud, joogivesi ja higirätik!
-        </p>
-        
-        <h4 className="schedule-heading">Trennid toimuvad täiskasvanutel:</h4>
-        <div className="schedule-table">
-          <div className="schedule-row">
-            <span className="day">Teisipäeval</span>
-            <span className="time">19:00–20:00</span>
+          <h3>Tere{fullName ? `, ${fullName}` : ""}!</h3>
+          <p className="booking-instruction">
+            <span className="highlight-text2">Selleks, et ennast trenni kirja panna</span>, vali kalendrist sobiv päev ja kellaaeg ning vajuta sellele.
+          </p>
+          <p className="info-instruction">
+            Kui tuled jumpingu trenni, siis võta kaasa trennikaaslased, hea tuju, 
+            trenniriided, sisetossud, joogivesi ja higirätik!
+          </p>
+          
+          <h4 className="schedule-heading">Trennid toimuvad täiskasvanutel:</h4>
+          <div className="schedule-table">
+            <div className="schedule-row">
+              <span className="day">Teisipäeval</span>
+              <span className="time">19:00–20:00</span>
+            </div>
+            <div className="schedule-row">
+              <span className="day">Kolmapäeval</span>
+              <span className="time">19:00–20:00</span>
+            </div>
+            <div className="schedule-row">
+              <span className="day">Pühapäeval</span>
+              <span className="time">17:30–18:30</span>
+            </div>
           </div>
-          <div className="schedule-row">
-            <span className="day">Kolmapäeval</span>
-            <span className="time">19:00–20:00</span>
+          
+          <h4 className="schedule-heading">Trennid toimuvad lastel:</h4>
+          <div className="schedule-table">
+            <div className="schedule-row">
+              <span className="day">Teisipäeval</span>
+              <span className="time">18:00–19:00</span>
+            </div>
           </div>
-          <div className="schedule-row">
-            <span className="day">Pühapäeval</span>
-            <span className="time">17:30–18:30</span>
-          </div>
+          
+          <p className="stebby-link">
+            Osta endale kuupilet <a href="https://app.stebby.eu/pos/a.k.riided.o." target="_blank" rel="noopener noreferrer">Stebby</a> kaudu!
+          </p>
         </div>
-        
-        <h4 className="schedule-heading">Trennid toimuvad lastel:</h4>
-        <div className="schedule-table">
-          <div className="schedule-row">
-            <span className="day">Teisipäeval</span>
-            <span className="time">18:00–19:00</span>
-          </div>
-        </div>
-        
-        <p className="stebby-link">
-          Osta endale kuupilet <a href="https://app.stebby.eu/pos/a.k.riided.o." target="_blank" rel="noopener noreferrer">Stebby</a> kaudu!
-        </p>
-      </div>
         <div className="calendar-wrapper">
         <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

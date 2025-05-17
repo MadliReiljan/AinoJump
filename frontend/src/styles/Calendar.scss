@@ -24,7 +24,6 @@
 
 .calendar-wrapper {
   flex: 2;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: visible;
   background-color: $color-background;
 
@@ -60,70 +59,104 @@
 
 .info-box {
   flex: 1;
-  background-color: #555D53;
+  background-color: #222322;
   border-radius: 15px;
   padding: 30px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   font-size: $font-size-base;
-  color: $color-text;
+  color: #ffffff;
   display: flex;
   flex-direction: column;
   max-width: 350px;
-}
-
-.info-box h3 {
-  font-size: $font-size-heading-small;
-  margin-bottom: $spacing-md;
-  font-weight: 500;
-}
-
-.info-instruction {
-  margin-bottom: 30px;
-  line-height: 1.5;
+  border-left: 5px solid #4caf50;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: #4caf50;
+  }
 }
 
 .schedule-heading {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 12px;
-  margin-top: 10px;
+  margin-top: 25px;
+  color: #50d757;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
 }
 
 .schedule-table {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
   margin-bottom: 25px;
+  background-color: rgba(245, 245, 245, 0.09);
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .schedule-row {
   display: flex;
-  justify-content: flex-start;
-  padding: 0;
+  justify-content: space-between;
+  padding: 12px 15px;
+  background-color: rgba(245, 245, 245, 0.08);
+  
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
 }
 
 .day {
-  font-weight: normal;
-  width: 150px;
+  font-weight: 500;
+  width: auto;
+  color: #ffffff;
 }
 
 .time {
-  font-weight: normal;
+  font-weight: 500;
+  color: #ffffff;
+  padding-left: 10px;
 }
 
 .stebby-link {
-  margin-top: 15px;
-  font-weight: normal;
+  margin-top: 25px;
+  font-weight: 500;
+  text-align: center;
 }
 
 .stebby-link a {
-  color: $color-text;
-  text-decoration: underline;
-  font-weight: 500;
+  color: #6dca71;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  
+  &:hover {
+    color: #8ce990;
+  }
 }
 
-.stebby-link a:hover {
-  text-decoration: none;
+.jumping-info {
+  color: #4caf50;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+
+.highlight-text2 {
+  color: #50d757;
+  font-weight: 600;
+}
+
+strong {
+  color: #50d757;
 }
 
 .info-box ul {
@@ -138,7 +171,6 @@
 
 .calendar-wrapper {
   flex: 2;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
@@ -260,7 +292,7 @@
 }
 
 .calendar-wrapper .fc .fc-day-today {
-  background-color: #3a4139;
+
   
   .fc-daygrid-day-number {
     background-color: #4caf50;
@@ -333,10 +365,14 @@
     width: 100%;
   }
   
-  .info-box {
-    margin-bottom: $spacing-md;
+ .info-box {
+    padding: 25px;
     max-width: 100%;
-    padding: 20px;
+    margin-bottom: $spacing-md;
+  }
+  
+  .schedule-table {
+    padding: 12px;
   }
 
   .calendar-wrapper {
@@ -394,8 +430,16 @@
   }
   
   .info-box {
-    padding: 15px;
-    margin-bottom: 15px;
+    padding: 20px;
+    max-width: 100%;
+  }
+  
+  .schedule-table {
+    padding: 10px;
+  }
+  
+  .day, .time {
+    font-size: 14px;
   }
 
   .fc-dayGridMonth-view .fc-daygrid-day {
