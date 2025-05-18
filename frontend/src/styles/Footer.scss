@@ -1,3 +1,6 @@
+@import 'Variables';
+@import 'Mixins';
+
 footer {
   background-color: #7ee469;
   color: #000000;
@@ -14,12 +17,7 @@ footer {
 }
 
 .footer-inner {
-  max-width: 1600px;
-  padding-left: 120px;
-  padding-right: 120px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
+  @include container-base;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -38,10 +36,10 @@ footer {
   width: 30%;
   text-align: center;
   padding: 0 15px;
-}
-
-.footer-column h4 {
-  margin-bottom: 15px;
+  
+  h4 {
+    margin-bottom: 15px;
+  }
 }
 
 .logo-column {
@@ -91,21 +89,21 @@ footer {
   }
 }
 
-@media (max-width: 768px) {
+@include respond-to(tablet) {
   .footer-inner {
     padding-left: 60px;
     padding-right: 60px;
   }
 }
 
-@media (max-width: 580px) and (min-width: 481px) {
+@include respond-to(tablet-small) {
   .footer-inner {
     padding-left: 40px;
     padding-right: 40px;
   }
 }
 
-@media (max-width: 480px) {
+@include respond-to(mobile) {
   .footer-inner {
     padding-left: 20px;
     padding-right: 20px;

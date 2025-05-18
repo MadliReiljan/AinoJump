@@ -1,9 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@import 'Variables';
+@import 'Mixins';
 
 .button {
     padding: 10px 10px;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: $font-size-base;
+    font-family: $font-family-base;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     border: none;
@@ -17,7 +19,7 @@
       left: 50%;
       width: 0;
       height: 3px;
-      background-color: #BFFF7F; 
+      background-color: $color-highlight; 
       transition: width 0.5s ease;
       border-radius: 3px;
       transform: translateX(-50%);
@@ -26,145 +28,144 @@
   &:hover::after {
       width: 100%;
   }
-}
   
-.button.default {
-    text-align: center;
-    color: white;
-    border-radius: 0.5rem;
-    text-decoration: none;
+    &.default {
+      text-align: center;
+      color: $color-text;
+      border-radius: 0.5rem;
+      text-decoration: none;
+    }
+    
+    &.outline {
+      background-color: transparent;
+      border: 2px solid $color-highlight;
+      color: $color-highlight;
+      
+      &:hover {
+        background-color: $color-highlight;
+        color: $color-text;
+      }
+      
+      &::after {
+        background-color: $color-highlight;
+      }
+    }
+    
+    &.neutral {
+      align-items: center;
+      justify-content: center;
+      align-self: center;
+      background-color: #A4FF87;
+      color: rgb(0, 0, 0);
+      text-decoration: none;
+      
+      &:hover {
+        background-color: $color-highlight;
+        color: rgb(0, 0, 0);
+      }
+      
+      &::after {
+        background-color: #d3faac;
+      }
+    }
+      
+    &.danger {
+      background-color: #ef4444;
+      color: $color-text;
+      text-decoration: none;
+      
+      &:hover {
+        background-color: #dc2626;
+      }
+      
+      &::after {
+        background-color: #fecaca;
+      }
+    }
 }
 
 .modal-content {
     position: relative; 
     padding: 20px;
-    background-color: white;
+    background-color: $color-background;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .modal-content .button.default {
-    position: absolute; 
-    top: 10px;
-    right: 20px;
-    background-color: transparent;
-    font-size: 25px;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-    width: auto;
-    transition: color 0.2s ease-in-out;
-  }
-  
-  .modal-content .button.default:hover {
-    color: #BFFF7F; 
-  }
-
-  .modal-content .button.default::after {
-    content: none; 
-  }
-  
-.button.outline {
-    background-color: transparent;
-    border: 2px solid #BFFF7F;
-    color: #BFFF7F;
     
-    &:hover {
-        background-color: #BFFF7F;
-        color: white;
-    }
-    
-    &::after {
-        background-color: #BFFF7F;
+    .button.default {
+      position: absolute; 
+      top: 10px;
+      right: 20px;
+      background-color: transparent;
+      font-size: 25px;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      width: auto;
+      transition: color 0.2s ease-in-out;
+      
+      &:hover {
+        color: $color-highlight; 
+      }
+      
+      &::after {
+        content: none; 
+      }
     }
 }
 
-.button.neutral {
-    align-items: center;
-    justify-content: center;
-    align-self: center;
-    background-color: #A4FF87;
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-    
-    &:hover {
-        background-color: #BFFF7F;
-        color: rgb(0, 0, 0);
-    }
-    
-    &::after {
-        background-color: #d3faac;
-    }
-}
-  
-.button.danger {
-    background-color: #ef4444;
-    color: white;
-    text-decoration: none;
-    
-    &:hover {
-        background-color: #dc2626;
-    }
-    
-    &::after {
-        background-color: #fecaca;
-    }
-}
-
-@media (max-width: 1087px) {
-
-    nav .menu {
-        display: flex;
-    }
-
-    nav .nav-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        position: relative;
-        width: 100%;
-    }
-
-    nav ul {
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        padding-left: 0;
-        margin-top: 0.5rem;
-        background-color: #A4FF87;
-        border-radius: 10px;
-        padding: 10px 0;
-    }
-
-    nav ul.open {
-        display: flex;
-    }
-
-    nav ul li {
-        width: 100%;
-        text-align: center;
-    }
-
-    nav ul li a {
-        margin: 0.2rem 0;
-        color: #000000;
-        padding: 10px 0;
-    }
-
-    nav ul li .button,
-    nav ul li a.button {
-        background-color: transparent !important;
-        color: #000000 !important;
-        width: 100% !important;
-        text-align: center !important;
-        margin: 0.2rem 0 !important;
-        padding: 10px 0 !important;
-    }
-
-    nav ul li a.active::after,
-    nav ul li a:hover::after,
-    nav ul li .button::after,
-    nav ul li .button:hover::after {
-        background-color: none;
+@include respond-to(medium) {
+    nav {
+        .menu {
+            display: flex;
+        }
+        
+        .nav-inner {
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            width: 100%;
+        }
+        
+        ul {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding-left: 0;
+            margin-top: 0.5rem;
+            background-color: #A4FF87;
+            border-radius: 10px;
+            padding: 10px 0;
+            
+            &.open {
+                display: flex;
+            }
+            
+            li {
+                width: 100%;
+                text-align: center;
+                
+                a {
+                    margin: 0.2rem 0;
+                    color: #000000;
+                    padding: 10px 0;
+                }
+                
+                .button,
+                a.button {
+                    background-color: transparent !important;
+                    color: #000000 !important;
+                    width: 100% !important;
+                    text-align: center !important;
+                    margin: 0.2rem 0 !important;
+                    padding: 10px 0 !important;
+                    
+                    &::after,
+                    &:hover::after {
+                        background-color: transparent;
+                    }
+                }
+            }
+        }
     }
 }

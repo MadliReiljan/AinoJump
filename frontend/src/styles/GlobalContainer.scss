@@ -33,7 +33,7 @@ body {
   color: $color-text;
 }
 
-// Layout components
+
 .two-column-section {
   display: flex;
   flex-direction: row;
@@ -96,7 +96,7 @@ body {
   object-fit: cover;
 }
 
-// Benefits section
+
 .benefits-grid {
   display: flex;
   flex-direction: column;
@@ -183,7 +183,6 @@ body {
   }
 }
 
-// Responsive styles
 @include respond-to(medium) {
   .benefits-grid:before {
     display: none !important;

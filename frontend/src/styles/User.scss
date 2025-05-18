@@ -1,16 +1,6 @@
 @import 'Variables';
 @import 'Mixins';
 
-// Color variables
-$color-green: #429745;
-$color-green-hover: #3e8e41;
-$color-green-light: #bfff7f12;
-$color-red: #ff6b6b;
-$color-bg-dark: #2a2a2a;
-$color-bg-darker: #333;
-$color-border: #444;
-$color-text-muted: #999;
-
 // Mixins
 @mixin button-base {
   padding: 5px 10px;
@@ -20,18 +10,7 @@ $color-text-muted: #999;
 }
 
 @mixin form-input {
-  background-color: $color-bg-darker;
-  border: 1px solid $color-border;
-  color: $color-text;
-  padding: 5px 10px;
-  border-radius: 4px;
-  width: 100%;
-  
-  &:focus {
-    outline: none;
-    border-color: $color-highlight;
-    box-shadow: 0 0 0 1px rgba(191, 255, 127, 0.3);
-  }
+  @include form-input-styling;
 }
 
 /* ===== LAYOUT ===== */
@@ -78,8 +57,9 @@ $color-text-muted: #999;
     margin-bottom: $spacing-xs;
     font-weight: normal;
   }
+  
   p {
-    color: #888;
+    color: $color-text-muted;
   }
 }
 
@@ -118,14 +98,14 @@ $color-text-muted: #999;
 }
 
 .edit-button {
-  background: $color-green;
+  background: $color-green-primary;
   color: $color-text;
-  border: 1px solid $color-green;
+  border: 1px solid $color-green-primary;
   font-size: 14px;
   margin-left: auto;
   
   &.save {
-    background: $color-green;
+    background: $color-green-primary;
     color: $color-text;
   }
   
@@ -137,7 +117,7 @@ $color-text-muted: #999;
   }
   
   &:hover {
-    background: $color-green-light;
+    background: $color-green-light-transparent;
   }
 }
 
@@ -153,8 +133,8 @@ $color-text-muted: #999;
 }
 
 .password-change-button {
-  background: $color-green;
-  border: 1px solid $color-green;
+  background: $color-green-primary;
+  border: 1px solid $color-green-primary;
   font-size: 14px;
   color: $color-text;
   margin-left: 10px;
@@ -200,7 +180,7 @@ $color-text-muted: #999;
     margin-bottom: 4px;
     font-weight: 500;
     color: $color-text-muted;
-    font-size: 0.9rem;
+    font-size: 14px; /* Changed from 0.9rem */
   }
 }
 
@@ -253,7 +233,7 @@ $color-text-muted: #999;
   }
   
   .save-password {
-    background-color: $color-green;
+    background-color: $color-green-primary;
     font-size: 14px;
     color: white;
     border: none;
@@ -278,7 +258,7 @@ $color-text-muted: #999;
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background-color: $color-green;
+    background-color: $color-green-primary;
     color: $color-text;
     cursor: pointer;
     
@@ -299,7 +279,7 @@ $color-text-muted: #999;
     }
     
     .add-child-button {
-      background-color: $color-green;
+      background-color: $color-green-primary;
       color: $color-text;
       font-size: 14px;
       border: none;
@@ -457,7 +437,7 @@ $color-text-muted: #999;
 }
 
 .admin-button {
-  background-color: $color-green;
+  background-color: $color-green-primary;
   color: white;
   border: none;
   padding: 10px 20px;

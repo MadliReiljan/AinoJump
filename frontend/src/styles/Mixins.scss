@@ -41,3 +41,47 @@
     padding-right: 20px;
   }
 }
+
+@mixin form-input-styling {
+  background-color: $color-bg-darker;
+  border: 1px solid $color-border;
+  color: $color-text;
+  padding: 10px;
+  border-radius: 4px;
+  width: 100%;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  transition: all 0.2s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: $color-highlight;
+    box-shadow: 0 0 0 1px rgba(191, 255, 127, 0.3);
+  }
+  
+  &:hover {
+    background-color: lighten($color-bg-darker, 5%);
+  }
+}
+
+@mixin button-styling($bg-color, $text-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  
+  &:hover {
+    background-color: lighten($bg-color, 5%);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(1px);
+  }
+}
