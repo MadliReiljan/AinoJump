@@ -45,6 +45,7 @@ button.neutral {
   padding: 8px 16px;
   border-radius: 6px;
   font-weight: 500;
+  font-size: 14px;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
   border: none;
@@ -138,7 +139,7 @@ button.neutral {
 
   .post-date {
     margin: 0 0 0.67rem;
-    font-size: 14.4px;
+    font-size: 14px;
     color: #aaa;
     
     @include respond-to(mobile) {
@@ -180,6 +181,7 @@ button.neutral {
       padding: 8px 16px;
       border-radius: 6px;
       font-weight: 500;
+      font-size: 14px;
       cursor: pointer;
       transition: background-color 0.2s, transform 0.1s;
       border: none;

@@ -26,6 +26,7 @@
 
 .modal-content h2 {
   margin-bottom: 20px;
+  font-size: 20px;
   text-align: center;
   color: white;
 }
@@ -266,6 +267,7 @@
 }
 
 .detail-label {
+  font-size: 16px;
   font-weight: bold;
   color: #aaaaaa;
   text-align: left;
@@ -285,6 +287,7 @@
     .post-edit-button, .post-delete-button {
       padding: 8px 16px;
       border-radius: 6px;
+      font-size: 14px;
       font-weight: 500;
       cursor: pointer;
       transition: background-color 0.2s, transform 0.1s;

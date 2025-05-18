@@ -712,13 +712,13 @@ const User = () => {
                   </div>
                 ))
             ) : (
-              <div className="booking-item">Sul pole ühtegi broneeringut.</div>
+              <div className="booking-item">Sul ei ole ühtegi broneeringut.</div>
             )}
           </div>
 
           <h2 style={{marginTop: '2rem'}}>Laste broneeringud</h2>
           {childrenBookings.length === 0 ? (
-            <div className="booking-item">Sul pole ühtegi last ega nende broneeringut.</div>
+            <div>Sul ei ole ühtegi last lisatud.</div>
           ) : (
             childrenBookings.map(childObj => (
               <div key={childObj.child.id} className="child-bookings-block">
