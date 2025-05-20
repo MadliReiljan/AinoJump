@@ -49,7 +49,12 @@ const User = () => {
       }
 
       const data = await response.json();
-      setUserData(data);
+      setUserData({
+        ...data,
+        firstName: data.firstName || data.first_name || "",
+        lastName: data.lastName || data.last_name || "",
+        email: data.email || ""
+      });
 
       const phoneResponse = await fetch(`${baseURL}/accounts/get_user_phone.php`, {
         method: "GET",
