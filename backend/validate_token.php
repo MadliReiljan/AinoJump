@@ -4,7 +4,7 @@ function validateToken($db, $token) {
         return false;
     }
 
-    $query = "SELECT u.id AS user_id, t.person_id, p.full_name, u.email, u.role, t.created_at
+    $query = "SELECT u.id AS user_id, t.person_id, p.full_name, u.email, u.role, t.created_at, t.expires_at
               FROM tokens t
               INNER JOIN person p ON t.person_id = p.id
               INNER JOIN user u ON p.id = u.person_id
@@ -18,10 +18,16 @@ function validateToken($db, $token) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        $tokenAge = time() - strtotime($user['created_at']);
-        $tokenExpiry = 3600; 
-        if ($tokenAge > $tokenExpiry) {
-            return false;
+        if (isset($user['expires_at'])) {
+            if (strtotime($user['expires_at']) < time()) {
+                return false;
+            }
+        } else {
+            $tokenAge = time() - strtotime($user['created_at']);
+            $tokenExpiry = 3600; 
+            if ($tokenAge > $tokenExpiry) {
+                return false;
+            }
         }
     }
 

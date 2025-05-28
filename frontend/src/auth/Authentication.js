@@ -13,14 +13,19 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      fetchUserData(token);
+    const expiryTime = localStorage.getItem("tokenExpiry");
+    if (token && expiryTime) {
+      if (Date.now() > parseInt(expiryTime, 10)) {
+        logout();
+      } else {
+        fetchUserData(token);
+      }
     }
   }, []);
 
   const fetchUserData = async (token) => {
     const expiryTime = localStorage.getItem("tokenExpiry");
-    if (expiryTime && Date.now() > expiryTime) {
+    if (expiryTime && Date.now() > parseInt(expiryTime, 10)) {
       console.error("Token expired");
       logout();
       return;
@@ -52,6 +57,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (token, email) => {
     localStorage.setItem("token", token);
+    // Set expiry to 1 hour from now
+    const expiry = Date.now() + 3600 * 1000;
+    localStorage.setItem("tokenExpiry", expiry.toString());
     setIsLoggedIn(true);
     setUserEmail(email); 
     fetchUserData(token); 
