@@ -3,7 +3,7 @@ describe('Login', () => {
     cy.visit('/login');
   });
 
-xit('should display login form', () => {
+  it('should display login form', () => {
     cy.get('input[type="email"]').should('be.visible');
     cy.get('.password-input-wrapper input').should('be.visible');
     cy.get('.login-button').should('be.visible');
@@ -17,7 +17,7 @@ xit('should display login form', () => {
     cy.get('.error-message').should('be.visible');
   });
 
-  xit('should successfully log in with valid credentials', () => {
+  it('should successfully log in with valid credentials', () => {
     cy.get('input[type="email"]').type(Cypress.env('CYPRESS_USERNAME'));
     cy.get('.password-input-wrapper input').type(Cypress.env('CYPRESS_PASSWORD'));
     cy.get('input[type="checkbox"]').check(); 

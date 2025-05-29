@@ -149,7 +149,7 @@ export const Calendar = () => {
               <span className="time">19:00–20:00</span>
             </div>
             <div className="schedule-row">
-              <span className="day">Kolmapäeval</span>
+              <span className="day">Neljapäeval</span>
               <span className="time">19:00–20:00</span>
             </div>
             <div className="schedule-row">
