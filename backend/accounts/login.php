@@ -42,12 +42,6 @@ if (!empty($data->email) && !empty($data->password)) {
             
             if (password_verify($data->password, $row['password_hash'])) {
                 $token = bin2hex(random_bytes(16)); 
-            
-                $deleteQuery = "DELETE FROM tokens WHERE person_id = :personId";
-                $deleteStmt = $db->prepare($deleteQuery);
-                $deleteStmt->bindParam(':personId', $row['person_id']);
-                $deleteStmt->execute();
-            
                 $insertQuery = "INSERT INTO tokens (person_id, token, created_at) VALUES (:personId, :token, NOW())";
                 $insertStmt = $db->prepare($insertQuery);
                 $insertStmt->bindParam(':personId', $row['person_id']);

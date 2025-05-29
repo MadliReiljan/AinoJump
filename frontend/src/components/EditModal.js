@@ -106,15 +106,18 @@ const EventEditModal = ({ event, onClose, onEventUpdated }) => {
       setModal({
         open: true,
         title: 'Korduv sündmus',
-        message: 'Kas soovid värskendada kõiki korduvaid sündmusi selles sarjas?',
+        message: 'Kas soovid muuta ainult seda sündmust või kõiki selle sarja sündmusi?',
+        onClose: () => setModal(m => ({ ...m, open: false })),
         onConfirm: () => {
           setModal(m => ({ ...m, open: false }));
-          submitEdit(true);
+          submitEdit(true); 
         },
         onCancel: () => {
           setModal(m => ({ ...m, open: false }));
-          onClose();
+          submitEdit(false);
         },
+        confirmText: 'Kõik',
+        cancelText: 'Ainult see'
       });
       return;
     }
@@ -284,6 +287,8 @@ const EventEditModal = ({ event, onClose, onEventUpdated }) => {
           onClose={modal.onClose}
           onConfirm={modal.onConfirm}
           onCancel={modal.onCancel}
+          confirmText={modal.confirmText}
+          cancelText={modal.cancelText}
         />
       )}
     </div>

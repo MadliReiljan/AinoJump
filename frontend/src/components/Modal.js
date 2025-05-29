@@ -126,15 +126,14 @@ const EventModal = ({ selectedDate, onClose, onEventCreated }) => {
         } else if (responseData.event) {
           onEventCreated(responseData.event);
         }
-        
         setModal({ 
           open: true, 
           title: 'Õnnestus', 
           message: 'Sündmus loodud edukalt!', 
           onClose: () => { 
             setModal(m => ({ ...m, open: false })); 
-            onClose();
-            window.location.reload();
+            onEventCreated(); 
+            onClose(); 
           } 
         });
       } else {

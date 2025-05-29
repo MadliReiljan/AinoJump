@@ -37,11 +37,20 @@ if (!$user) {
 }
 
 try {
+    $firstName = null;
+    $lastName = null;
+    if (!empty($user['full_name'])) {
+        $nameParts = explode(' ', $user['full_name'], 2);
+        $firstName = $nameParts[0];
+        $lastName = isset($nameParts[1]) ? $nameParts[1] : '';
+    }
     http_response_code(200);
     echo json_encode(array(
         "email" => $user['email'],
         "role" => $user['role'],
-        "fullname" => $user['full_name']
+        "full_name" => $user['full_name'],
+        "first_name" => $firstName,
+        "last_name" => $lastName
     ));
 } catch (Exception $e) {
     http_response_code(500);

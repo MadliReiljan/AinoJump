@@ -101,7 +101,11 @@ export const Calendar = () => {
   };
 
   const handleEventCreated = (newEvent) => {
-    setEvents((prevEvents) => [...prevEvents, newEvent]);
+    if (newEvent) {
+      setEvents((prevEvents) => [...prevEvents, newEvent]);
+    } else {
+      refreshEvents();
+    }
   };
   const reviewsData = [
     {

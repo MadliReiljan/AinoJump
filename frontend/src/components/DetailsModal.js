@@ -189,21 +189,21 @@ const EventDetailsModal = ({ event, onClose, onReservationChange }) => {
         message: 'Kas soovid kustutada ainult selle sündmuse või kõik selle sarja sündmused?',
         onClose: () => setModal(m => ({ ...m, open: false })),
         onConfirm: () => {
-          setShowConfirmDelete(true);
           setModal(m => ({ ...m, open: false }));
           event.deleteAllRecurring = true;
+          confirmDeletion();
         },
         onCancel: () => {
-          setShowConfirmDelete(true);
           setModal(m => ({ ...m, open: false }));
           event.deleteAllRecurring = false;
+          confirmDeletion();
         },
         confirmText: 'Kõik',
         cancelText: 'Ainult see'
       });
-    } else {
-      setShowConfirmDelete(true);
+      return;
     }
+    setShowConfirmDelete(true);
   };
 
   const cancelDeletion = () => {
