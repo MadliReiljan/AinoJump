@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Button from "./Button";
 import ModalMessage from "./ModalMessage";
 import "../styles/EventModal.scss";
 import baseURL from "../baseURL";
 
-const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
+const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated, resetEditingPost }) => {
   const [formData, setFormData] = useState({
     title: editingPost?.title || "",
     body: editingPost?.body || "",
@@ -14,6 +14,15 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
   const [dragging, setDragging] = useState(false);
   const [modal, setModal] = useState({ open: false, title: '', message: '', onClose: null });
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    setFormData({
+      title: editingPost?.title || "",
+      body: editingPost?.body || "",
+    });
+    setImageFile(null);
+    setRemoveImage(false);
+  }, [editingPost]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -107,6 +116,13 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
     }
   };
 
+  const handleClose = () => {
+    if (typeof resetEditingPost === 'function') {
+      resetEditingPost();
+    }
+    onClose();
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -178,7 +194,7 @@ const PostModal = ({ onClose, onPostCreated, editingPost, onPostUpdated }) => {
             </button>
             <button 
               type="button" 
-              onClick={onClose} 
+              onClick={handleClose} 
               className="post-delete-button"
             >
               Loobu

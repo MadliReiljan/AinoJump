@@ -32,6 +32,8 @@ export const Info = () => {
 
   const handlePostCreated = (newPost) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
+    setIsPostModalOpen(false);
+    setEditingPost(null);
   };
 
   const handleDeletePost = async (postId) => {
@@ -94,13 +96,17 @@ export const Info = () => {
     setIsPostModalOpen(false);
   };
 
+  const resetEditingPost = () => {
+    setEditingPost(null);
+  };
+
   return (
     <div className="info-container">
       <h1 className="page-title">Info</h1>
       
       {userRole === "owner" && (
         <div className="admin-controls">
-          <button onClick={() => setIsPostModalOpen(true)} className="neutral">
+          <button onClick={() => { setIsPostModalOpen(true); setEditingPost(null); }} className="neutral">
             Loo postitus
           </button>
           {isPostModalOpen && (
@@ -109,6 +115,7 @@ export const Info = () => {
               onPostCreated={handlePostCreated}
               editingPost={editingPost}
               onPostUpdated={handlePostUpdated}
+              resetEditingPost={resetEditingPost}
             />
           )}
         </div>
@@ -170,3 +177,5 @@ export const Info = () => {
     </div>
   );
 }
+
+export default Info;

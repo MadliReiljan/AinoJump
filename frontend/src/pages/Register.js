@@ -31,12 +31,37 @@ const Register = () => {
       setModal({
         open: true,
         title: "Viga",
-        message: "Palun sisestage kehtiv e-posti aadress.",
-        onClose: () => setModal({ ...modal, open: false })
+        message: "Palun sisestage kehtiv e-posti aadress (nt. kasutaja@example.com).",
+        onClose: () => setModal(m => ({ ...m, open: false }))
       });
-      setError("Palun sisestage kehtiv e-posti aadress.");
+      setError("Palun sisestage kehtiv e-posti aadress (nt. kasutaja@example.com). ");
       return;
     }
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setModal({
+        open: true,
+        title: "Viga",
+        message: "Parool peab olema vähemalt 8 tähemärki pikk, sisaldama vähemalt ühte suurt tähte, ühte numbrit ja ühte erimärki.",
+        onClose: () => setModal({ ...modal, open: false })
+      });
+      setError("Parool peab olema vähemalt 8 tähemärki pikk, sisaldama vähemalt ühte suurt tähte, ühte numbrit ja ühte erimärki.");
+      return;
+    }
+
+    const nameParts = fullName.trim().split(/\s+/);
+    if (nameParts.length < 2) {
+      setModal({
+        open: true,
+        title: "Viga",
+        message: "Palun sisestage nii ees- kui ka perekonnanimi.",
+        onClose: () => setModal(m => ({ ...m, open: false }))
+      });
+      setError("Palun sisestage nii ees- kui ka perekonnanimi.");
+      return;
+    }
+
     setError("");
     setIsLoading(true);
 

@@ -418,9 +418,9 @@ const User = () => {
         open={modal.open} 
         title={modal.title} 
         message={modal.message} 
-        onClose={modal.onClose} 
+        onClose={() => setModal(m => ({ ...m, open: false, onConfirm: null, onCancel: null }))} 
         onConfirm={modal.onConfirm} 
-        onCancel={modal.onCancel} 
+        onCancel={modal.onCancel || (() => setModal(m => ({ ...m, open: false, onConfirm: null, onCancel: null })))} 
       />
       <h1 className="account-title">Konto</h1>
       
