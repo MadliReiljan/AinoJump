@@ -51,7 +51,6 @@ if (!isset($input['id'])) {
 $userId = intval($input['id']);
 
 try {
-    
     $stmt = $db->prepare("SELECT person_id FROM user WHERE id = ?");
     $stmt->execute([$userId]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -62,12 +61,28 @@ try {
     }
     $personId = $row['person_id'];
 
-    
+    $stmt = $db->prepare("DELETE FROM reservations WHERE person_id = ?");
+    $stmt->execute([$personId]);
+
+    $stmt = $db->prepare("SELECT id FROM person WHERE parent_id = ?");
+    $stmt->execute([$personId]);
+    $children = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($children as $child) {
+        $childId = $child['id'];
+        $stmt2 = $db->prepare("DELETE FROM reservations WHERE person_id = ?");
+        $stmt2->execute([$childId]);
+        $stmt2 = $db->prepare("DELETE FROM person WHERE id = ?");
+        $stmt2->execute([$childId]);
+    }
+
     $stmt = $db->prepare("DELETE FROM user WHERE id = ?");
     $stmt->execute([$userId]);
 
+    $stmt = $db->prepare("DELETE FROM person WHERE id = ?");
+    $stmt->execute([$personId]);
+
     http_response_code(200);
-    echo json_encode(["message" => "Kasutaja kustutatud."]);
+    echo json_encode(["message" => "Kasutaja ja seotud andmed kustutatud."]);
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(["message" => "Serveri viga: " . $e->getMessage()]);
